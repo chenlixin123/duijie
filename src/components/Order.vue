@@ -136,16 +136,7 @@ export default {
           that.orders();
           localStorage.setItem("router", true);
         } else {
-          var u = navigator.userAgent;
-          // android终端
-          var isAndroid = u.indexOf("wehome/1") > -1;
-          var isiOS = u.indexOf("wehome/2") > -1;
-          // ios终端
-          if (isiOS) {
-            window.finish_current_activity_webView("", "");
-          } else if (isAndroid) {
-            window.jsObject.finish_current_activity_webView("", "");
-          }
+          that.$router.go(-1)
         }
       });
   },

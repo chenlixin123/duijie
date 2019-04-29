@@ -14,9 +14,9 @@
       <img class="you" src="@/assets/you@2.png">
     </div>
       <!-- 首部预约车位橘黄色提示框-->
-    <div class="module" v-if="show == 'true'" @click="mypark">
-      <img class="weizhi" src="@/assets/chewei@2.png">
-      <div class="text">您正在使用{{long_name}}[{{names}}]车位</div>
+    <div class="modules" v-if="appointments == 'true'" @click="parks">
+      <img class="weizhi" src="@/assets/yuyue@2x.png">
+      <div class="text">您已预约{{long_name}}[{{names}}]车位</div>
       <img class="you" src="@/assets/you@2.png">
     </div>
   </div>
@@ -35,7 +35,9 @@ export default {
       long_name: "",
       names: "",
       shows: "",
-      show: ""
+      show: "",
+      appointment:'',
+      appointments:'false',
     };
   },
   created() {
@@ -43,6 +45,21 @@ export default {
     let token = Cookies.get("tokens");
      window.jhajax = this.jhajax;
     this.jhajax(token);
+     axios
+        .request({
+          url: Url.url.current
+        })
+        .then(res => {
+          console.log(res)
+          that.appointment = res.data
+          if(res.data == null){
+            that.appointments = 'false'
+          }else{
+            that.long_name = res.data.prefectureName,
+            that.names = res.data.stallName
+            that.appointments = 'true'
+          }
+        })
     // window.jhajax({
     //   token:'e6e3d2145d5b46c1a2caa072c1771c96',
     //   data:1,
@@ -95,19 +112,33 @@ export default {
     },
     park(item) {
       console.log(item);
+      let that = this
       let oo = localStorage.getItem("oo");
       let token = Cookies.get("tokens");
       if (oo == "true") {
         alert("您正在使用长租车位");
       } else {
-        this.$router.push({
+          if(that.appointment == null){
+                 this.$router.push({
           path: "/Parking",
           query: {
             groupId: item.groupId,
             token:token
           }
         });
+          }else{
+             that.$router.push({
+              path: "/Order"
+            });
+          }
+       
       }
+    },
+    parks(){
+      let that = this
+         that.$router.push({
+              path: "/Order"
+            });
     },
     mypark() {
       console.log('长租');
@@ -196,6 +227,21 @@ html {
   line-height: 60px;
   border-radius: 60px;
   background: #faa901;
+  opacity: 0.68;
+  position: absolute;
+  top: 0px;
+  left: 30px;
+  align-items: center;
+  font-size: 28px;
+  color: #ffffff;
+  box-sizing: border-box;
+}
+.modules {
+  width: 690px;
+  height: 60px;
+  line-height: 60px;
+  border-radius: 60px;
+  background: #f66913;
   opacity: 0.68;
   position: absolute;
   top: 0px;
