@@ -1,38 +1,10 @@
 <template>
   <div class="page">
-    <div class="head">
-      <div class="head-list">
-        <!-- <img src="@/assets/fanhui@3x.png"> -->
-        <div class="head-name">车区列表</div>
-        <div class="mypark" @click="mypark()">我的车位</div>
-      </div>
-    </div>
-    <div class="body">
-      <div class="body-content" v-for="(item,index) in msg" :key="index">
-        <div class="body-body">
-          <div class="content-name">{{item.name}}</div>
-          <div class="content-di">{{item.address}}</div>
-          <div class="content-btm">
-            <div class="content-time">
-              <div class="content-money">
-                <div class="content-mons">{{item.chargePrice}}</div>
-                <div class="moneys">元</div>
-              </div>
-              <div class="content-timer">{{item.chargeTime}}</div>
-            </div>
-            <div class="content-num">
-              <div class="content-nums">
-                <div class="content-nus">{{item.leisureStall}}</div>
-                <div class="ge">个</div>
-              </div>
-              <div class="content-kong">空闲车位</div>
-            </div>
-            <div class="btn">
-              <button @click="park(item)">预约停车</button>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="body" v-for="(item,index) in msg" :key="index">
+        <div class="box_title">车区名称:{{item.name}}</div>
+        <div class="car_where">车区地址:{{item.address}}</div>
+        <button class="btn_appointment" @click="park(item)">预约停车</button>
+        <button class="btn_long" @click="mypark">我的车位</button>
     </div>
 
     <!-- 首部长租车位黄色提示框-->
@@ -61,15 +33,17 @@ export default {
   },
   created() {
     let that = this;
-
-    window.jhajax = this.jhajax;
     let token = Cookies.get("tokens");
+     window.jhajax = this.jhajax;
     this.jhajax(token);
     // window.jhajax({
     //   token:'e6e3d2145d5b46c1a2caa072c1771c96',
     //   data:1,
     //   groupId:64,
     //   })
+    //  window.jhajax(
+    //   token='c2fb6980c0284a99ba3ef24a96ec6c6a',
+    //   )
 
     axios
       .request({
@@ -94,9 +68,14 @@ export default {
   },
   methods: {
     jhajax(token) {
+      let that = this
       // alert(token);
+       that.bus.$emit("loading", true);
+       that.bus.$emit("tip", { title: "加载中请稍候..." });
+     var u = navigator.userAgent;
+     console.log(u)
       console.log(token);
-      Cookies.set("tokens", token.token);
+      Cookies.set("tokens", token);
       axios
         .request({
           url: Url.url.car_list,
@@ -104,24 +83,28 @@ export default {
         })
         .then(res => {
           this.msg = res.data;
+           that.bus.$emit("loading", false);
           console.log(res);
         });
     },
     park(item) {
       console.log(item);
       let oo = localStorage.getItem("oo");
+      let token = Cookies.get("tokens");
       if (oo == "true") {
         alert("您正在使用长租车位");
       } else {
         this.$router.push({
           path: "/Parking",
           query: {
-            groupId: item.groupId
+            groupId: item.groupId,
+            token:token
           }
         });
       }
     },
     mypark() {
+      console.log('长租');
       let oo = localStorage.getItem("oo");
       console.log(oo);
       if (oo == "true") {
@@ -148,134 +131,53 @@ html {
   width: 100%;
   height: 100%;
   background: #f5f4f4;
+  box-sizing: border-box;
+  padding-top: 24px;
 }
-.head {
-  width: 100%;
-  height: 92px;
-  background: #fff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.body{
+  width: 690px;
+  background: white;
+  margin: 0 auto;
+  margin-bottom: 30px;
+  border-radius: 20px;
+  box-sizing: border-box;
+  padding: 34px 30px 32px 30px;
 }
-.head-list {
-  width: 95%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.head-name {
-  font-size: 38px;
+.box_title{
+  font-size: 30px;
   color: #333;
-  margin: auto;
 }
-.mypark {
-  font-size: 32px;
+.car_where{
+  font-size: 26px;
   color: #666;
-  position: absolute;
-  right: 30px;
-}
-.body {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.body-content {
-  width: 95%;
-  height: 324px;
-  border-radius: 14px;
-  margin-top: 26px;
-  background: #fff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-.body-body {
-  width: 90%;
-  height: 90%;
-  /* background: saddlebrown; */
-}
-.content-name {
-  font-size: 32px;
-  color: #333;
-  margin-top: 16px;
-}
-.content-di {
-  font-size: 28px;
-  color: #999;
-  border-bottom: 1px solid #f5f3f3;
-  margin-top: 24px;
-  padding-bottom: 24px;
-}
-.content-btm {
-  width: 100%;
-  /* background: red; */
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
   margin-top: 28px;
+  margin-bottom: 32px;
 }
-.content-time {
-  text-align: center;
-}
-.content-money {
-  margin-bottom: 22px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.content-mons {
-  font-size: 36px;
-  font-weight: bold;
-  color: #999;
-}
-.moneys {
-  font-size: 28px;
-  color: #999;
-}
-.content-timer {
-  font-size: 28px;
-  color: #999;
-}
-.content-nums {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 22px;
-}
-.content-nus {
-  font-size: 36px;
-  font-weight: bold;
+.btn_appointment{
+  width: 134px;
+  height: 46px;
+  line-height: 46px;
+  font-size: 24px;
   color: #f66913;
-}
-.ge {
-  font-size: 28px;
-  color: #999;
-}
-.content-kong {
-  font-size: 28px;
-  color: #999;
-}
-.btn button {
-  height: 60px;
-  border: 1px solid #f66913;
-  border-radius: 8px;
-  color: #f66913;
-  font-size: 28px;
-  background: #fff;
+  background: white;
+  border-radius: 10px;
+  margin-left: 310px;
+  border:1px solid #f66913;
   outline: none;
 }
-.btns button {
-  height: 60px;
-  border: 1px solid rgb(224, 219, 219);
-  border-radius: 8px;
-  color: gray;
-  font-size: 28px;
-  background: rgb(224, 219, 219);
+.btn_long{
+   width: 134px;
+  height: 46px;
+  line-height: 46px;
+  font-size: 24px;
+  color: #faa901;
+  background: white;
+  border-radius: 10px;
+  margin-left: 20px;
+  border:1px solid #faa901;
   outline: none;
 }
+
 .module {
   width: 690px;
   height: 60px;

@@ -662,39 +662,6 @@ export default {
       Cookies.set("tokens", that.token);
       localStorage.setItem("token", that.token);
       localStorage.setItem("groupId", that.groupId);
-      // if (data.data == 2) {
-      // axios
-      //   .request({
-      //     url: Url.url.long_current,
-      //     method: "get"
-      //   })
-      //   .then(res => {
-      //     console.log(res);
-      //     if (res.data.status == false) {
-      //       (that.shows = "none"), localStorage.setItem("oo", false);
-      //       that.show = localStorage.getItem("oo");
-      //       console.log("车位页");
-      //       this.$router.push({ path: "/Choice" });
-      //     } else {
-      //       (that.shows = "block"),
-      //         (that.names = res.data.stallName),
-      //         (that.long_name = res.data.preName);
-      //       localStorage.setItem("oo", true);
-      //       that.show = localStorage.getItem("oo");
-      //       localStorage.setItem("num", res.data.stallNumber);
-      //       console.log("详情页");
-      //       this.$router.push({
-      //         path: "/Park"
-      //       });
-      //     }
-      //   });
-      // this.$router.push({
-      //   path: "/Choice",
-      //   query: {
-      //     data: data
-      //   }
-      // });
-      // } else {
       axios
         .request({
           url: Url.url.car_lists + "?groupId=" + that.groupId,
@@ -724,7 +691,6 @@ export default {
             }, 500);
           }
         });
-      // }
     },
     // jhajax: function(val) {
     //   // alert('收到值了'+ val)
@@ -934,27 +900,6 @@ export default {
         path: "/Order"
       });
     }
-  },
-  mounted() {
-    // let that = this;
-    //  that.bus.$emit('loading', false);
-    // this.$nextTick(function() {
-    //   // this.initPanel();
-    //   let tokens = Cookies.get("tokens");
-    //   let groupId = localStorage.getItem("groupId");
-    //   console.log(tokens);
-    //   this.jhajax({
-    //     groupId: groupId,
-    //     token: tokens
-    //   });
-    // });
-  },
-  watch: {
-    // chessboardXvalue(newValue, oldValue) {
-    //   // alert(newValue)
-    //   // this.indexStyle.width = (newValue) * 42 + 'px'
-    //   // this.indexStyle.width = 12 * 42 + 'px'
-    // }
   },
   created() {
     let that = this;

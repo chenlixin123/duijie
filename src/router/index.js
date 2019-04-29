@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-// import List from '@/components/List'
+import List from '@/components/List'
 import Parking from '@/components/Parking'
 import Order from '@/components/Order'
 import Pay from '@/components/paySuccess'
@@ -13,12 +13,21 @@ import CarError from '@/components/carError'
 Vue.use(Router)
 
 export default new Router({
-  routes: [{
+  routes: [
+    {
       path: '/', //预约车位页面
+      name: 'List',
+      component: List,
+      meta: {
+        title: '车区列表'
+      }
+    },
+    {
+      path: '/Parking', //预约车位页面
       name: 'Parking',
       component: Parking,
       meta: {
-        title: '凌猫停车'
+        title: '预约车位'
       }
     },
     // {
