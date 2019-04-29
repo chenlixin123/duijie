@@ -52,7 +52,6 @@ export default {
       })
       .then(res => {
         console.log(res);
-        console.log(that.ss);
         if (res.data.status == false) {
           (that.shows = "none"), localStorage.setItem("oo", false);
           that.show = localStorage.getItem("oo");
@@ -105,6 +104,7 @@ export default {
     },
     mypark() {
       console.log('长租');
+      let token = Cookies.get("tokens");
       let oo = localStorage.getItem("oo");
       console.log(oo);
       if (oo == "true") {
@@ -114,7 +114,12 @@ export default {
         });
       } else {
         console.log("车位页");
-        this.$router.push({ path: "/Choice" });
+        this.$router.push({ 
+          path: "/Choice",
+          query:{
+            token:token
+          }
+           });
       }
     }
   }

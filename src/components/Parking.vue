@@ -682,10 +682,14 @@ export default {
             this.data = res.data.parkingDataMap;
             this.chessboardXvalue = res.data.gridX;
             this.chessboardYvalue = res.data.gridY;
-            res.data.parkingDataMap.forEach((item, index) => {
+            if(res.data.parkingDataMap ==  null){
+                  that.bus.$emit("tips", { show: true, title: "没有车位" });
+            }else{
+                  res.data.parkingDataMap.forEach((item, index) => {
               let key = item.x + "," + item.y;
               Vue.set(this.parkingMap, key, item);
             });
+            }
             setTimeout(() => {
               this.bus.$emit("loading", false);
             }, 500);

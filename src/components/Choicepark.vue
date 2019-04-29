@@ -116,19 +116,20 @@ export default {
         if (path == 1) {
           if (res.data.status == true) {
             localStorage.setItem("oo", true);
+            that.$router.go(-1)
             // that.$router.push({
             //   path: "/Park"
             // });
-            var u = navigator.userAgent;
+            // var u = navigator.userAgent;
             // android终端
-            var isAndroid = u.indexOf("wehome/1") > -1;
-            var isiOS = u.indexOf("wehome/2") > -1;
+            // var isAndroid = u.indexOf("wehome/1") > -1;
+            // var isiOS = u.indexOf("wehome/2") > -1;
             // ios终端
-            if (isiOS) {
-              window.finish_current_activity_webView("", "");
-            } else if (isAndroid) {
-              window.jsObject.finish_current_activity_webView("", "");
-            }
+            // if (isiOS) {
+            //   window.finish_current_activity_webView("", "");
+            // } else if (isAndroid) {
+            //   window.jsObject.finish_current_activity_webView("", "");
+            // }
             localStorage.setItem("path", 2);
           } else {
             this.carlist();
