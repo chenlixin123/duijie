@@ -937,17 +937,7 @@ export default {
           that.jhajax();
         } else {
           if (router == "true") {
-            var u = navigator.userAgent;
-            // android终端
-            var isAndroid = u.indexOf("wehome/1") > -1;
-            var isiOS = u.indexOf("wehome/2") > -1;
-            localStorage.setItem("router", false);
-            // ios终端
-            if (isiOS) {
-              window.finish_current_activity_webView("", "");
-            } else if (isAndroid) {
-              window.jsObject.finish_current_activity_webView("", "");
-            }
+            that.$router.go(-1)
           } else {
             that.$router.push({
               path: "/Order"

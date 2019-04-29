@@ -13,7 +13,14 @@
       <div class="text">您正在使用{{long_name}}[{{names}}]车位</div>
       <img class="you" src="@/assets/you@2.png">
     </div>
+      <!-- 首部预约车位橘黄色提示框-->
+    <div class="module" v-if="show == 'true'" @click="mypark">
+      <img class="weizhi" src="@/assets/chewei@2.png">
+      <div class="text">您正在使用{{long_name}}[{{names}}]车位</div>
+      <img class="you" src="@/assets/you@2.png">
+    </div>
   </div>
+  
 </template>
 
 <script>
@@ -191,7 +198,7 @@ html {
   background: #faa901;
   opacity: 0.68;
   position: absolute;
-  top: 80px;
+  top: 0px;
   left: 30px;
   align-items: center;
   font-size: 28px;
