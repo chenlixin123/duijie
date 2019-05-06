@@ -4,7 +4,7 @@
         <div class="box_title">车区名称:{{item.name}}</div>
         <div class="car_where">车区地址:{{item.address}}</div>
         <button class="btn_appointment" @click="park(item)">预约停车</button>
-        <button class="btn_long" @click="mypark">我的车位</button>
+        <button class="btn_long" @click="mypark(item)">我的车位</button>
     </div>
 
     <!-- 首部长租车位黄色提示框-->
@@ -19,6 +19,10 @@
       <div class="text">您已预约{{long_name}}[{{names}}]车位</div>
       <img class="you" src="@/assets/you@2.png">
     </div>
+
+    <!-- 首页授权标识 -->
+
+    <img class="empower" src="@/assets/shouquan@2x.png" alt="" @click="empower">
   </div>
   
 </template>
@@ -38,12 +42,21 @@ export default {
       show: "",
       appointment:'',
       appointments:'false',
+      num:0
     };
   },
   created() {
     let that = this;
-    let token = Cookies.get("tokens");
-     window.jhajax = this.jhajax;
+    localStorage.setItem('tap',0)
+    let token = that.$route.query.token;
+    // token = 'a9f8af6a1c21463fb024656a87ae8149'
+    //  window.jhajax = this.jhajax;
+    console.log(token)
+    if(token == undefined){
+       console.log('5555555555')
+      token = Cookies.get("tokens");
+    }
+    console.log(token)
     this.jhajax(token);
      axios
         .request({
@@ -60,6 +73,16 @@ export default {
             that.appointments = 'true'
           }
         })
+        axios
+        .request({
+          url: Url.url.plate_list,
+          method: "get"
+        })
+        .then(res => {
+          console.log(res);
+          that.num = res.data.length
+        });
+        console.log(that.num)
     // window.jhajax({
     //   token:'e6e3d2145d5b46c1a2caa072c1771c96',
     //   data:1,
@@ -95,8 +118,8 @@ export default {
       // alert(token);
        that.bus.$emit("loading", true);
        that.bus.$emit("tip", { title: "加载中请稍候..." });
-     var u = navigator.userAgent;
-     console.log(u)
+    //  var u = navigator.userAgent;
+    //  console.log(u)
       console.log(token);
       Cookies.set("tokens", token);
       axios
@@ -105,27 +128,36 @@ export default {
           method: "get"
         })
         .then(res => {
+          console.log(res)
           this.msg = res.data;
            that.bus.$emit("loading", false);
           console.log(res);
         });
     },
+    // 跳转预约车位
     park(item) {
       console.log(item);
       let that = this
       let oo = localStorage.getItem("oo");
       let token = Cookies.get("tokens");
       if (oo == "true") {
-        alert("您正在使用长租车位");
+        that.bus.$emit("tips", { show: true, title: "您正在使用长租车位" });
       } else {
+        console.log(that.appointment)
           if(that.appointment == null){
-                 this.$router.push({
+            if(that.num == 0){
+            this.$router.push({
+          path: "/addcarmodule",
+        });
+            }else{
+          this.$router.push({
           path: "/Parking",
           query: {
             groupId: item.groupId,
             token:token
           }
         });
+            }
           }else{
              that.$router.push({
               path: "/Order"
@@ -140,25 +172,46 @@ export default {
               path: "/Order"
             });
     },
-    mypark() {
+    // 跳转长租
+    mypark(e) {
+      console.log(e.groupId)
+      localStorage.setItem('groupId',e.groupId)
+      let that = this
       console.log('长租');
       let token = Cookies.get("tokens");
       let oo = localStorage.getItem("oo");
       console.log(oo);
-      if (oo == "true") {
+      if(that.appointments == 'true'){
+        that.bus.$emit("tips", { show: true, title: "您正在使用预约车位" });
+      }else if (oo == "true") {
         console.log("详情页");
         this.$router.push({
           path: "/Park"
         });
       } else {
-        console.log("车位页");
+        // that.num = 0
+        if(that.num == 0){
+            this.$router.push({ 
+          path: "/CarModuleList",
+           });
+        }else{
+         console.log("车位页");
         this.$router.push({ 
           path: "/Choice",
           query:{
             token:token
           }
            });
+        }
       }
+    },
+
+    // 跳转授权页面
+    empower(){
+        let that = this
+        that.$router.push({
+          path:'/NoEmpower'
+        })
     }
   }
 };
@@ -179,6 +232,7 @@ html {
 }
 .body{
   width: 690px;
+  height: 250px;
   background: white;
   margin: 0 auto;
   margin-bottom: 30px;
@@ -271,5 +325,12 @@ html {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.empower{
+  width: 80px;
+  height:80px;
+  position: absolute;
+  top: 50%;
+  right: 0px;
 }
 </style>

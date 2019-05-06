@@ -30,6 +30,20 @@ let Url = {
   switchTab: "/api/order/app/order/v2.1/switch",
   //降锁异常原因
   CarError: '/api/common/app/dicts/v2.0/cause/switch',
+  //添加车牌号
+  add_plate:'/api/account/app/plate-numbers/v2.0/save',
+  //删除车牌
+  del_plate:'/api/account/app/plate-numbers/v2.0/delete',
+  //授权人授权记录列表
+  user_impower:"/api/enterprise/app/auth-record/v2.0/list",
+  //查询用户可授权的车位
+  sure: "/api/enterprise/app/user-rent-stall/v2.0/auth-stall",
+   //亲属关系
+  friends: "/api/common/app/dicts/v2.0/relation/code",
+   //查询用户详情
+   choose_user: "/api/account/app/users/v2.0/detail",
+    //新增授权接口
+    newImpower: "/api/enterprise/app/auth-record/v2.0/save",
 
 
   //固定车位

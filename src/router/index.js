@@ -8,7 +8,13 @@ import Lock from '@/components/Lockup'
 import Choice from '@/components/Choicepark'
 import Park from '@/components/mypark'
 import CarError from '@/components/carError'
-
+import Addcarmodule from '@/components/addcarmodule'
+import CarModuleList from '@/components/CarModuleList'
+import NoEmpower from '@/components/NoEmpower'
+import confirm from '@/components/confirm'
+import pastdue from '@/components/pastdue'
+import addImpower from '@/components/addImpower'
+import carImpower from '@/components/carImpower'
 
 Vue.use(Router)
 
@@ -30,11 +36,14 @@ export default new Router({
         title: '预约车位'
       }
     },
-    // {
-    //   path: '/',
-    //   name: 'List', //车区列表
-    //   component: List
-    // },
+    {
+      path: '/CarModuleList', //预约车位页面
+      name: 'CarModuleList',
+      component: CarModuleList,
+      meta: {
+        title: '车牌号管理'
+      }
+    },
     {
       path: '/Park', //我的车位详情页
       name: 'Park',
@@ -79,6 +88,54 @@ export default new Router({
       meta: {
         title: '车位异常'
       }
-    }
+    },
+    {
+      path: '/Addcarmodule',
+      name: 'Addcarmodule',
+      component: Addcarmodule,
+      meta: {
+        title: '添加车牌号'
+      }
+    },
+    {
+      path: '/NoEmpower', //车位授权页面
+      name: 'NoEmpower',
+      component: NoEmpower,
+      meta: {
+        title: '授权管理'
+      }
+    },
+    {
+      path: '/confirm', //确认授权页
+      name: 'confirm',
+      component: confirm,
+      meta: {
+        title: '确认授权'
+      }
+    },
+    {
+      path: '/pastdue', //授权信息页
+      name: 'pastdue',
+      component: pastdue,
+      meta: {
+        title: '授权信息'
+      }
+    },
+    {
+      path: '/addImpower', //授权选择车位页
+      name: 'addImpower',
+      component: addImpower,
+      meta: {
+        title: '选择车位'
+      }
+    },
+    {
+      path: '/carImpower', //授权选择车位页
+      name: 'carImpower',
+      component: carImpower,
+      meta: {
+        title: '确认车位'
+      }
+    },
   ]
 })

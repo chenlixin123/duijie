@@ -169,6 +169,20 @@
   background: white;
   margin: 60% auto;
   border-radius: 10px;
+  position: relative;
+  .disappear{
+    width: 58px;
+    height: 58px;
+    position: absolute;
+    bottom: -162px;
+    left: 45%;
+  }
+  .box_title{
+    width: 100%;
+    height:80px;
+    font-size: 32px;
+    line-height: 90px;
+  }
 }
 .box_top {
   width: 100%;
@@ -411,14 +425,16 @@
     <!-- 车牌号 -->
     <div class="box" v-if="show == 'true'">
       <div class="box_center">
+        <div class="box_title">选择车牌</div>
         <div class="box_top" v-for="(item,index) in carlist" :key="index" @click="car(item,index)">
           <div class="box_top_left">{{item.vehMark}}{{ss}}</div>
           <img :src="index == inds ? src1 : src2" class="box_top_right">
         </div>
         <div class="box_bottom">
-          <div class="box_left" @click="qu_car">取消</div>
+          <div class="box_left" @click="edit">编辑</div>
           <div class="box_right" @click="que_car">确认</div>
         </div>
+         <img class="disappear" src="@/assets/tubiao@2x.png" alt=""  @click="qu_car">
       </div>
     </div>
 
@@ -658,10 +674,13 @@ export default {
       that.bus.$emit("tip", { title: "加载中请稍候..." });
       // this.groupId = string;
       // let tokens = strings;
+      console.log(that.groupId)
       that.groupId = that.groupId;
       Cookies.set("tokens", that.token);
       localStorage.setItem("token", that.token);
       localStorage.setItem("groupId", that.groupId);
+      let t = Cookies.get("tokens");
+      console.log(t,that.groupId)
       axios
         .request({
           url: Url.url.car_lists + "?groupId=" + that.groupId,
@@ -693,22 +712,16 @@ export default {
             setTimeout(() => {
               this.bus.$emit("loading", false);
             }, 500);
+          }else{
+            this.bus.$emit("loading", false);
+            that.bus.$emit("tips", { show: true, title: res.message.content });
           }
         });
     },
-    // jhajax: function(val) {
-    //   // alert('收到值了'+ val)
-    //   console.log(val);
-    //   for (var i in this.parkingMap) {
-    //     let item = this.parkingMap[i];
-    //     if (item.name == val) {
-    //       this.ind = item.index;
-    //     }
-    //   }
-    // },
     // 渲染车牌事件
     carlists() {
       let that = this;
+      that.bus.$emit("loading", true);
       axios
         .request({
           url: Url.url.plate_list,
@@ -717,22 +730,24 @@ export default {
         .then(res => {
           console.log(res);
           that.carlist = res.data;
-          let index = localStorage.getItem("carlist_index");
-          console.log(index);
-          if (index == null) {
-            that.bus.$emit("loading", true);
-            localStorage.setItem("carlist_index", 0);
-            that.inds = 0;
-            that.plateId = res.data[0].id;
-            console.log(that.plateId);
-            console.log("index == 0");
-          } else {
-            that.inds = index;
-            that.bus.$emit("loading", true);
-            console.log(res);
-            that.plateId = res.data[that.inds].id;
-            console.log(that.plateId);
-            console.log("index != 0");
+           let id = localStorage.getItem("carlist_index");
+           console.log(id)
+           for(let i = 0; i < res.data.length; i++){
+             console.log(res.data[i].id)
+             if(res.data[i].id == id){
+               console.log('走了')
+                that.inds = i
+                 that.plateId = res.data[that.inds].id;
+                return
+             }else{
+               that.inds = 0
+               that.plateId = res.data[0].id;
+             }
+             console.log(that.inds)
+           }
+
+          if(res.status == true){
+            that.bus.$emit("loading", false);
           }
         });
     },
@@ -740,6 +755,12 @@ export default {
     watch() {
       let that = this;
       that.sho = "true";
+    },
+    //编辑车牌号
+    edit(){
+         this.$router.push({ 
+          path: "/CarModuleList",
+           });
     },
     //关闭查看详情
     close_watch() {
@@ -787,10 +808,11 @@ export default {
     // 点击车牌
     car(item, index) {
       let that = this;
-      that.inds = index;
+      that.inds = index
+      that.id = item.id;
       console.log(item, index);
       that.plateId = item.id;
-      localStorage.setItem("carlist_indexs", index);
+      localStorage.setItem("carlist_indexs", item.id);
     },
     // 取消选择车牌
     qu_car() {
@@ -808,12 +830,12 @@ export default {
       let that = this;
       that.show = "false";
       that.hao = "true";
-      let index = localStorage.getItem("carlist_indexs");
-      console.log(index);
-      if (index == null) {
-        localStorage.setItem("carlist_index", 0);
+      let id = localStorage.getItem("carlist_indexs");
+      console.log(id);
+      if (id == null) {
+        localStorage.setItem("carlist_index", null);
       } else {
-        localStorage.setItem("carlist_index", index);
+        localStorage.setItem("carlist_index", id);
       }
     },
     // 准备预约车位
@@ -907,10 +929,11 @@ export default {
   },
   created() {
     let that = this;
+    localStorage.setItem('tap',1)
     console.log(that);
     // alert(that.$route.query.token)
-    that.token = that.$route.query.token;
-    that.groupId = that.$route.query.groupId;
+    // that.token = that.$route.query.token;
+    // that.groupId = that.$route.query.groupId;
     if (that.token == undefined || that.groupId == undefined) {
       that.token = localStorage.getItem("token");
       that.groupId = localStorage.getItem("groupId");
@@ -924,7 +947,7 @@ export default {
     localStorage.setItem("token", that.token);
     localStorage.setItem("groupId", that.groupId);
     let router = localStorage.getItem("router");
-    console.log(router);
+    console.log(that.token);
     axios
       .request({
         url: Url.url.current

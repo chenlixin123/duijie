@@ -95,21 +95,29 @@ export default {
       // });
       // window.location.href = "http://www.baidu.com"; // 跳转外部链接
 
-      var u = navigator.userAgent;
-      // android终端
-      var isAndroid = u.indexOf("wehome/1") > -1;
-      var isiOS = u.indexOf("wehome/2") > -1;
-      // ios终端
-      if (isiOS) {
-        // alert(navigator.userAgent);
-        window.finish_current_activity_webView("", "");
-        // alert("isiOS调用成功2");
-      } else if (isAndroid) {
-        // alert(navigator.userAgent);
-        window.jsObject.finish_current_activity_webView("", "");
-        // window.jsObject.open_in_new_activity_webView("1212");
-        // alert("isAndroid调用成功2");
+      // var u = navigator.userAgent;
+      // alert(u)
+      // // android终端
+      // var isAndroid = u.indexOf("wehome/1") > -1;
+      // var isiOS = u.indexOf("wehome/2") > -1;
+      // // ios终端
+      // if (isiOS) {
+      //   // alert(navigator.userAgent);
+      //   window.finish_current_activity_webView("", "");
+      //   // alert("isiOS调用成功2");
+      // } else if (isAndroid) {
+      //   // alert(navigator.userAgent);
+      //   window.jsObject.finish_current_activity_webView("", "");
+      //   // window.jsObject.open_in_new_activity_webView("1212");
+      //   // alert("isAndroid调用成功2");
+      // }
+      let tap = localStorage.getItem('tap')
+      if(tap == 0){
+          this.$router.go(-2)
+      }else{
+         this.$router.go(-3)
       }
+      
     }
   }
 };

@@ -18,6 +18,7 @@
       <div class="body-content">
         <div class="body-name">{{item.preName}}</div>
         <div class="body-num">
+          <div class="vals">25gh</div>
           <div
             :class=" ss == index ? 'vals': 'val'"
             v-for="(val , index) in data"
@@ -299,12 +300,13 @@ html {
   /* justify-content: center; */
 }
 .body-content {
-  width: 95%;
+  width: 90%;
   height: 100%;
 }
 .body-name {
   font-size: 32px;
   color: #333;
+  margin-left: 23px;
   margin-top: 44px;
   margin-bottom: 38px;
 }
@@ -312,7 +314,9 @@ html {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  // box-sizing: border-box;
+  // padding-left: 15PX;
+  // justify-content: space-between;
 }
 .val {
   width: 170px;
@@ -321,7 +325,8 @@ html {
   text-align: center;
   line-height: 68px;
   border: 1px solid #f5f4f4;
-  margin-right: 61px;
+  margin-right: 23px;
+  margin-left: 23px;
   margin-bottom: 38px;
 }
 .vals {
@@ -332,7 +337,8 @@ html {
   line-height: 68px;
   border: 1px solid #f5f4f4;
   color: white;
-  margin-right: 61px;
+  margin-right: 23px;
+  margin-left: 23px;
   margin-bottom: 38px;
   background: #f66913;
 }

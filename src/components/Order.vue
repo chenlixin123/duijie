@@ -136,7 +136,7 @@ export default {
           that.orders();
           localStorage.setItem("router", true);
         } else {
-          that.$router.go(-1)
+          that.$router.go(-2)
         }
       });
   },
@@ -284,9 +284,9 @@ export default {
                   (that.s = 4),
                   (that.begins = "true");
               } else if (res.message.code == 8005073) {
-                alert(res.message.content);
+                that.bus.$emit("tips", { show: true, title: res.message.content});
               } else if (res.message.code == 8005072) {
-                alert(res.message.content);
+                that.bus.$emit("tips", { show: true, title: res.message.content});
               }
             }
           } else {
@@ -336,9 +336,9 @@ export default {
                   (that.s = 4),
                   (that.begins = "true");
               } else if (res.message.code == 8005073) {
-                alert(res.message.content);
+                that.bus.$emit("tips", { show: true, title:res.message.content});
               } else if (res.message.code == 8005072) {
-                alert(res.message.content);
+                that.bus.$emit("tips", { show: true, title: res.message.content});
               }
             }
           } else {
@@ -396,16 +396,17 @@ export default {
             }
           });
       } else if (that.s == 5) {
-        var u = navigator.userAgent;
-        // android终端
-        var isAndroid = u.indexOf("wehome/1") > -1;
-        var isiOS = u.indexOf("wehome/2") > -1;
-        // ios终端
-        if (isiOS) {
-          window.finish_current_activity_webView("", "");
-        } else if (isAndroid) {
-          window.jsObject.finish_current_activity_webView("", "");
-        }
+        // var u = navigator.userAgent;
+        // // android终端
+        // var isAndroid = u.indexOf("wehome/1") > -1;
+        // var isiOS = u.indexOf("wehome/2") > -1;
+        // // ios终端
+        // if (isiOS) {
+        //   window.finish_current_activity_webView("", "");
+        // } else if (isAndroid) {
+        //   window.jsObject.finish_current_activity_webView("", "");
+        // }
+        that.$router.go(-1)
       } else if (that.s == 6) {
         console.log("切换车位失败");
       } else {
@@ -455,17 +456,24 @@ export default {
           console.log(res);
           if (res.status == true) {
             that.bus.$emit("tips", { show: true, title: "取消成功" });
+            let tap = localStorage.getItem('tap')
             setTimeout(() => {
-              var u = navigator.userAgent;
-              // android终端
-              var isAndroid = u.indexOf("wehome/1") > -1;
-              var isiOS = u.indexOf("wehome/2") > -1;
-              // ios终端
-              if (isiOS) {
-                window.finish_current_activity_webView("", "");
-              } else if (isAndroid) {
-                window.jsObject.finish_current_activity_webView("", "");
+              // var u = navigator.userAgent;
+              // // android终端
+              // var isAndroid = u.indexOf("wehome/1") > -1;
+              // var isiOS = u.indexOf("wehome/2") > -1;
+              // // ios终端
+              // if (isiOS) {
+              //   window.finish_current_activity_webView("", "");
+              // } else if (isAndroid) {
+              //   window.jsObject.finish_current_activity_webView("", "");
+              // }
+              if(tap == 1){
+                  that.$router.go(-2)
+              }else{
+                that.$router.go(-1)
               }
+              
             }, 2000);
             localStorage.setItem("yue", false);
           } else {

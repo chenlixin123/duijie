@@ -310,11 +310,11 @@ export default {
                   console.log(res.message.content);
                   (that.loading = "none"), (that.self = true);
                   that.bus.$emit("loading", false);
-                  alert(res.message.content);
+                  that.bus.$emit("tips", { show: true, title: res.message.content });
                 } else if (res.message.code == 8005072) {
                   (that.loading = "none"), (that.self = true);
                   that.bus.$emit("loading", false);
-                  alert(res.message.content);
+                  that.bus.$emit("tips", { show: true, title: res.message.content });
                 }
               }
             }
