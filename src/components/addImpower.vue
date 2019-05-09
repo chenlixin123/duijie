@@ -104,7 +104,8 @@ export default {
   background: white;
   box-sizing: border-box;
   padding: 34px 0px;
-  margin-top: 20px;
+  /* margin-top: 20px; */
+  margin-bottom: 20px;
 }
 
 .title {

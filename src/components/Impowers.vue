@@ -2,8 +2,8 @@
 <div class="page">
     <div class="line"></div>
 <div class='body'>
-  <input class='put_mobile' placeholder='请输入被授权人手机号' v-on:input='put_mobile' type='number' oninput="if(value.length==12)value=value.slice(0,11)">
-  <input class='put_user' placeholder='请输入被授权人备注名'  v-on:input='put_user' maxlength='10'>
+  <input class='put_mobile' placeholder='请输入被授权人手机号' type='number' readonly='true' oninput="if(value.length==12)value=value.slice(0,11)" :value="mobile">
+  <input class='put_user' placeholder='请输入被授权人备注名'  v-on:input='put_user' maxlength='10' :value="username">
   <div class='relation'>
     <div v-for='(item,index) in relation' :key='index' :class="inds == index ? 'texts' : 'texte'" @click='tap(item,index)'>{{item.name}}</div>
   </div>
@@ -12,6 +12,9 @@
   <input type="text" @click='input2' readonly='true' class='end_time' placeholder='到期时间' :value='end_time'>
   </div>
   <button :class="dis == true ? 'btns' : 'btn'" @click='btn'>确定授权</button>
+   <div class='cancel_bottom'>
+    <div class='cancels' @click='cancels'>取消授权</div>
+   </div>
   </div>
 </div>
 </template>
@@ -28,77 +31,86 @@ import './zepto.js'
             return {
      start_time: '',
     end_time: '',
+    ss: '',
     show: 'false',
     relation: [],
     inds: -1,
     mobile: '',
     username: '',
+    hours: '',
+    min: '',
     value: [],
-    time:'',
-    hour:'',
-    mins:'',
-    judge:'',
-    dis:true,
-    preId:'',
-    stallId:'',
-    carname:'',
-    name:'',
-    relationId:'',
-    relationName:'',
+    times: '',
+    time: '',
+    hour: '',
+    mins: '',
+    judge: '',
+    dis: true,
+    preId: '',
+    stallId: '',
+    carname: '',
+    name: '',
+    relationId: '',
+    relationName: '',
     loadingText:'加载中请稍候',
+    loading:'none',
+    stallEndTime:'',
     title:'',
-    num:'',
-    myself_mobile:''
+    id:''
             }
         },
-        created() {
-            let that = this
-            //获取用户手机号
-            that.myself_mobiles()
-            //用户关系渲染
-             axios.request({
+      created() {
+      let that = this
+      console.log(that.$route.query)
+      let data = JSON.parse(that.$route.query.data)
+      let datas = JSON.parse(that.$route.query.datas)
+      console.log(data)
+      console.log(datas)
+      that.preId = data.preId,
+      that.stallId = data.stallId,
+      that.carname = data.preName,
+      that.name = data.stallName,
+      that.id = datas.id,
+      that.mobile = datas.mobile,
+      that.username = datas.username,
+      that.relationName = datas.relationName,
+      that.relationId = datas.relationId,
+      that.start_time = datas.startTime,
+      that.end_time = datas.endTime,
+      that.stallEndTime = datas.stallEndTime
+       that.bus.$emit("loading", true);
+      that.bus.$emit("tip", { title: "加载中请稍候..." });
+
+
+        //用户关系渲染
+        axios.request({
         url:Url.url.friends,
         method:'get'
     }).then(res => {
         console.log(res.data)
-         console.log(that)
-          that.relation = res.data
+          if (res.status == true){
+
+          that.relation = res.data,
+           that.bus.$emit("loading", false);
+
+        for(let i = 0; i < res.data.length; i++){
+          if (that.relationName == res.data[i].name){
+              that.inds = i
+            if (that.start_time == '' || that.end_time == '' || that.inds == -1) {
+                that.dis = true
+            } else {
+                that.dis = false
+            }
+          }
+        }
+        }else{
+          that.bus.$emit("loading", false);
+         that.bus.$emit("tips", { show: true, title: "加载失败" });
+        }
     })
-    console.log(that.$route.query)
-      that.preId = that.$route.query.preId,
-      that.stallId = that.$route.query.stallId,
-      that.carname = that.$route.query.carname,
-      that.name = that.$route.query.name,
-      that.stallEndTime = that.$route.query.stallEndTime
-    console.log(that.stallEndTime)
         },
 
 methods: {
-//获取用户手机号
-myself_mobiles(){
-    let that = this
-    axios.request({
-        url:Url.url.choose_user,
-        method:'get'
-    }).then(res => {
-        console.log(res.data.mobile)
-        that.myself_mobile = res.data.mobile
-    })
-    },
-//输入手机号
-put_mobile(e){
-    let that = this
-    // console.log(e.target.value.length)
-    that.mobile = e.target.value
-    that.num = e.target.value.length
-     if (that.num != 11 || that.start_time == '' || that.end_time == '' || that.ind == -1) {
-
-        that.dis = true
-
-    } else {
-        that.dis = false
-    }
-    },
 
 //输入备注名称
 put_user(e){
@@ -115,27 +127,34 @@ put_user(e){
       that.inds = index,
       that.relationId = e.id,
       that.relationName = e.name
-    if (that.num != 11 || that.start_time == '' || that.end_time == '' || that.ind == -1) {
-
-        that.dis = true
-
-    } else {
-        that.dis = false
-    }
+      if (that.start_time == '' || that.end_time == '' || that.inds == -1) {
+          that.dis = true
+      } else {
+          that.dis = false
+      }
   },
   //点击开始时间输入框
   //   时间选择器
 input1(){
     var showDateDom = $('#showDate');
     var that = this;
+    //截取小时与分钟
+     let fen = that.start_time.split(' ')
+      console.log(fen[0])
+      let data = fen[0].split('月')
+        console.log(data[0])
+        console.log(parseInt(data[1]))
+     let time = fen[1].split(':')
+
     // 初始化时间
     var now = new Date();
     var nowYear = now.getFullYear();
     var nowMonth = now.getMonth() + 1;
     var nowDate = now.getDate();
-    var hours = now.getHours();
-    var minutes = now.getMinutes();
-    var date = now.getMonth()+1+'月'+nowDate+'日'
+    var hours = parseInt(time[0])
+    var minutes = parseInt(time[1])
+    var date = data[0] + '月' + parseInt(data[1]) + '日'
+    console.log(date,hours,minutes)
     var arrs = [];
     showDateDom.attr('data-year',date);
     showDateDom.attr('data-month', hours);
@@ -242,13 +261,11 @@ input1(){
                     }
 
                     that.start_time = selectOneObj.value + ' ' + selectTwoObjs + ':' + selectThreeObjs
-                     if (that.num != 11 || that.start_time == '' || that.end_time == '' || that.ind == -1) {
-
-                         that.dis = true
-
-                    } else {
+                     if (that.start_time == '' || that.end_time == '' || that.inds == -1) {
+                        that.dis = true
+                      } else {
                         that.dis = false
-                    }
+                      }
                 }
         });
 },
@@ -257,14 +274,22 @@ input1(){
       console.log('结束时间')
     var showDateDom = $('#showDate');
     var that = this;
+
+     //截取小时与分钟
+     let fen = that.end_time.split(' ')
+      console.log(fen[0])
+      let data = fen[0].split('月')
+        console.log(data[0])
+        console.log(parseInt(data[1]))
+     let time = fen[1].split(':')
     // 初始化时间
     var now = new Date();
     var nowYear = now.getFullYear();
     var nowMonth = now.getMonth() + 1;
     var nowDate = now.getDate();
-    var hours = now.getHours();
-    var minutes = now.getMinutes();
-    var date = now.getMonth()+1+'月'+nowDate+'日'
+    var hours = parseInt(time[0])
+    var minutes = parseInt(time[1])
+    var date = data[0] + '月' + parseInt(data[1]) + '日'
     var arrs = [];
     showDateDom.attr('data-year',date);
     showDateDom.attr('data-month', hours);
@@ -327,7 +352,6 @@ input1(){
     var yearData = function(callback) {
        callback(formatYear(nowYear))
     }
-    console.log(yearData)
     var monthData = function (year, callback) {
         callback(formatMonth());
     };
@@ -370,14 +394,13 @@ input1(){
                     }
 
                     that.end_time = selectOneObj.value + ' ' + selectTwoObjs + ':' + selectThreeObjs
-                     if (that.num != 11 || that.start_time == '' || that.end_time == '' || that.ind == -1) {
-
+                    console.log(that.num,that.start_time,that.end_time,that.inds)
+                     if (that.start_time == '' || that.end_time == '' || that.inds == -1) {
                         that.dis = true
-
                     } else {
-                         that.dis = false
-                    }
-                }
+                      that.dis = false
+                      }
+                 }
         });
   },
   //确定授权
@@ -402,8 +425,7 @@ input1(){
 
 
     // 结束时间截取
-
-       console.log(that.end_time)
+    console.log(that.end_time)
     console.log(parseInt(that.end_time))
     let end_m = parseInt(that.end_time) //月
     let end_ri = that.end_time.split('月')
@@ -466,10 +488,6 @@ input1(){
          that.bus.$emit("tips", { show: true, title: "请输入到期时间" });
     }else if(start_time == end_time){
      that.bus.$emit("tips", { show: true, title: "请设置有效时间" });
-    }else if ( that.myself_mobile == that.mobile){
-      console.log(that.myself_mobile)
-      console.log(that.mobile)
-      that.bus.$emit("tips", { show: true, title: "长租车位不能授权给自己" });
     }else{
         console.log(mobile_verify.test(that.mobile))
         that.bus.$emit("loading", true);
@@ -477,16 +495,17 @@ input1(){
 
         //请求授权接口
         axios.request({
-            url:Url.url.newImpower,
+            url:Url.url.update,
             method:"post",
             params:{
                 endTime: end_time, //结束时间
                 startTime: start_time, //开始时间
-                mobile: that.mobile, //手机号
-                preId: that.preId, //车区ID
-                preName: that.carname, // 车区名称
-                stallIds:that.stallId, //车位ID
-                stallNames:that.name, //车位名称
+                // mobile: that.mobile, //手机号
+                // preId: that.preId, //车区ID
+                // preName: that.carname, // 车区名称
+                // stallIds:that.stallId, //车位ID
+                // stallNames:that.name, //车位名称
+                id:that.id,//主键ID
                 username: that.username, //用户名称
                 relationId: that.relationId, //关系ID
                 relationName: that.relationName, //关系名称
@@ -499,7 +518,7 @@ input1(){
             that.bus.$emit("loading", false);
             setTimeout(() => {
               that.$router.push({
-                path: '/succeedImpower?start_time=' + that.start_time + '&endtime=' + that.end_time + '&mobile=' + that.mobile + '&username=' + that.username + '&relationName=' + that.relationName + '&carname=' + that.carname + '&name=' + that.name + '&stallId=' + that.stallId
+                path: '/succeedImpower?start_time=' + that.start_time + '&endtime=' + that.end_time + '&mobile=' + that.mobile + '&username=' + that.username + '&relationName=' + that.relationName + '&carname=' + that.carname + '&name=' + that.name + '&stallId=' + that.stallId + '&skip=1'
               })
             },1000)
           }else{
@@ -513,6 +532,29 @@ input1(){
           }
         })
     }
+  },
+   //取消授权
+  cancels(){
+    let that = this
+     that.bus.$emit("loading", true);
+      that.bus.$emit("tip", { title: "加载中请稍候..." });
+    console.log(that.id)
+    axios.request({
+      url:Url.url.cancels + '?id=' + that.id,
+      method:"post"
+    }).then(res => {
+      console.log(res)
+      if(res.data == true){
+           that.bus.$emit("loading", false);
+           that.bus.$emit("tips", { show: true, title: "取消成功" });
+            setTimeout(function () {
+                that.$router.go(-1)
+            }, 1000);
+          }else{
+             that.bus.$emit("loading", false);
+           that.bus.$emit("tips", { show: true, title: "取消失败" });
+          }
+    })
   },
         }
     }
@@ -634,7 +676,7 @@ input1(){
         margin-top: 140px;
         border: none;
         outline: none;
-        font-size: 30px;
+         font-size: 30px;
     }
 
     .box {
@@ -699,4 +741,13 @@ input1(){
         font-size: 30px;
         color: #333;
     }
+    .cancel_bottom{
+  width: 100%;
+  margin-top: 54px;
+  text-align: center;
+}
+.cancels{
+  font-size: 28px;
+  color: #999;
+}
 </style>

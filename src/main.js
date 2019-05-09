@@ -6,6 +6,8 @@ import router from './router'
 import Axios from 'axios'
 import $ from 'jquery'
 import VueWechatTitle from 'vue-wechat-title'
+import infiniteScroll from 'vue-infinite-scroll'
+Vue.use(infiniteScroll)
 Vue.use(VueWechatTitle)
 
 // Vue.use(Axios)

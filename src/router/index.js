@@ -15,6 +15,11 @@ import confirm from '@/components/confirm'
 import pastdue from '@/components/pastdue'
 import addImpower from '@/components/addImpower'
 import carImpower from '@/components/carImpower'
+import succeedImpower from '@/components/succeedImpower'
+import Impowers from '@/components/Impowers'
+import malfunction from '@/components/malfunction'
+import record from '@/components/record'
+import particulars from '@/components/particulars'
 
 Vue.use(Router)
 
@@ -130,11 +135,51 @@ export default new Router({
       }
     },
     {
-      path: '/carImpower', //授权选择车位页
+      path: '/carImpower', //确认车位页
       name: 'carImpower',
       component: carImpower,
       meta: {
         title: '确认车位'
+      }
+    },
+    {
+      path: '/succeedImpower', //授权成功页面
+      name: 'succeedImpower',
+      component: succeedImpower,
+      meta: {
+        title: '授权成功'
+      }
+    },
+    {
+      path: '/Impowers', //预约车位页面
+      name: 'Impowers',
+      component: Impowers,
+      meta: {
+        title: '授权信息'
+      }
+    },
+    {
+      path: '/malfunction', //车位故障页面
+      name: 'malfunction',
+      component: malfunction,
+      meta: {
+        title: '车位故障'
+      }
+    },
+    {
+      path: '/record', //使用记录页面
+      name: 'record',
+      component: record,
+      meta: {
+        title: '使用记录'
+      }
+    },
+    {
+      path: '/particulars', //使用记录详情页面
+      name: 'particulars',
+      component: particulars,
+      meta: {
+        title: '详情页'
       }
     },
   ]

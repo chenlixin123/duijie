@@ -22,7 +22,7 @@
 
     <!-- 首页授权标识 -->
 
-    <img class="empower" src="@/assets/shouquan@2x.png" alt="" @click="empower">
+    <img class="empower" src="@/assets/shouquan@2x.png" alt="" @click="empower" v-if="show_impower == true">
   </div>
   
 </template>
@@ -42,14 +42,17 @@ export default {
       show: "",
       appointment:'',
       appointments:'false',
-      num:0
+      num:0,
+      show_impower:'',
+      longitude: "116.41361",
+      latitude: "39.91106",
     };
   },
   created() {
     let that = this;
     localStorage.setItem('tap',0)
     let token = that.$route.query.token;
-    // token = 'a9f8af6a1c21463fb024656a87ae8149'
+    token = '3963590489b24337a4eb2747d64a4f35'
     //  window.jhajax = this.jhajax;
     console.log(token)
     if(token == undefined){
@@ -73,6 +76,7 @@ export default {
             that.appointments = 'true'
           }
         })
+        //获取车牌列表的接口
         axios
         .request({
           url: Url.url.plate_list,
@@ -108,9 +112,10 @@ export default {
             (that.long_name = res.data.preName);
           localStorage.setItem("oo", true);
           that.show = localStorage.getItem("oo");
-          localStorage.setItem("num", res.data.stallNumber);
+          
         }
       });
+      that.show_impowers()
   },
   methods: {
     jhajax(token) {
@@ -122,6 +127,9 @@ export default {
     //  console.log(u)
       console.log(token);
       Cookies.set("tokens", token);
+      localStorage.setItem("token", token);
+
+      //请求车场列表接口  渲染列表
       axios
         .request({
           url: Url.url.car_list,
@@ -131,8 +139,22 @@ export default {
           console.log(res)
           this.msg = res.data;
            that.bus.$emit("loading", false);
-          console.log(res);
         });
+    },
+    //是否显示授权标识
+    show_impowers(){
+      let that = this
+        axios.request({
+          url:Url.url.show_impower,
+          method:"get"
+        }).then(res => {
+          console.log(res)
+          if (res.status == true){
+            // console.log(res.data.authFlag)
+            that.show_impower = res.data.authFlag
+            // console.log(that.show_impower)
+        }
+        })
     },
     // 跳转预约车位
     park(item) {
@@ -186,7 +208,13 @@ export default {
       }else if (oo == "true") {
         console.log("详情页");
         this.$router.push({
-          path: "/Park"
+          path: "/Park",
+          query:{
+            skip:1,
+             token:token,
+             latitude: that.latitude,
+             longitude : that.longitude,
+          }
         });
       } else {
         // that.num = 0
@@ -195,13 +223,40 @@ export default {
           path: "/CarModuleList",
            });
         }else{
-         console.log("车位页");
-        this.$router.push({ 
-          path: "/Choice",
-          query:{
-            token:token
-          }
-           });
+          axios.request({
+            url:Url.url.long_carLists,//查看长租用户车位列表
+            method:"post",
+            params: {
+                    latitude: that.latitude,
+                    longitude: that.longitude
+                  },
+          }).then(res =>{
+            console.log(res)
+            if(res.data.num > 1){
+               localStorage.setItem("num", res.data.num);
+                console.log("选车位页");
+              this.$router.push({ 
+               path: "/Choice",
+                query:{
+                  token:token,
+                  latitude: that.latitude,
+                  longitude : that.longitude
+                      }
+                  });
+            }else{
+              localStorage.setItem("num", res.data.num);
+              console.log('xiamg')
+              this.$router.push({ 
+               path: "/Park",
+                query:{
+                  token:token,
+                  latitude: that.latitude,
+                  longitude : that.longitude,
+                  skip:1
+                      }
+                  });
+            }
+          })      
         }
       }
     },

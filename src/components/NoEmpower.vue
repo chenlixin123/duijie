@@ -9,7 +9,7 @@
 </div>
 
 <div class='body' v-if='show == true'>
-  <div class='boxs' v-for='(item,index) in datas' :key='index'  @click='tap(items)'  v-for-item='items'>
+  <div class='boxs' v-for='(item,index) in datas' :key='index'  @click='tap(item)'>
     <div class='title'>
       <div class='carmodule'>{{item.preName}}</div>
       <div class='carname'>{{item.stallNames}}</div>
@@ -98,8 +98,9 @@ shows(){
 },
 //点击进入详情
 tap(e){
-  console.log(e.currentTarget.dataset)
+  console.log(e)
   let that = this
+  that.data = e
    that.bus.$emit("loading", true);
    that.bus.$emit("tip", { title: "加载中请稍候..." });
   let data = JSON.stringify(that.data);
@@ -119,9 +120,9 @@ tap(e){
  
 },
 taps(e){
-  console.log(e.currentTarget.dataset.items)
+  console.log(e)
   let that = this
-    that.datas =  e.currentTarget.dataset.items
+    that.datas =  e
 },
 //跳转可授权车位页面
 add(){
@@ -170,8 +171,9 @@ add(){
 <style scoped>
     .big_box{
   width: 100%;
-  height: 100%;
   background: #f5f4f4;
+  box-sizing: border-box;
+  padding-bottom: 20px;
 }
 .line{
   border-top: 1px solid rgb(243, 240, 240);
@@ -223,7 +225,8 @@ add(){
   color: #999;
   display: flex;
   align-items: center;
-  margin-top: 20px;
+  box-sizing: border-box;
+  padding-top: 20px;
 }
 .carname{
   margin-left: 22px;

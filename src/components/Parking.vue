@@ -675,7 +675,6 @@ export default {
       // this.groupId = string;
       // let tokens = strings;
       console.log(that.groupId)
-      that.groupId = that.groupId;
       Cookies.set("tokens", that.token);
       localStorage.setItem("token", that.token);
       localStorage.setItem("groupId", that.groupId);
@@ -930,10 +929,9 @@ export default {
   created() {
     let that = this;
     localStorage.setItem('tap',1)
-    console.log(that);
-    // alert(that.$route.query.token)
-    // that.token = that.$route.query.token;
-    // that.groupId = that.$route.query.groupId;
+    console.log(that.$route.query)
+    that.token = that.$route.query.token;
+    that.groupId = that.$route.query.groupId;
     if (that.token == undefined || that.groupId == undefined) {
       that.token = localStorage.getItem("token");
       that.groupId = localStorage.getItem("groupId");

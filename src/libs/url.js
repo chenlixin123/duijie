@@ -44,6 +44,12 @@ let Url = {
    choose_user: "/api/account/app/users/v2.0/detail",
     //新增授权接口
     newImpower: "/api/enterprise/app/auth-record/v2.0/save",
+    //修改授权接口
+    update: "/api/enterprise/app/auth-record/v2.0/update",
+    //取消授权接口
+    cancels: "/api/enterprise/app/auth-record/v2.0/cancel",
+    //首页是否显示授权
+    show_impower: "/api/enterprise/app/user-rent-stall/v2.0/auth-flag",
 
 
   //固定车位
@@ -52,14 +58,18 @@ let Url = {
   choose_carModule: '/api/enterprise/app/user-rent-stall/v2.0/owner',
   //获取长租车位列表
   long_carList: '/api/enterprise/app/user-rent-stall/v2.0/list',
+  // 长租车位列表
+  long_carLists: '/api/enterprise/app/user-rent-stall/v2.0.1/list',
   //长租用户操作车位锁
   long_control: '/api/enterprise/app/user-rent-stall/v2.0/control',
   //查询当前是否有使用长租车位
   long_current: '/api/enterprise/app/user-rent-stall/v2.0/current',
-  //故障车位上报 -- 暂时不写
+  //故障车位上报 
   long_Feedback: '/api/account/app/fault-stall/feedback/v2.0/save',
-  //故障车位失败原因列表 -- 暂时不写
-  long_Feedbacks: '/api/common/app/dicts/v2.0/cause/fault'
+  //故障车位失败原因列表 
+  long_Feedbacks: '/api/common/app/dicts/v2.0/cause/fault',
+   //停车记录
+   record: "/api/enterprise/app/user-rent-stall/v2.0/parking-record",
 }
 
 function Time(time) {

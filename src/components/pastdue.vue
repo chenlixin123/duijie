@@ -26,26 +26,18 @@ export default {
     data(){
         return{
             data: [],
-            datas: '',
-            carname: '',
-            name: ''
+            datas: ''
         }
     },
     created(){
-         console.log(options)
     let that = this
-    that.setData({
-      loading:'block'
-    })
-    let data = JSON.parse(options.data)
-    let datas = JSON.parse(options.datas)
+    console.log(that.$route.query)
+    let data = JSON.parse(that.$route.query.data)
+    let datas = JSON.parse(that.$route.query.datas)
     console.log(data)
     console.log(datas)
-    that.setData({
-      data: data,
-      datas: datas,
-      loading:'none'
-    })
+      that.data = data,
+      that.datas = datas
     }
 }
 </script>
