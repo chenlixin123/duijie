@@ -33,12 +33,13 @@ export default {
        that.skip = localStorage.getItem('skip')
        console.log(localStorage.getItem('skip'))
         if(that.skip == 2){
+            console.log('555555555555')
             that.$router.go(-1)
            localStorage.setItem('skip',1)
         }
-        console.log(that.skip)
         that.stallName = that.$route.query.stallName
         that.stallId = that.$route.query.stallId
+        console.log(that.stallName)
         axios.request({
             url:Url.url.entrance,
             method:'get',

@@ -107,7 +107,7 @@
     </div>
     <div class="foot">
       <button v-if="data.cancelFlag == 1" @click="cancel_orders">取消预约</button>
-      <button v-else @click="top">升锁离场</button>
+      <button v-else @click="top">结账离场</button>
       <button @click="bottom">降下地锁</button>
     </div>
   </div>
@@ -132,7 +132,8 @@ export default {
       nocar: "false",
       nocar_content: "降锁成功",
       stallId:'',
-      preId:''
+      preId:'',
+      name:''
     };
   },
   created() {
@@ -143,6 +144,7 @@ export default {
       })
       .then(res => {
         console.log(res);
+        that.name = res.data.stallName
         that.stallId = res.data.stallId
         if(that.$route.query.preId == undefined){
           that.preId = localStorage.getItem('preId')
@@ -165,8 +167,9 @@ export default {
      carwhere(){
     let that = this
       console.log('跳转室内导航')
+      console.log(that.preId,that.stallId,that.name+'66666666666')
       that.$router.push({
-           path: '/entrance?preId=' + that.preId + '&stallId=' + that.stallId + '&stallName=' + that.data.stallName,
+           path: '/entrance?preId=' + that.preId + '&stallId=' + that.stallId + '&stallName=' + that.name,
       })
   },
     // 渲染订单接口
