@@ -16,7 +16,7 @@
       <!-- 首部预约车位橘黄色提示框-->
     <div class="modules" v-if="appointments == 'true'" @click="parks">
       <img class="weizhi" src="@/assets/yuyue@2x.png">
-      <div class="text">您已预约{{long_name}}[{{names}}]车位</div>
+      <div class="text">{{downFlag}}{{long_name}}[{{names}}]车位</div>
       <img class="you" src="@/assets/you@2.png">
     </div>
 
@@ -28,6 +28,8 @@
 </template>
 
 <script>
+// var wx = require('weixin-js-sdk');
+import wx from 'weixin-js-sdk';
 import axios from "@/libs/api.request";
 import Cookies from "js-cookie";
 import Url from "@/libs/url";
@@ -46,13 +48,20 @@ export default {
       show_impower:'',
       longitude: "116.41361",
       latitude: "39.91106",
+      downFlag:'' //车位的状态
     };
   },
   created() {
     let that = this;
+    console.log(wx)
+    // let wexinPay = (data,cb,errorCb) => {
+    //   console.log(data)
+    //   console.log(cd)
+    // }
     localStorage.setItem('tap',0)
     let token = that.$route.query.token;
-    token = '3963590489b24337a4eb2747d64a4f35'
+    // token = '4534807d4f184a06870192563a289c2e'
+    // token = '2d5c574581c447f9ab4e6fbd224b7233'
     //  window.jhajax = this.jhajax;
     console.log(token)
     if(token == undefined){
@@ -68,6 +77,13 @@ export default {
         .then(res => {
           console.log(res)
           that.appointment = res.data
+          if(res.data.downFlag == 0){
+            that.downFlag = '您已预约'
+          }else if(res.data.downFlag == 1){
+            that.downFlag = '您正在使用'
+          }else{
+              that.downFlag = '您有一笔订单未支付，请前往支付'
+          }
           if(res.data == null){
             that.appointments = 'false'
           }else{
@@ -117,6 +133,23 @@ export default {
       });
       that.show_impowers()
   },
+//   mounted(){
+//       axios.request({
+//   method: 'post',
+//   url: 'http://my.service.com/index.php/opcode/6002',
+//   data:{ url:location.href.split('#')[0] } //向服务端提供授权url参数，并且不需要#后面的部分
+// }).then((res)=>{
+//   console.log(res)
+//   wx.config({
+//     debug: true, // 开启调试模式,
+//     appId: res.appId, // 必填，企业号的唯一标识，此处填写企业号corpid
+//     timestamp: res.timestamp, // 必填，生成签名的时间戳
+//     nonceStr: res.nonceStr, // 必填，生成签名的随机串
+//     signature: res.signature,// 必填，签名，见附录1
+//     jsApiList: ['scanQRCode'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+//   });
+// })
+//   },
   methods: {
     jhajax(token) {
       let that = this
@@ -169,7 +202,7 @@ export default {
           if(that.appointment == null){
             if(that.num == 0){
             this.$router.push({
-          path: "/addcarmodule",
+          path: "/addcarmodule?num=2",
         });
             }else{
           this.$router.push({
@@ -220,7 +253,7 @@ export default {
         // that.num = 0
         if(that.num == 0){
             this.$router.push({ 
-          path: "/CarModuleList",
+          path: "/nocarmodule",
            });
         }else{
           axios.request({
@@ -232,7 +265,11 @@ export default {
                   },
           }).then(res =>{
             console.log(res)
-            if(res.data.num > 1){
+            if(res.data.num == 0){
+                that.$router.push({
+                  path:'/nocarmodule'
+                })
+            }else if(res.data.num > 1){
                localStorage.setItem("num", res.data.num);
                 console.log("选车位页");
               this.$router.push({ 

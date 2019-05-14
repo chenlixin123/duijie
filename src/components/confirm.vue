@@ -91,7 +91,7 @@ put_mobile(e){
     // console.log(e.target.value.length)
     that.mobile = e.target.value
     that.num = e.target.value.length
-     if (that.num != 11 || that.start_time == '' || that.end_time == '' || that.ind == -1) {
+     if (that.num != 11 || that.start_time == '' || that.end_time == '' || that.inds == -1) {
 
         that.dis = true
 
@@ -115,7 +115,7 @@ put_user(e){
       that.inds = index,
       that.relationId = e.id,
       that.relationName = e.name
-    if (that.num != 11 || that.start_time == '' || that.end_time == '' || that.ind == -1) {
+    if (that.num != 11 || that.start_time == '' || that.end_time == '' || that.inds == -1) {
 
         that.dis = true
 
@@ -160,7 +160,7 @@ input1(){
     }
     function formatDate () {
          var arr = [];
-        for (var i = 1; i <= 59; i++) {
+        for (var i = 0; i <= 59; i++) {
            arr.push({
                 id: i + '',
                 value: i
@@ -242,7 +242,7 @@ input1(){
                     }
 
                     that.start_time = selectOneObj.value + ' ' + selectTwoObjs + ':' + selectThreeObjs
-                     if (that.num != 11 || that.start_time == '' || that.end_time == '' || that.ind == -1) {
+                     if (that.num != 11 || that.start_time == '' || that.end_time == '' || that.inds == -1) {
 
                          that.dis = true
 
@@ -289,7 +289,7 @@ input1(){
     }
     function formatDate () {
          var arr = [];
-        for (var i = 1; i <= 59; i++) {
+        for (var i = 0; i <= 59; i++) {
            arr.push({
                 id: i + '',
                 value: i
@@ -370,7 +370,7 @@ input1(){
                     }
 
                     that.end_time = selectOneObj.value + ' ' + selectTwoObjs + ':' + selectThreeObjs
-                     if (that.num != 11 || that.start_time == '' || that.end_time == '' || that.ind == -1) {
+                     if (that.num != 11 || that.start_time == '' || that.end_time == '' || that.inds == -1) {
 
                         that.dis = true
 
@@ -398,12 +398,11 @@ input1(){
     let fen = that.start_time.split(':')
     let fens = parseInt(fen[1])//分
     let start_time = y + '/' + m + '/' + d + " " + shis + ":" + fens
-    console.log(y + '/' + m + '/' + d + " " + shis + ":" + fens) 
+    console.log(y + '-' + m + '-' + d + " " + shis + ":" + fens) 
 
 
     // 结束时间截取
-
-       console.log(that.end_time)
+    console.log(that.end_time)
     console.log(parseInt(that.end_time))
     let end_m = parseInt(that.end_time) //月
     let end_ri = that.end_time.split('月')
@@ -420,37 +419,81 @@ input1(){
     // 开始时间与授权用户的使用时间对比
      let stallEndTime = that.stallEndTime.split('-')
     console.log(stallEndTime)
-    if (m == stallEndTime[1] && d == stallEndTime[2]) {
-      console.log('第一步')
-      if (shis > 0 || fens > 0) {
-        console.log('第二步')
-        that.bus.$emit("tips", { show: true, title: "开始时间不能大于车位使用时间" });
-        return
-      }
-    }
+    // if(y <= stallEndTime[0]){
+    // if (m == stallEndTime[1] && d == stallEndTime[2]) {
+    //   console.log('第一步')
+    //   if (shis > 0 || fens > 0) {
+    //     console.log('第二步')
+    //     that.bus.$emit("tips", { show: true, title: "开始时间不能大于车位使用时间" });
+    //     return
+    //   }
+    // }
+    // }
 
     //结束时间与授权用户的使用时间对比
-     if (end_m == stallEndTime[1] && end_d == stallEndTime[2]) {
-      console.log('第一步')
-      if (end_shis > 0 || end_fens > 0) {
-        console.log('第二步')
-        that.bus.$emit("tips", { show: true, title: "到期时间不能大于车位使用时间" });
+    console.log(stallEndTime[0]+'-'+stallEndTime[1]+'-'+stallEndTime[2])
+    let data = new Date(stallEndTime[0]+'-'+stallEndTime[1]+'-'+stallEndTime[2])
+    let time = data.getTime();  
+    console.log(time)
+
+    console.log(y + '-' + m + '-' + d + " " + shis + ":" + fens)
+     let data1 = new Date(y + '-' + m + '-' + d + " " + shis + ":" + fens)
+    let start_times = data1.getTime()
+    console.log(start_times)
+
+    
+     let data2 = new Date(y + '/' + end_m + '/' + end_d + " " + end_shis + ":" + end_fens)
+    let end_times = data2.getTime();  
+    console.log(end_times)
+if(start_times > time){
+    that.bus.$emit("tips", { show: true, title: "开始时间不能大于车位使用时间" });
         return
-      }
-    }
+}else if(end_times > time){
+    that.bus.$emit("tips", { show: true, title: "到期时间不能大于车位使用时间" });
+       return
+}
 
-     if (end_m > stallEndTime[1]){
-     that.bus.$emit("tips", { show: true, title: "到期时间不能大于车位使用时间" });
-      console.log('11111111')
-      return
+    // if(y < stallEndTime[0] || y == stallEndTime[0]){
+    //  if (end_m == stallEndTime[1] && end_d == stallEndTime[2]) {
+    //   console.log('第一步')
+    //   if (end_shis > 0 || end_fens > 0) {
+    //     console.log('第二步')
+    //     that.bus.$emit("tips", { show: true, title: "到期时间不能大于车位使用时间" });
+    //     return
+    //   }
+    // }
+    // }else{
+    //       that.bus.$emit("tips", { show: true, title: "到期时间不能大于车位使用时间" });
+    //       return
+    // }
+    //     if(y < stallEndTime[0] || y == stallEndTime[0]){
+    //         console.log('111111111')
+    //  if (end_m > stallEndTime[1]){
+    //      console.log('222222222222')
+    //  that.bus.$emit("tips", { show: true, title: "到期时间不能大于车位使用时间" });
+    //   return
       
-    }
-
-    if (m > stallEndTime[1]) {
-      that.bus.$emit("tips", { show: true, title: "开始时间不能大于车位使用时间" });
-      console.log('3333333333333')
-      return
-    }
+    // }else if(end_d > stallEndTime[2]){
+    //          that.bus.$emit("tips", { show: true, title: "到期时间不能大于车位使用时间" });
+    //   return
+    // }
+    //     }else{
+    //       that.bus.$emit("tips", { show: true, title: "到期时间不能大于车位使用时间" });
+    //       return
+    // }
+// if(y < stallEndTime[0] || y == stallEndTime[0]){
+//     if (m > stallEndTime[1]) {
+//       that.bus.$emit("tips", { show: true, title: "开始时间不能大于车位使用时间" });
+//       console.log('3333333333333')
+//       return
+//     }else if(d > stallEndTime[2]){
+//              that.bus.$emit("tips", { show: true, title: "到期时间不能大于车位使用时间" });
+//       return
+//     }
+// }else{
+//           that.bus.$emit("tips", { show: true, title: "到期时间不能大于车位使用时间" });
+//           return
+//     }
 
       console.log('确定授权')
        let mobile_verify = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1})|(17[0-9]{1})|(19[0-9]{1})|(16[0-9]{1}))+\d{8})$/;
@@ -464,7 +507,7 @@ input1(){
          that.bus.$emit("tips", { show: true, title: "请输入开始时间" });
     } else if (that.end_time == '') {
          that.bus.$emit("tips", { show: true, title: "请输入到期时间" });
-    }else if(start_time == end_time){
+    }else if(start_times == end_times){
      that.bus.$emit("tips", { show: true, title: "请设置有效时间" });
     }else if ( that.myself_mobile == that.mobile){
       console.log(that.myself_mobile)

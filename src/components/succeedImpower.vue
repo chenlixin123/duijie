@@ -64,7 +64,10 @@ export default {
         that.$router.go(-2)
       console.log('修改授权')
     }else{
-       that.$router.go(-4)
+       that.$router.go(-3)
+      //  that.$router.push({
+      //    path:'/goback'
+      //  })
     //  that.$router.push({
     //    path:'/NoEmpower'
     //  })

@@ -59,11 +59,14 @@ export default {
     hidden:'none',
     shows3:false,
     plateid:'',
-    showss:'false'
+    showss:'false',
+    num:''
         }
     },
     created(){
           let that = this;
+          console.log(that.$route.query.num)
+          that.num = that.$route.query.num
       axios
         .request({
           url: Url.url.plate_list,
@@ -93,7 +96,7 @@ export default {
      that.showss = 'true'
     } else {
      that.$router.push({
-       path:'/addcarmodule'
+       path:'/addcarmodule?num=' + that.num
      })
     }
   },

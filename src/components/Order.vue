@@ -53,6 +53,17 @@
         </figure>
         <div class="fault-txt">故障</div>
       </div>
+
+      <div class="faults" @click='carwhere'>
+        <figure class="img">
+          <img src='@/assets/where.png' width="100% ">
+        </figure>
+        <div class="fault-txt">找车位</div>
+      </div>
+
+
+      
+
     </div>
     <div class="body">
       <div class="body-content">
@@ -119,7 +130,9 @@ export default {
       begin: "false",
       aligin: "您确定要取消本次预约吗？取消后将会取消为您预留车位",
       nocar: "false",
-      nocar_content: "降锁成功"
+      nocar_content: "降锁成功",
+      stallId:'',
+      preId:''
     };
   },
   created() {
@@ -129,7 +142,14 @@ export default {
         url: Url.url.current
       })
       .then(res => {
-        console.log(res.data);
+        console.log(res);
+        that.stallId = res.data.stallId
+        if(that.$route.query.preId == undefined){
+          that.preId = localStorage.getItem('preId')
+        }else{
+             that.preId = that.$route.query.preId
+        }
+         console.log(that.preId)
         if (res.data != null) {
           that.bus.$emit("loading", true);
           that.bus.$emit("tip", { title: "加载中请稍候..." });
@@ -141,6 +161,14 @@ export default {
       });
   },
   methods: {
+      // 导航
+     carwhere(){
+    let that = this
+      console.log('跳转室内导航')
+      that.$router.push({
+           path: '/entrance?preId=' + that.preId + '&stallId=' + that.stallId + '&stallName=' + that.data.stallName,
+      })
+  },
     // 渲染订单接口
     orders() {
       let that = this;
@@ -497,6 +525,8 @@ export default {
 html,
 body {
   background: #fff;
+  width: 100%;
+  height: 100%;
 }
 .head {
   width: 100%;
@@ -550,13 +580,28 @@ body {
 .fault {
   position: absolute;
   right: 30px;
-  top: 250px;
+  top: 120px;
   .img {
     width: 56px;
     height: 56px;
     padding: 0;
     margin: 0;
     margin-bottom: 12px;
+    margin-left: 10px;
+  }
+}
+
+.faults {
+  position: absolute;
+  right: 30px;
+  top: 260px;
+  .img {
+    width: 56px;
+    height: 56px;
+    padding: 0;
+    margin: 0;
+    margin-bottom: 12px;
+    margin-left: 10px;
   }
 }
 
@@ -564,6 +609,7 @@ body {
   font-size: 24px;
   color: #999;
   text-align: center;
+  margin-bottom: 30px;
 }
 .body {
   width: 100%;

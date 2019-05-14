@@ -595,7 +595,8 @@ export default {
       plateId: "", //车牌ID
       prefectureId: "",
       nocar: "false",
-      ss: ""
+      ss: "",
+      preId:''
     };
     //   && (parkingMap[(x + ',' +y)].index = ind)?'self-btn':''
   },
@@ -688,6 +689,7 @@ export default {
         .then(res => {
           // console.log(res.data.gridX,res.data.gridY)
           console.log(res);
+          that.preId = res.data.preId
           if (res.status) {
             this.currentTimePeriod = res.data.currentTimePeriod; //当前时间
             this.currentFee = res.data.currentFee; //当前价格
@@ -921,8 +923,9 @@ export default {
     suss() {
       let that = this;
       that.showss = "false";
+      localStorage.setItem('preId',that.preId)
       that.$router.push({
-        path: "/Order"
+        path: "/Order?preId=" + that.preId
       });
     }
   },

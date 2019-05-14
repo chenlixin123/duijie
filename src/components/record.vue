@@ -1,4 +1,5 @@
 <template>
+<div class="scoll">
 <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
             
          
@@ -21,23 +22,22 @@
   <div v-if='loading == true' class='loadingq'>
     <div class='load-txtq'>加载中请稍候...</div>
   </div>
-
- 
     </div>
+  </div>
+   </div>
 
-    <div class="pages" v-if='num == 0'>
+   <div class="pages" v-if='num == 0'>
   <img class='img' alt=""  src='@/assets/zanwuchepaihao@2x.png'>
   <div class='text'>暂无停车记录</div>
   </div>
+
   </div>
-   </div>
 </template>
 
 <script>
 import axios from "@/libs/api.request";
 import Url from "@/libs/url";
 import Cookies from "js-cookie";
-var count = 0;
 export default {
     data(){
         return{
@@ -50,7 +50,7 @@ export default {
       use:'' ,// 车位权限类型 1原始用户  2被授权用户
       number:'',
       mobile:'',
-      page:1,
+      page:0,
     loading:false,
     datas:'',
      fullHeight: "" ,//fullHeight: document.documentElement.clientHeight  屏幕高度 默认值
@@ -86,8 +86,8 @@ export default {
             }
           })
           console.log(res.data)
-            that.num =  res.data.length,
-            that.data = res.data
+            that.num =  res.data.length
+            // that.data = res.data
 
 
         }
@@ -151,6 +151,10 @@ tap(item){
 }
 </script>
 <style lang="scss" scoped>
+.scoll{
+  width: 100%;
+  height: 100%;
+}
 .ss{
     width: 100%;
     height: 100%;
@@ -158,7 +162,9 @@ tap(item){
     .page{
    width: 100%;
   background: #f5f4f4;
-   box-sizing: border-box;}
+   box-sizing: border-box;
+   padding-top: 20px;
+   }
 .pages{
      width: 100%;
      height: 100%;

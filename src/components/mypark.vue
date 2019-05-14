@@ -31,10 +31,10 @@
     <img src='@/assets/guzhang@2x.png'>
     故障
 </div>
-<!-- <div  class='carwhere' @click='carwhere' v-if='userStatus == 0'>
+<div  class='carwhere' @click='carwhere' v-if='userStatus == 0'>
     <img src='@/assets/where.png'>
     找车位
-</div> -->
+</div>
 </div>
 
 <div class='user_message'  v-if='stallStatus == 2 && useUserName != null'>
@@ -169,14 +169,14 @@ export default {
     data1:'',
     validitys:'',
     number:0,
-    carstatus:1 ,// 1导航  2反向寻车
     underLayer:'',
     title:'',
     ying:false,
     qies:0,
     ji:0,
     malfunctions:0,
-    top_block:false
+    top_block:false,
+    preId:''
     };
   },
   created() {
@@ -277,20 +277,11 @@ export default {
                   that.gatewayStatus = res.gatewayStatus,
                   that.stallId = res.stallId,
                   that.isUserUse = res.isUserUse ,
-                  that.underLayer = res.underLayer
+                  that.underLayer = res.underLayer,
+                  that.preId = res.preId
 
                 console.log(that.isUserUse, '--------- isUserUse')
                 console.log(that.useUserName,that.useUserMobile)
-                if (that.stallStatus == 1){
-    
-                          that.carstatus =1     //导航
- 
-                } else if (that.stallStatus == 2){
-  
-                    that.carstatus = 2   //反向寻车
-
-                }
-                console.log(that.carstatus)
                  that.bus.$emit("loading", false);
                  that.ying = true
               })
@@ -382,15 +373,10 @@ export default {
         that.stallId = data.stallId,
         that.longitude = data1.longitude,
         that.latitude = data1.latitude,
-        that.underLayer = data.underLayer
+        that.underLayer = data.underLayer,
+        that.preId = data1.preId
 
        console.log(that.useUserName,that.useUserMobile)
-      if (that.stallStatus == 1) {
-          that.carstatus = 1     //导航
-      } else if (that.stallStatus == 2){
-          that.carstatus = 2   //反向寻车
-      }
-      console.log(that.carstatus)
       that.bus.$emit("loading", false);
       that.ying = true
 
@@ -415,8 +401,6 @@ export default {
         }).then(res => {
             console.log(res)
              if (res.data == true) {
-
-                that.carstatus = 1
 
               setTimeout(() => {
                that.bus.$emit("tips", { show: true, title: "升锁成功" });
@@ -472,7 +456,7 @@ export default {
     let that = this
       console.log('跳转室内导航')
       that.$router.push({
-           path: '/map?carstatus=' + that.carstatus,
+           path: '/entrance?preId=' + that.preId + '&stallId=' + that.stallId,
       })
   },
   malfunction(){
@@ -554,7 +538,6 @@ export default {
             console.log(res)
              if (res.data == true) {
 
-                that.carstatus = 1
 
               setTimeout(() => {
                that.bus.$emit("tips", { show: true, title: "升锁成功" });
@@ -630,7 +613,6 @@ export default {
           console.log(res)
            if(res.data == true){
 
-                that.carstatus = 2
  
                 setTimeout(() => {
                  that.bus.$emit("tips", { show: true, title: "降锁成功" });
@@ -753,7 +735,7 @@ export default {
   height:264px;
   margin-top:163px;
   margin-left:180px;
-  margin-bottom: 130px;
+  margin-bottom: 170px;
   position: relative;
 }
 .rights{

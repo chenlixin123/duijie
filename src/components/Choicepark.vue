@@ -180,7 +180,7 @@ export default {
 .page {
   width: 100%;
   height: 100%;
-   background: white;
+   background: #f5f4f4;
    box-sizing: border-box;
    padding: 0;
    margin: 0;
@@ -212,7 +212,7 @@ export default {
 }
 
 .column:last-child {
-   margin-bottom: 120px;
+   margin-bottom: 40px;
    border: none;
    border-top: 20px solid #f5f4f4;
 }

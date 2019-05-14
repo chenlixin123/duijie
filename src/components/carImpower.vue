@@ -27,7 +27,7 @@ export default {
     },
     created(){
          let that = this
-         console.log(that)
+         console.log(that.$route.query.num)
     if (that.$route.query.index == undefined){
         that.name = that.$route.query.name,
         that.carname = that.$route.query.carname,

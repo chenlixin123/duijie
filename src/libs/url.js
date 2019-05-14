@@ -69,7 +69,9 @@ let Url = {
   //故障车位失败原因列表 
   long_Feedbacks: '/api/common/app/dicts/v2.0/cause/fault',
    //停车记录
-   record: "/api/enterprise/app/user-rent-stall/v2.0/parking-record",
+  record: "/api/enterprise/app/user-rent-stall/v2.0/parking-record",
+   //导航  车区入口管理
+  entrance:'/api/prefecture/app/prefectures/v2.0/entrance-list'
 }
 
 function Time(time) {

@@ -133,9 +133,10 @@ add(){
      url:Url.url.sure,
      method:'get'
  }).then(res => {
-     console.log(res)
+    
      that.num = res.data.length
      res.data.map(res => {
+        console.log(res)
           that.nums =  res.stalls.length,
           that.carname = res.preName,
           that.preId = res.preId
@@ -147,8 +148,8 @@ add(){
               that.stallEndTime = res.stallEndTime
         })
       })
-      console.log(that.num,that.nums)
-          if (that.num == 1 || that.nums > 1){
+      console.log(that.carname,that.nums)
+          if (that.num > 1 || that.nums > 1){
            that.$router.push({
     path: '/addImpower'
   })
@@ -156,14 +157,18 @@ add(){
   console.log('11111111111111')
       }else{
         that.$router.push({
-          path: '/carImpower?num=1' + "&carname=" + that.data.carname + "&name=" + that.data.name + "&preId=" + that.data.preId + "&stallId=" + that.data.stallId + '&stallEndTime=' + that.data.stallEndTime
+          path: '/carImpower?num=1' + "&carname=" + that.carname + "&name=" + that.name + "&preId=" + that.preId + "&stallId=" + that.stallId + '&stallEndTime=' + that.stallEndTime
         })
       that.bus.$emit("loading", false);
         console.log('22222222222222222222')
       }
  })
   console.log('跳转车位授权页面')
+ 
 },
+    },
+    destroyed() {
+
     }
 }
 </script>

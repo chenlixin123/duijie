@@ -20,6 +20,8 @@ import Impowers from '@/components/Impowers'
 import malfunction from '@/components/malfunction'
 import record from '@/components/record'
 import particulars from '@/components/particulars'
+import entrance from '@/components/entrance'
+import nocarmodule from '@/components/nocarmodule'
 
 Vue.use(Router)
 
@@ -42,7 +44,7 @@ export default new Router({
       }
     },
     {
-      path: '/CarModuleList', //预约车位页面
+      path: '/CarModuleList', //车牌号管理页面
       name: 'CarModuleList',
       component: CarModuleList,
       meta: {
@@ -180,6 +182,30 @@ export default new Router({
       component: particulars,
       meta: {
         title: '详情页'
+      }
+    },
+    {
+      path: '/entrance', //车位导航入口页面
+      name: 'entrance',
+      component: entrance,
+      meta: {
+        title: '选择入口'
+      }
+    },
+    {
+      path: '/nocarmodule', //没有长租车位页面
+      name: 'nocarmodule',
+      component: nocarmodule,
+      meta: {
+        title: '我的车位'
+      }
+    },
+    {
+      path:'/goback',
+      redirect: '/NoEmpower',
+      component: NoEmpower,
+      meta: {
+        title: '授权管理'
       }
     },
   ]

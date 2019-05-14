@@ -98,6 +98,7 @@ export default {
     },
     created(){
         let that = this 
+        console.log(that.$route.query.num)
         that.groupId = localStorage.getItem('groupId')
         console.log(that)
            this.img = require('@/assets/tianjiachepaihao@3.png')
@@ -235,9 +236,39 @@ export default {
            that.data = res.data.data
            that.bus.$emit("tips", { show: true, title: "添加成功" });
           console.log("成功")
-          setTimeout(() =>{
+          if(that.$route.query.num == 1){
+            axios.request({
+            url:Url.url.long_carLists,//查看长租用户车位列表
+            method:"post",
+            params: {
+                    latitude: that.location.latitude,
+                    longitude: that.location.longitude
+                  },
+          }).then(res => {
+                console.log(res)
+                if(res.data.num == 0){
+                    setTimeout(() =>{
+              that.$router.go(-2)
+          })
+                }else{
+                  setTimeout(() =>{
+              that.$router.go(-3)
+          })
+                }
+          })
+             
+          }else{
+            if(that.$route.query.num == 2){
+                        setTimeout(() =>{
               that.$router.go(-1)
           })
+            }else{
+                      setTimeout(() =>{
+              that.$router.go(-2)
+          })
+            }
+         
+          }
       })  
       } else if (nums.length == 8 && xreg.test(nums)) {
       axios.request({
@@ -248,6 +279,39 @@ export default {
         },
       }).then(res => {
           console.log(res)
+           if(that.$route.query.num == 1){
+            axios.request({
+            url:Url.url.long_carLists,//查看长租用户车位列表
+            method:"post",
+            params: {
+                    latitude: that.location.latitude,
+                    longitude: that.location.longitude
+                  },
+          }).then(res => {
+                console.log(res)
+                if(res.data.num == 0){
+                    setTimeout(() =>{
+              that.$router.go(-2)
+          })
+                }else{
+                  setTimeout(() =>{
+              that.$router.go(-3)
+          })
+                }
+          })
+             
+          }else{
+            if(that.$route.query.num == 2){
+                        setTimeout(() =>{
+              that.$router.go(-1)
+          })
+            }else{
+                      setTimeout(() =>{
+              that.$router.go(-2)
+          })
+            }
+         
+          }
       }) 
     } else {
       that.bus.$emit("tips", { show: true, title: "请输入正确的车牌号" });
