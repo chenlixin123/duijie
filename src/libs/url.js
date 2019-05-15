@@ -50,7 +50,10 @@ let Url = {
     cancels: "/api/enterprise/app/auth-record/v2.0/cancel",
     //首页是否显示授权
     show_impower: "/api/enterprise/app/user-rent-stall/v2.0/auth-flag",
-
+    //生成账单
+    checkout: "/api/order/app/pay/v2.0/checkout",
+    //确认支付
+    confirm: "/api/order/app/pay/v2.0/confirm",
 
   //固定车位
 

@@ -22,6 +22,7 @@ import record from '@/components/record'
 import particulars from '@/components/particulars'
 import entrance from '@/components/entrance'
 import nocarmodule from '@/components/nocarmodule'
+import paySuccess from '@/components/paySuccess'
 
 Vue.use(Router)
 
@@ -68,11 +69,11 @@ export default new Router({
       }
     },
     {
-      path: '/Lock', //升锁成功页面
+      path: '/Lock', //出场凭证页面
       name: 'Lock',
       component: Lock,
       meta: {
-        title: '升锁离场'
+        title: '出场凭证'
       }
     },
     {
@@ -206,6 +207,14 @@ export default new Router({
       component: NoEmpower,
       meta: {
         title: '授权管理'
+      }
+    },
+    {
+      path: '/paySuccess', //确认订单页面
+      name: 'paySuccess',
+      component: paySuccess,
+      meta: {
+        title: '确认订单'
       }
     },
   ]

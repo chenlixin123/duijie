@@ -20,15 +20,15 @@
 
 <div class='rights'>
 <div  class='right_top' @click='qie' v-if='num > 1'>
-    <img src='@/assets/qiehuan@2x1.png'>
+    <img class="right_top_img" src='@/assets/qiehuan@2x1.png'>
     切换
 </div>
 <div  class='right_center' @click='record' v-if='userStatus  == 1'>
-    <img src='@/assets/jilu@2x.png'>
+    <img class="right_center_img" src='@/assets/jilu@2x.png'>
     记录
 </div>
 <div class='right_bottom' @click='malfunction'>
-    <img src='@/assets/guzhang@2x.png'>
+    <img class="right_bottom_img" src='@/assets/guzhang@2x.png'>
     故障
 </div>
 <div  class='carwhere' @click='carwhere' v-if='userStatus == 0'>
@@ -752,7 +752,7 @@ export default {
   text-align: center;
   margin-bottom: 40px;
 }
-.right_top > img{
+.right_top_img{
   width:60px;
   height:60px;
 }
@@ -764,7 +764,7 @@ export default {
   text-align: center;
   margin-bottom: 40px;
 }
-.right_center > img{
+.right_center_img{
   width:60px;
   height:60px;
 }
@@ -776,7 +776,7 @@ export default {
   text-align: center;
    margin-bottom: 40px;
 }
-.right_bottom > img{
+.right_bottom_img{
   width:60px;
   height:60px;
 }

@@ -1,6 +1,7 @@
 <template>
   <div class="lockup">
-    <div class="success">升锁成功</div>
+    <div class="success">支付成功</div>
+    <div class="much">￥{{data.sactualAmount}}</div>
     <div class="body">
       <div class="body-content">
         <div class="body-num">
@@ -28,10 +29,23 @@
       </div>
       <div class="body-content">
         <div class="body-num">
+          <span>订单编号</span>
+          <span>{{data.orderNo}}</span>
+        </div>
+      </div>
+      <div class="body-content">
+        <div class="body-num">
           <span>停车时长</span>
           <span>{{data.parkingTime}}</span>
         </div>
       </div>
+      <div class="body-content">
+        <div class="body-num">
+          <span>优惠减免</span>
+          <span>{{data.couponAmount}}元</span>
+        </div>
+      </div>
+       <div class='leave-txts'>结账成功后，请在{{data.leaveTime}}分钟内离场</div>
     </div>
     <div class="btn">
       <button @click="suss">完成</button>
@@ -83,41 +97,12 @@ export default {
   },
   methods: {
     suss() {
-      // var u = navigator.userAgent;
-      // alert(navigator.userAgent);
-
-      // var u = navigator.userAgent;
-      // // android终端
-      // var isAndroid = u.indexOf("wehome/1") > -1;
-      // var isIos = u.indexOf("wehome/2") > -1;
-      // this.$router.push({
-      //   path: "/"
-      // });
-      // window.location.href = "http://www.baidu.com"; // 跳转外部链接
-
-      // var u = navigator.userAgent;
-      // alert(u)
-      // // android终端
-      // var isAndroid = u.indexOf("wehome/1") > -1;
-      // var isiOS = u.indexOf("wehome/2") > -1;
-      // // ios终端
-      // if (isiOS) {
-      //   // alert(navigator.userAgent);
-      //   window.finish_current_activity_webView("", "");
-      //   // alert("isiOS调用成功2");
-      // } else if (isAndroid) {
-      //   // alert(navigator.userAgent);
-      //   window.jsObject.finish_current_activity_webView("", "");
-      //   // window.jsObject.open_in_new_activity_webView("1212");
-      //   // alert("isAndroid调用成功2");
-      // }
       let tap = localStorage.getItem('tap')
       if(tap == 0){
           this.$router.go(-2)
       }else{
          this.$router.go(-3)
       }
-      
     }
   }
 };
@@ -129,12 +114,27 @@ export default {
 }
 .success {
   width: 100%;
-  font-size: 48px;
+  font-size: 40px;
   font-weight: bold;
   color: #333;
   text-align: center;
-  margin-top: 180px;
-  margin-bottom: 132px;
+  padding-top: 60px;
+  margin-bottom: 20px;
+}
+.much{
+  width: 100%;
+  font-size: 70px;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  margin-bottom: 80px;
+}
+.leave-txts{
+  width: 100%;
+  font-size: 28px;
+  color: #f66913;
+  text-align: center;
+  margin-top: 30px;
 }
 .body {
   width: 100%;
@@ -171,6 +171,6 @@ export default {
   outline: none;
   background: #fff;
   border: 1px solid #333;
-  margin-top: 126px;
+  margin-top: 80px;
 }
 </style>

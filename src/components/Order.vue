@@ -133,7 +133,8 @@ export default {
       nocar_content: "降锁成功",
       stallId:'',
       preId:'',
-      name:''
+      name:'',
+      orderId:''
     };
   },
   created() {
@@ -146,6 +147,7 @@ export default {
         console.log(res);
         that.name = res.data.stallName
         that.stallId = res.data.stallId
+        that.orderId = res.data.id
         if(that.$route.query.preId == undefined){
           that.preId = localStorage.getItem('preId')
         }else{
@@ -277,54 +279,60 @@ export default {
     //升锁离场（预约）
     top() {
       let that = this;
-      that.bus.$emit("loading", true);
-      that.bus.$emit("tip", { title: "升锁中请稍候..." });
-      console.log(that);
-      axios
-        .request({
-          url: Url.url.control_up,
-          method: "post",
-          params: {
-            orderId: that.data.id, //订单ID
-            parkingStatus: 1, //状态
-            stallId: that.data.stallId // 车位ID
-          }
-        })
-        .then(res => {
-          console.log(res);
-          if (res.status == false) {
-            if (res.message != null) {
-              that.bus.$emit("loading", false);
-              console.log(res.message.code, res.message.content);
-              if (res.message.code == 8005099) {
-                (that.aligns = res.message.content),
-                  (that.ss = "再升一次"),
-                  (that.s = 1),
-                  (that.begins = "true"),
-                  console.log(res.message.content);
-              } else if (res.message.code == 8005101) {
-                console.log(res.message.content);
-                (that.aligns = res.message.content),
-                  (that.ss = "故障上报"),
-                  (that.s = 3),
-                  (that.begins = "true");
-              } else if (res.message.code == 8005092) {
-                console.log(res.message.content);
-                (that.aligns = res.message.content),
-                  (that.ss = "切换车位"),
-                  (that.s = 4),
-                  (that.begins = "true");
-              } else if (res.message.code == 8005073) {
-                that.bus.$emit("tips", { show: true, title: res.message.content});
-              } else if (res.message.code == 8005072) {
-                that.bus.$emit("tips", { show: true, title: res.message.content});
-              }
-            }
-          } else {
-            that.$router.push({ path: "/Lock" });
-            that.bus.$emit("loading", false);
-          }
-        });
+      that.$router.push({
+         path: "/paySuccess",
+         query:{
+              orderId:that.orderId
+         }
+         });
+      // that.bus.$emit("loading", true);
+      // that.bus.$emit("tip", { title: "升锁中请稍候..." });
+      // console.log(that);
+      // axios
+      //   .request({
+      //     url: Url.url.control_up,
+      //     method: "post",
+      //     params: {
+      //       orderId: that.data.id, //订单ID
+      //       parkingStatus: 1, //状态
+      //       stallId: that.data.stallId // 车位ID
+      //     }
+      //   })
+      //   .then(res => {
+      //     console.log(res);
+      //     if (res.status == false) {
+      //       if (res.message != null) {
+      //         that.bus.$emit("loading", false);
+      //         console.log(res.message.code, res.message.content);
+      //         if (res.message.code == 8005099) {
+      //           (that.aligns = res.message.content),
+      //             (that.ss = "再升一次"),
+      //             (that.s = 1),
+      //             (that.begins = "true"),
+      //             console.log(res.message.content);
+      //         } else if (res.message.code == 8005101) {
+      //           console.log(res.message.content);
+      //           (that.aligns = res.message.content),
+      //             (that.ss = "故障上报"),
+      //             (that.s = 3),
+      //             (that.begins = "true");
+      //         } else if (res.message.code == 8005092) {
+      //           console.log(res.message.content);
+      //           (that.aligns = res.message.content),
+      //             (that.ss = "切换车位"),
+      //             (that.s = 4),
+      //             (that.begins = "true");
+      //         } else if (res.message.code == 8005073) {
+      //           that.bus.$emit("tips", { show: true, title: res.message.content});
+      //         } else if (res.message.code == 8005072) {
+      //           that.bus.$emit("tips", { show: true, title: res.message.content});
+      //         }
+      //       }
+      //     } else {
+      //       that.$router.push({ path: "/paySuccess" });
+      //       that.bus.$emit("loading", false);
+      //     }
+      //   });
     },
     //降下车锁（预约）
     bottom() {

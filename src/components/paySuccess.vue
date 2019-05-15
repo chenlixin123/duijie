@@ -1,144 +1,193 @@
 <template>
-    <div class="pay">
-        <div class="paymoney">
-            <div class="success">支付成功</div>
-            <div class="money">￥{{pay.money}}</div>
-        </div>
-        <div class="body">
-            <div class="body-content">
-                <div class="body-num">
-                    <span>车位号</span>
-                    <span>{{pay.num}}</span>
-                </div>
-            </div>
-            <div class="body-content">
-                <div class="body-num">
-                    <span>车牌号码</span>
-                    <span>{{pay.parknum}}</span>
-                </div>
-            </div>
-             <div class="body-content">
-                <div class="body-num">
-                    <span>开始时间</span>
-                    <span>{{pay.starttime}}</span>
-                </div>
-            </div>
-             <div class="body-content">
-                <div class="body-num">
-                    <span>结束时间</span>
-                    <span>{{pay.endtime}}</span>
-                </div>
-            </div>
-             <div class="body-content">
-                <div class="body-num">
-                    <span>订单编号</span>
-                    <span>{{pay.ordernum}}</span>
-                </div>
-            </div>
-             <div class="body-content">
-                <div class="body-num">
-                    <span>停车时长</span>
-                    <span>{{pay.parktime}}</span>
-                </div>
-            </div>
-             <div class="body-content">
-                <div class="body-num">
-                    <span>优惠减免</span>
-                    <span>￥{{pay.dismoney}}</span>
-                </div>
-            </div>
-        </div>
-        <div class="foot">
-            <div class="foot-content">结账成功后，请在15分钟内驶离停车场</div>
-            <button>完成</button>
-        </div>
-    </div>
+<div class="page">
+   <div class='bill-true'>
+      <div class='group'>
+         <div class='list'>停车场
+            <div>{{obj.prefectureName}}</div>
+         </div>
+         <div class='list'>车位号
+            <div>{{obj.stallName}}</div>
+         </div>
+         <div class='list'>车牌号码
+            <div>{{obj.plateNumber}}</div>
+         </div>
+         <div class='list'>开始时间
+            <div>{{startTime}}</div>
+         </div>
+         <div class='list'>结束时间
+            <div>{{endTime}}</div>
+         </div>
+         <div class='list'>停车时长
+            <div>{{obj.parkingTime + 1}}</div>
+         </div>
+      </div>
+   </div>
+   <div class='bill-true'>
+      <div class='group'>
+         <div class='list'>应付金额
+            <div>{{obj.amount}}元</div>
+         </div>
+         <div class='lists'>实付金额
+            <div style='color:#f66913;' >{{obj.totalAmount}}元</div>
+         </div>
+      </div>
+   </div>
+   <div class='btn'>
+      <button class='btns' @click='pay' :disabled='disabled'>确认支付</button>
+   </div>
+</div>
 </template>
+<script type="text/javascript" charset="UTF-8" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script>
+import axios from "@/libs/api.request";
+import Url from "@/libs/url";
+import Cookies from "js-cookie";
+import wx from "weixin-js-sdk";
 export default {
-    name:"Pay",
     data(){
         return{
-            pay:{
-                money:'10.0',
-                num:'088',
-                parknum:'京N12584',
-                starttime:'2019/4/6  20:00',
-                endtime:'2019/4/6  21:25',
-                ordernum:'2019040610000460',
-                parktime:'1时15分',
-                dismoney:'5.0'
-            }
+    obj: {},
+    ticketTxt: "选择停车券",
+    loading: 'none',
+    loadingdiv: '加载中请稍候',
+    disabled: false,
+    startTime:'',
+    endTime:'',
+    orderId:''
         }
-    }
+    },
+    created(){
+        let that = this
+        console.log(wx)
+        that.orderId = that.$route.query.orderId
+          axios
+        .request({
+          url: Url.url.current
+        }).then(res => {
+            console.log(res)
+            that.obj = res.data
+            console.log(that.obj)
+function add0(m){return m<10?'0'+m:m }
+let time = new Date(res.data.startTime);
+let y = time.getFullYear();
+let m = time.getMonth()+1;
+let d = time.getDate();
+let h = time.getHours();
+let mm = time.getMinutes();
+let s = time.getSeconds();
+console.log(y+'/'+add0(m)+'/'+add0(d)+' '+add0(h)+':'+add0(mm)+':'+add0(s))
+that.startTime = y+'/'+add0(m)+'/'+add0(d)+' '+add0(h)+':'+add0(mm)+':'+add0(s)
+
+let times = new Date(res.data.endTime);
+let ys = times.getFullYear();
+let ms = times.getMonth()+1;
+let ds = times.getDate();
+let hs = times.getHours();
+let mms = times.getMinutes();
+let ss = times.getSeconds();
+console.log(ys+'/'+add0(ms)+'/'+add0(ds)+' '+add0(hs)+':'+add0(mms)+':'+add0(ss))
+that.endTime = ys+'/'+add0(ms)+'/'+add0(ds)+' '+add0(hs)+':'+add0(mms)+':'+add0(ss)
+
+        })
+
+        //获取数据的接口
+
+    },
+    methods:{
+
+        pay(){
+            let that = this
+            axios.request({
+                url:Url.url.confirm,
+                method:"post",
+                params:{
+                    couponId:0,
+                    orderId:that.orderId,
+                    payType:2
+                }
+            }).then(res => {
+
+                // window.location.href = 'https://wx.tenpay.com/cgi-bin/mmpayweb-bin/checkmweb?prepay_id='+ prepay_id +'&package=' + packages
+            })
+    },
+    wx_pay(){
+            
+        },
+}
 }
 </script>
 
-<style scoped>
-.pay{
-    width: 100%;
+<style lang="scss" scoped>
+.page {
+  width: 100%;
+  height: 100%;
+  background: #fafafa;
+  box-sizing: border-box;
+  padding-top: 20px;
 }
-.paymoney{
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 100px;
-    margin-bottom: 96px;
-    color: #333;
-    font-weight: bold;
+.bill-true{
+  width: 100%;
+  background: #fff;
+  border-top: 1px solid rgb(241, 241, 240);
 }
-.success{
-    font-size: 32px;
-    margin-bottom:18px;
+.group{
+  width: 100%;
 }
-.money{
-    font-size: 46px;
+.list{
+  width: 100%;
+  height: 80px;
+  border-bottom: 1px solid rgb(241, 241, 240);
+  line-height: 80px;
+  font-size: 30px;
+  color: #454245;
+  position: relative;
+  box-sizing: border-box;
+  padding: 0 20px;
 }
-.body{
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+.lists{
+  width: 100%;
+  height: 80px;
+  border-bottom: 1px solid rgb(241, 241, 240);
+  line-height: 80px;
+  font-size: 30px;
+  color: #454245;
+    box-sizing: border-box;
+  padding: 0 20px;
 }
-.body-content{
-    width: 95%;
-    height: 98px;
+.list:last-child{
+  border-bottom: none;
 }
-.body-num{
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 30px;
-    color: #333;
-    border-bottom: 1px solid #f5f4f4;
+div{
+  float: right;
 }
-.foot{
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content:center;
-    margin-top: 32px;
+
+.go-img{
+  width: 22px;
+  height: 32px;
+  float: right;
+  margin: 4px -20px 0 -10px;
+  border: 10px solid transparent; 
+  background-clip: padding-box;
 }
-.foot-content{
-    width: 100%;
-    margin-bottom: 82px;
-    color: #f66913;
-    color: 26px;
-    text-align: center;
+.btn{
+  width: 750px;
+  height: 164px;
+  background: #fff;
+  padding-top: 100px; 
 }
-.foot button{
-    width: 286px;
-    height: 74px;
-    border-radius: 12px;
-    font-size: 36px;
-    color: #333;
-    outline: none;
-    background: #fff;
-    border: 1px solid #333;
+.btns{
+  width: 490px;
+  height: 82px;
+  background: #f66913;
+  border-radius: 60px;
+  margin-left: 131px;
+  div-align: center;
+  color: #fff;
+  font-size: 38px;
+  line-height: 82px;
+  border: none;
+  outline: none;
 }
 </style>
+
+

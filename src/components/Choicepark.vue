@@ -7,7 +7,6 @@
          <div class='number'>
             <div v-for="(item,index) in itemName.rentUserStalls"  :key='index'>
                <div v-if="item.stallStatus == 1" :class="nav==index&&outnav==outindex? 'cur':'num'"  @click='menuClick(item,index)' >{{item.stallName}}<img v-if='item.userStatus == 0' class='img' src='@/assets/impower.png'></div>
-
                <div v-else  :class="nav==index&&outnav==outindex?' cur ':'nums'" @click='menuClicks(item,index)'>{{item.stallName}}<img v-if='item.userStatus == 0' class='imgs' src='@/assets/impower.png'></div>
             </div>
          </div>
@@ -58,6 +57,10 @@ export default {
   },
   created() {
     let that = this;
+    let name = encodeURI("localhost:8080/#/Choice?token=65897b879c4a491ea35d42752959bb65&latitude=39.91106&longitude=116.41361")
+    //如果 URI 组件中含有分隔符，比如 ? 和 #，则应当使用 encodeURIComponent() 方法分别对各组件进行编码
+    let url = encodeURIComponent('localhost:8080/#/Choice?token=65897b879c4a491ea35d42752959bb65&latitude=39.91106&longitude=116.41361')
+    console.log(url,name)
     that.bus.$emit("loading", true);
     that.bus.$emit("tip", { title: "加载中请稍候..." });
     that.token = that.$route.query.token;
@@ -251,7 +254,7 @@ export default {
    line-height: 68px;
    text-align: center;
    margin-bottom: 35px;
-   margin-left:43px;
+   margin-left:38px;
    margin-right: 35px;
    position: relative;
 }
@@ -265,7 +268,7 @@ export default {
 .nums {
    width: 170px;
    height: 68px;
-   border: none;
+   border: 1px solid #ffb489;
    font-size: 32px;
    border-radius: 10px;
    color: #fff;
@@ -273,7 +276,7 @@ export default {
    line-height: 68px;
    text-align: center;
    margin-bottom: 35px;
-   margin-left:43px;
+   margin-left:38px;
    margin-right: 35px;
    position: relative;
 }
@@ -307,7 +310,7 @@ export default {
    line-height: 68px;
    text-align: center;
    margin-bottom: 35px;
-   margin-left:43px;
+   margin-left:38px;
    margin-right: 35px;
    position: relative;
 }
