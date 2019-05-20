@@ -21,7 +21,6 @@
     </div>
 
     <!-- 首页授权标识 -->
-
     <img class="empower" src="@/assets/shouquan@2x.png" alt="" @click="empower" v-if="show_impower == true">
   </div>
   
@@ -53,14 +52,14 @@ export default {
   },
   created() {
     let that = this;
-    console.log(wx)
+    console.log(Url.url.current)
     // let wexinPay = (data,cb,errorCb) => {
     //   console.log(data)
     //   console.log(cd)
     // }
     localStorage.setItem('tap',0)
     let token = that.$route.query.token;
-    token = '65897b879c4a491ea35d42752959bb65'
+    token = '888ab41ed5a442cd86f32809b7ca8060'
     // token = '2d5c574581c447f9ab4e6fbd224b7233'
     //  window.jhajax = this.jhajax;
     console.log(token)
@@ -72,7 +71,8 @@ export default {
     this.jhajax(token);
      axios
         .request({
-          url: Url.url.current
+          url: Url.url.current,
+          method:'get'
         })
         .then(res => {
           console.log(res)

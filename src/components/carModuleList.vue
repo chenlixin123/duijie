@@ -155,35 +155,6 @@ export default {
           that.data = res.data
         });
     })
-    // api.DELETE({
-    //   url: app.url.del_plate + '?id=' + self.data.plateid,
-    //   params: {
-    //   },
-    //   success(res) {
-    //     console.log(res);
-    //     if (res.data.status == true) {
-    //       wx.showToast({
-    //         title: '删除成功',
-    //         icon: 'none'
-    //       })
-    //       self.onLoad()
-    //     } else {
-    //       wx.showToast({
-    //         title: res.data.message.content,
-    //         icon: 'none'
-    //       })
-    //     }
-    //   },
-    //   fail() {
-    //     wx.showToast({
-    //       title: '删除失败',
-    //       icon: 'none'
-    //     })
-    //   },
-    //   complete() {
-
-    //   }
-    // }, app.globalData.token)
    }
 }
 }

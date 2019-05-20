@@ -106,13 +106,9 @@ that.endTime = ys+'/'+add0(ms)+'/'+add0(ds)+' '+add0(hs)+':'+add0(mms)+':'+add0(
                     payType:2
                 }
             }).then(res => {
-
                 // window.location.href = 'https://wx.tenpay.com/cgi-bin/mmpayweb-bin/checkmweb?prepay_id='+ prepay_id +'&package=' + packages
             })
     },
-    wx_pay(){
-            
-        },
 }
 }
 </script>
@@ -181,7 +177,7 @@ div{
   background: #f66913;
   border-radius: 60px;
   margin-left: 131px;
-  div-align: center;
+  text-align: center;
   color: #fff;
   font-size: 38px;
   line-height: 82px;

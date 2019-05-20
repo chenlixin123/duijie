@@ -464,45 +464,9 @@ if(start_times > time){
     that.bus.$emit("tips", { show: true, title: "到期时间不能大于车位使用时间" });
        return
 }
-    
-    // 开始时间与授权用户的使用时间对比
-    //  let stallEndTime = that.stallEndTime.split('-')
-    // console.log(stallEndTime)
-    // if (m == stallEndTime[1] && d == stallEndTime[2]) {
-    //   console.log('第一步')
-    //   if (shis > 0 || fens > 0) {
-    //     console.log('第二步')
-    //     that.bus.$emit("tips", { show: true, title: "开始时间不能大于车位使用时间" });
-    //     return
-    //   }
-    // }
-
-    //结束时间与授权用户的使用时间对比
-    //  if (end_m == stallEndTime[1] && end_d == stallEndTime[2]) {
-    //   console.log('第一步')
-    //   if (end_shis > 0 || end_fens > 0) {
-    //     console.log('第二步')
-    //     that.bus.$emit("tips", { show: true, title: "到期时间不能大于车位使用时间" });
-    //     return
-    //   }
-    // }
-
-    //  if (end_m > stallEndTime[1]){
-    //  that.bus.$emit("tips", { show: true, title: "到期时间不能大于车位使用时间" });
-    //   console.log('11111111')
-    //   return
-      
-    // }
-
-    // if (m > stallEndTime[1]) {
-    //   that.bus.$emit("tips", { show: true, title: "开始时间不能大于车位使用时间" });
-    //   console.log('3333333333333')
-    //   return
-    // }
-
       console.log('确定授权')
        let mobile_verify = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1})|(17[0-9]{1})|(19[0-9]{1})|(16[0-9]{1}))+\d{8})$/;
-       if (that.mobile == '') {
+    if (that.mobile == '') {
             that.bus.$emit("tips", { show: true, title: "请输入被授权人的手机号" });
     } else if (!mobile_verify.test(that.mobile)) {
          that.bus.$emit("tips", { show: true, title: "请输入正确的手机号" });

@@ -9,7 +9,6 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
-
 const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
 
@@ -51,7 +50,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     // proxy: {
     //   '/': {
     //     target: 'https://api.linkmoreparking.cn/',
-    //     pathRewrite: {'': ''},
+    //     pathRewrite: {'^/api': 'api/'},
     //     changeOrigin: true
     //   }
     // }
@@ -63,9 +62,11 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     },
     proxy: {
       '/api': {
-        target: 'https://api.linkmoreparking.cn/', // 开发cn 测试net  线上com
+        changeOrigin: true, 
+        target: 'http://api.linkmoreparking.cn/', // 开发cn 测试net  线上com
+        strictSSL: false,
         pathRewrite: {
-          '^/api': 'api/'
+          '^/api': '/api'
         },
         changeOrigin: true
       }

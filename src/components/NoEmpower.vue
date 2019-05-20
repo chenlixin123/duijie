@@ -1,11 +1,17 @@
 <template>
-<div class="big_box">
+<div class="big_boxs">
+    <div class="tab">
+      <div :class="tab == 1 ? 'tab2' : 'tab1'" @click="tab1">授权</div>
+      <div :class="tab == 2 ? 'tab2' : 'tab1'" @click="tab2">出租</div>
+    </div>
+<div class="big_box1" v-if="tab == 1">
     <div class='img_box' v-if='img == true'>
 <div class='line'></div>
   <img class='img' src='@/assets/noCartupian@2x.png'>
   <div class='img_title'>完成车位授权</div>
   <div class='img_text'>您的朋友也可以使用您的长租车位哦!</div>
   <button class='btns' @click='add'>添加授权</button>
+   <div class='fail' @click='fail' v-if='length != 0'>查看已失效的授权</div>
 </div>
 
 <div class='body' v-if='show == true'>
@@ -30,6 +36,41 @@
   <img class='add' v-if='show == true' @click='add' src='@/assets/tianjia@2x.png'>
 </div>
 </div>
+
+<div class="big_box1" v-if="tab == 2">
+    <div class='img_box' v-if='imgs == true'>
+<div class='line'></div>
+  <img class='img' src='@/assets/noCartupian@2x.png'>
+  <div class='img_title'>长租车位闲时出租，他人可预约使用</div>
+  <div class='img_text'>出租长租车位，收益在“钱包”中查看</div>
+  <button class='btns' @click='add'>发布车位</button>
+</div>
+
+<div class='body' v-if='show1 == true'>
+  <div class='boxs' v-for='(item,index) in datas' :key='index'  @click='tap(item)'>
+    <div class='title'>
+      <div class='carmodule'>{{item.preName}}</div>
+      <div class='carname'>{{item.stallNames}}</div>
+    </div>
+    <div class='body_box' v-for='(item,index) in item.detailList'  :key='index' @click='taps(item)'>
+      <div class='top'>
+        <img class='mobile_img' src='@/assets/dianhua@2x.png'>
+        <div class='mobile'>{{item.mobiles}}</div>
+        <div class='name' v-if="item.username != ''">({{item.username}})</div>
+        <div class='right'>{{item.authFlag == 0 ? "" : item.authFlag == 1 ? "已取消" : item.authFlag == 2 ? "已过期" : "已失效" }}</div>
+      </div>
+      <div class='bottom'>
+         <img class='mobile_img' src='@/assets/shijian@2x.png'>
+        <div class='mobile'>{{item.startTime}}-{{item.endTime}}</div>
+      </div>
+    </div>
+  </div>
+  <div class='fail' @click='fail' v-if='length != 0'>查看已失效的授权</div>
+  <img class='add' v-if='show == true' @click='add' src='@/assets/tianjia@2x.png'>
+</div>
+</div>
+
+</div>
 </template>
 <script>
 import axios from "@/libs/api.request";
@@ -40,20 +81,58 @@ export default {
         return{
       show:'',
       img:'',
+      show1:'',
+      imgs:'',
       num:'',
       nums:'',
       preId:'',
       data:'',
       datas:'',
-      stallEndTime:''
+      stallEndTime:'',
+      tab:1,
+      length:0
         }
     },
     created(){
             let that = this
             console.log(that)
             that.shows()
+            that.rentList()
     },
     methods:{
+      //tab切换
+      tab1(){
+          let that = this
+          that.tab = 1
+      },
+      tab2(){
+           let that = this
+          that.tab = 2
+      },
+      //跳转失效授权
+      fail(){
+          let that = this
+          that.$router.push({
+            path:'/longrentfail'
+          })
+      },
+      //渲染出租记录列表
+      rentList(){
+          let that = this
+          that.bus.$emit("loading", true);
+          that.bus.$emit("tip", { title: "加载中请稍候..." });
+          axios.request({
+            url:Url.url.rent_list,
+            method:'post'
+          }).then(res => {
+                console.log(res.data.length)
+                if(res.data.length == 0){
+                  that.imgs = true
+                }else{
+                  that.show1 = true
+                }
+          })
+      },
           //渲染授权记录列表
 shows(){
   let that = this
@@ -64,6 +143,15 @@ shows(){
        method:'post'
    }).then(res => {
         console.log(res)
+          let ss = []
+      res.data.map(res => {
+        res.detailList.map(reson => {
+          if(reson.authFlag == 0){
+            ss.push(res)
+          }
+        })
+      })
+      console.log(ss)
          if(res.data == null){
          that.img = true,
           that.show = false
@@ -71,12 +159,28 @@ shows(){
         console.log('111111111111')
         console.log(that.img)
       }else{
-        console.log('2222222222222')
-          that.show = true,
-          that.img = false
-        console.log(that.show)
-        // let datas = []
-        res.data.forEach((items) => {
+          let datas = []
+        let data = []
+        res.data.map(reson => {
+          reson.detailList.map(resons => {
+            if (resons.authFlag == 0){
+              datas.push(resons.authFlag)
+            }else{
+              data.push(resons.authFlag)
+            }
+            
+          })
+        })
+         console.log(datas.length)
+        console.log(data.length)
+        that.length = data.length
+         if (datas.length == 0){
+            that.show = false,
+            that.img = true
+        }else{
+           that.show = true,
+            that.img = false
+             res.data.forEach((items) => {
           items.stallNames = items.stallName + '车位'
           items.detailList.forEach((item) => {
             if (item.mobile == null){
@@ -91,8 +195,9 @@ shows(){
             }
           })
         })
+        }
         that.bus.$emit("loading", false);
-          that.datas = res.data
+          that.datas = ss
       }
    })
 },
@@ -174,18 +279,53 @@ add(){
 </script>
 
 <style scoped>
-    .big_box{
+.big_boxs{
   width: 100%;
+  box-sizing: border-box;
+  padding-top: 74px;
+  background: #f5f4f4;
+}
+.tab{
+  width: 100%;
+  height: 74px;
+  display: flex;
+  justify-content: space-around;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  background: white;
+  border-top: 1px solid #f1f1f1;
+  border-bottom: 1px solid #f1f1f1;
+}
+.tab1{
+  height: 100%;
+  text-align: center;
+  line-height: 74px;
+  font-size: 30px;
+  color: #666;
+}
+.tab2{
+  height: 100%;
+  text-align: center;
+  line-height: 74px;
+  font-size: 30px;
+  border-bottom: 3px solid #faa901;
+  color: #faa901;
+}
+    .big_box1{
+  width: 100%;
+  height: 100%;
   background: #f5f4f4;
   box-sizing: border-box;
-  padding-bottom: 20px;
+  /* padding-bottom: 20px; */
 }
 .line{
   border-top: 1px solid rgb(243, 240, 240);
 }
 .img_box{
   width: 100%;
-  height: 100%;
+  height: 160%;
   text-align: center;
   background: white;
 }
@@ -201,7 +341,7 @@ add(){
   color: #333;
 }
 .img_text{
-  margin-top: 28px;
+  margin-top: 20px;
   font-size: 28px;
   color: #999;
   margin-bottom: 138px;
@@ -281,6 +421,12 @@ add(){
   position: fixed;
   bottom: 80px;
   right: 30px;
+}
+.fail{
+ margin-top: 48px;
+  font-size: 28px;
+  color: #999;
+  text-align: center;
 }
 </style>
 

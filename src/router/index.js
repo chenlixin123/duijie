@@ -23,6 +23,7 @@ import particulars from '@/components/particulars'
 import entrance from '@/components/entrance'
 import nocarmodule from '@/components/nocarmodule'
 import paySuccess from '@/components/paySuccess'
+import longrentfail from '@/components/longrentfail'
 
 Vue.use(Router)
 
@@ -215,6 +216,14 @@ export default new Router({
       component: paySuccess,
       meta: {
         title: '确认订单'
+      }
+    },
+    {
+      path: '/longrentfail', //预约车位页面
+      name: 'longrentfail',
+      component: longrentfail,
+      meta: {
+        title: '失效授权'
       }
     },
   ]

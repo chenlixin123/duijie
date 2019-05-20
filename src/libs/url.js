@@ -53,7 +53,9 @@ let Url = {
     //生成账单
     checkout: "/api/order/app/pay/v2.0/checkout",
     //确认支付
-    confirm: "/api/order/app/pay/v2.0/confirm",
+  confirm: "/api/order/app/pay/v2.0/confirm",
+    //出租人出租记录列表
+  rent_list:"/api/enterprise/app/rent-record/v2.0/list",
 
   //固定车位
 
