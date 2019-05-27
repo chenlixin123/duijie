@@ -59,7 +59,7 @@ export default {
     // }
     localStorage.setItem('tap',0)
     let token = that.$route.query.token;
-    token = '888ab41ed5a442cd86f32809b7ca8060'
+    // token = '888ab41ed5a442cd86f32809b7ca8060'
     // token = '2d5c574581c447f9ab4e6fbd224b7233'
     //  window.jhajax = this.jhajax;
     console.log(token)

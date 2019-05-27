@@ -33,6 +33,7 @@
       </div>
     </div>
   </div>
+  <div class='fail' @click='fail' v-if='length != 0'>查看已失效的授权</div>
   <img class='add' v-if='show == true' @click='add' src='@/assets/tianjia@2x.png'>
 </div>
 </div>
@@ -43,7 +44,8 @@
   <img class='img' src='@/assets/noCartupian@2x.png'>
   <div class='img_title'>长租车位闲时出租，他人可预约使用</div>
   <div class='img_text'>出租长租车位，收益在“钱包”中查看</div>
-  <button class='btns' @click='add'>发布车位</button>
+  <button class='btns' @click='adds'>发布车位</button>
+  <div class='fail' @click='longrentfails' v-if='length != 0'>查看失效的出租记录</div>
 </div>
 
 <div class='body' v-if='show1 == true'>
@@ -65,8 +67,8 @@
       </div>
     </div>
   </div>
-  <div class='fail' @click='fail' v-if='length != 0'>查看已失效的授权</div>
-  <img class='add' v-if='show == true' @click='add' src='@/assets/tianjia@2x.png'>
+  <div class='fail' @click='longrentfails' v-if='length != 0'>查看失效的出租记录</div>
+  <img class='add' v-if='show == true' @click='adds' src='@/assets/tianjia@2x.png'>
 </div>
 </div>
 
@@ -100,6 +102,25 @@ export default {
             that.rentList()
     },
     methods:{
+      longrentfails(){
+          let that = this
+          that.$router.push({
+            path:'/longrentfail'
+          })
+      },
+      fails(){
+           let that = this
+          that.$router.push({
+            path:'/fails'
+          })
+      },
+      //跳转发布页面
+      adds(){
+          let that = this
+          that.$router.push({
+            path:'/Release'
+          })
+      },
       //tab切换
       tab1(){
           let that = this
@@ -113,7 +134,7 @@ export default {
       fail(){
           let that = this
           that.$router.push({
-            path:'/longrentfail'
+            path:'/fails'
           })
       },
       //渲染出租记录列表
@@ -197,7 +218,28 @@ shows(){
         })
         }
         that.bus.$emit("loading", false);
-          that.datas = ss
+
+         function deteleObject(obj) {
+            var uniques = [];
+            var stringify = {};
+            for (var i = 0; i < obj.length; i++) {
+              var keys = Object.keys(obj[i]);
+              keys.sort(function (a, b) {
+                return (Number(a) - Number(b));
+              });
+              var str = '';
+              for (var j = 0; j < keys.length; j++) {
+                str += JSON.stringify(keys[j]);
+                str += JSON.stringify(obj[i][keys[j]]);
+              }
+              if (!stringify.hasOwnProperty(str)) {
+                uniques.push(obj[i]);
+                stringify[str] = true;
+              }
+            }
+            return uniques;
+          }
+          that.datas =  deteleObject(ss)
       }
    })
 },
@@ -281,9 +323,11 @@ add(){
 <style scoped>
 .big_boxs{
   width: 100%;
+  min-height:100%;
   box-sizing: border-box;
   padding-top: 74px;
   background: #f5f4f4;
+  display: flex;
 }
 .tab{
   width: 100%;
@@ -315,7 +359,7 @@ add(){
 }
     .big_box1{
   width: 100%;
-  height: 100%;
+  min-height:100%;
   background: #f5f4f4;
   box-sizing: border-box;
   /* padding-bottom: 20px; */
@@ -325,7 +369,7 @@ add(){
 }
 .img_box{
   width: 100%;
-  height: 160%;
+  height: 100%;
   text-align: center;
   background: white;
 }

@@ -323,7 +323,7 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-    .add-plate {
+.add-plate {
  width: 100%;
  height: 100%;
 }

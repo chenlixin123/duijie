@@ -24,6 +24,8 @@ import entrance from '@/components/entrance'
 import nocarmodule from '@/components/nocarmodule'
 import paySuccess from '@/components/paySuccess'
 import longrentfail from '@/components/longrentfail'
+import Release from '@/components/Release'
+import fails from '@/components/fails'
 
 Vue.use(Router)
 
@@ -111,7 +113,7 @@ export default new Router({
       name: 'NoEmpower',
       component: NoEmpower,
       meta: {
-        title: '授权管理'
+        title: '车位授权和出租'
       }
     },
     {
@@ -207,7 +209,7 @@ export default new Router({
       redirect: '/NoEmpower',
       component: NoEmpower,
       meta: {
-        title: '授权管理'
+        title: '车位授权和出租'
       }
     },
     {
@@ -224,6 +226,22 @@ export default new Router({
       component: longrentfail,
       meta: {
         title: '失效授权'
+      }
+    },
+    {
+      path: '/Release', //预约车位页面
+      name: 'Release',
+      component: Release,
+      meta: {
+        title: '车位出租'
+      }
+    },
+    {
+      path: '/fails', //预约车位页面
+      name: 'fails',
+      component: fails,
+      meta: {
+        title: '失效出租'
       }
     },
   ]
