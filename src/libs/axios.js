@@ -27,7 +27,7 @@ class httpRequest {
       // config.headers['X-Access-Auth-Token'] = 'b36d78cda79f40e49e56840409f924af'
       console.log('add token for heard')
       config.headers['X-Access-Auth-Token'] = Cookies.get('tokens')
-      config.headers['os'] = 4
+      config.headers['os'] = 3
       // alert('token :' + Cookies.get('tokens'))
       let contentType = (config.headers['Content-Type'])
       config.data = JSON.stringify(config.params)
@@ -56,17 +56,17 @@ class httpRequest {
 
       } else {
         if (data.message.code == 9002000) {
-          console.log('走了')
-          var u = navigator.userAgent;
-          // android终端
-          var isAndroid = u.indexOf("wehome/1") > -1;
-          var isiOS = u.indexOf("wehome/2") > -1;
-          // ios终端
-          if (isiOS) {
-            window.finish_current_activity_webView("", "");
-          } else if (isAndroid) {
-            window.jsObject.finish_current_activity_webView("", "");
-          }
+          console.log(data.message.content)
+          // var u = navigator.userAgent;
+          // // android终端
+          // var isAndroid = u.indexOf("wehome/1") > -1;
+          // var isiOS = u.indexOf("wehome/2") > -1;
+          // // ios终端
+          // if (isiOS) {
+          //   window.finish_current_activity_webView("", "");
+          // } else if (isAndroid) {
+          //   window.jsObject.finish_current_activity_webView("", "");
+          // }
         }
       }
       if (data.code !== 200) {

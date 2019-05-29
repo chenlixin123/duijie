@@ -428,20 +428,26 @@
         <div class="box_title">选择车牌</div>
         <div class="box_top" v-for="(item,index) in carlist" :key="index" @click="car(item,index)">
           <div class="box_top_left">{{item.vehMark}}{{ss}}</div>
-          <img :src="index == inds ? src1 : src2" class="box_top_right">
+          <div class="box_top_right">
+               <img :src="index == inds ? src1 : src2" width="100%">
+          </div>
         </div>
         <div class="box_bottom">
           <div class="box_left" @click="edit">编辑</div>
           <div class="box_right" @click="que_car">确认</div>
         </div>
-         <img class="disappear" src="@/assets/tubiao@2x.png" alt=""  @click="qu_car">
+        <div class="disappear" @click="qu_car">
+            <img src="@/assets/tubiao@2x.png" alt="" width="100%">
+        </div>
       </div>
     </div>
 
     <!-- 查看详情 -->
     <div class="boxs" v-if="sho == 'true'">
       <div class="boxs_center">
-        <img class="img" src="@/assets/shoufeixiangqing_cha@2x.png" alt @click="close_watch">
+        <div class="img" @click="close_watch">
+            <img src="@/assets/shoufeixiangqing_cha@2x.png" width="100%">
+        </div>
         <div class="boxs_top">收费详情</div>
         <div class="boxs_num">
           <div class="num1">{{businessTime}}</div>

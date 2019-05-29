@@ -1,12 +1,12 @@
 <template>
   <div class="loading" v-show="loading">
     <div class="loading_img">
-      <figure class="img">
+      <div class="img">
         <img src="./logo.png" width="100%">
-      </figure>
-      <figure class="img_box">
+      </div>
+      <div class="img_box">
         <img :src="url" alt width="100%">
-      </figure>
+      </div>
       <div class="text">{{tip.title}}</div>
     </div>
   </div>
@@ -75,7 +75,7 @@ export default {
       padding: 0;
       margin: 0;
       position: absolute;
-      top: 26px;
+      top: 23px;
       left: 28px;
     }
     .img_box {

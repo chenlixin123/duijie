@@ -4,7 +4,9 @@
 <div class='text'>
   <div class='title'>{{carname}}</div>
   <div class='name'>{{name}}</div>
-  <img class='img' src='@/assets/qiehuan@2x.png' @click='switc' v-if='num > 1'>
+  <div class='img' @click='switc' v-if='num > 1'>
+      <img src='@/assets/qiehuan@2x.png' width="100%">
+  </div>
 </div>
 <div class='lines'></div>
 <button class='btne' @click='after'>下一步</button>
@@ -19,6 +21,7 @@ export default {
       carname:'',
       num:'',
       index:'',
+      outind:'',
     stallId:'',
     preId:'',
     stallEndTime:'',
@@ -40,6 +43,7 @@ export default {
         that.carname = that.$route.query.carname,
         that.num = that.$route.query.num,
         that.index = that.$route.query.index,
+        that.outind = that.$route.query.outind
         that.stallId = that.$route.query.stallId,
         that.preId = that.$route.query.preId,
         that.stallEndTime = that.$route.query.stallEndTime
@@ -53,7 +57,7 @@ export default {
       console.log('跳转选车位页面')
       let that = this 
     that.$router.push({
-      path: '/addImpower?index=' + that.index + '&num=' + that.num + '&carname=' + that.carname + '&name=' + that.name + '&stallId=' + that.stallId + '&preId=' + that.preId + '&stallEndTime=' + that.stallEndTime,
+      path: '/addImpower?index=' + that.index + '&num=' + that.num + '&carname=' + that.carname + '&name=' + that.name + '&stallId=' + that.stallId + '&preId=' + that.preId + '&stallEndTime=' + that.stallEndTime + '&outind=' + that.outind,
     })
   },
   //下一步

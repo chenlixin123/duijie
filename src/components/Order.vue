@@ -11,6 +11,16 @@
         </div>
       </div>
     </div>
+
+    <div class="starts" v-if="beginss == 'true'">
+      <div class="begin">
+        <div class="con">{{'已为您分配[' + data.stallName + ']车位'}}</div>
+        <div class="fails"></div>
+        <div class="caos">
+          <div class="cof" @click="cof">确定</div>
+        </div>
+      </div>
+    </div>
     <!-- 取消预约提示框 -->
     <div class="boxs" v-if="begin == 'true'">
       <div class="centers">
@@ -60,10 +70,6 @@
         </figure>
         <div class="fault-txt">找车位</div>
       </div>
-
-
-      
-
     </div>
     <div class="body">
       <div class="body-content">
@@ -133,7 +139,8 @@ export default {
       nocar_content: "降锁成功",
       stallId:'',
       preId:'',
-      name:''
+      name:'',
+      beginss:'false'
     };
   },
   created() {
@@ -171,6 +178,10 @@ export default {
       that.$router.push({
            path: '/entrance?preId=' + that.preId + '&stallId=' + that.stallId + '&stallName=' + that.name,
       })
+  },
+  cof(){
+      let that = this
+      that.beginss = 'false'
   },
     // 渲染订单接口
     orders() {
@@ -422,8 +433,8 @@ export default {
                 }
               }
             } else {
-              that.bus.$emit("tips", { show: true, title: "切换成功" });
               that.orders();
+              that.beginss = 'true'
             }
           });
       } else if (that.s == 5) {
@@ -437,29 +448,22 @@ export default {
         // } else if (isAndroid) {
         //   window.jsObject.finish_current_activity_webView("", "");
         // }
-        that.$router.go(-1)
+        that.$router.go(-2)
       } else if (that.s == 6) {
         console.log("切换车位失败");
+        
       } else {
         console.log("跳转故障车位页");
-        that.$router.push({
-          path: "/CarError",
-          query: {
-            orderId: that.data.id,
-            name: that.data.stallName
-          }
-        });
+         that.$router.push({
+         path: '/malfunction?stallId=' + that.data.id + '&val=' + that.data.stallName
+    })
       }
     },
     error() {
       let that = this;
       that.$router.push({
-        path: "/CarError",
-        query: {
-          orderId: that.data.id,
-          name: that.data.stallName
-        }
-      });
+         path: '/malfunction?stallId=' + that.data.id + '&val=' + that.data.stallName
+    })
     },
     xiao() {
       let that = this;
@@ -814,5 +818,13 @@ body {
       }
     }
   }
+}
+.cof{
+  width: 100%;
+  text-align: center;
+  height: 100px;
+  line-height: 100px;
+  font-size: 30px;
+  border-top: 1px solid #999;
 }
 </style>

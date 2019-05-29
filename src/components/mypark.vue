@@ -11,28 +11,41 @@
 </div>
 <div class='time' v-if='userStatus == 0'>有效期：{{validity}}</div>
 <div class='time' v-if='userStatus == 1'>有效期：{{validitys}}</div>
-<img class='imgNumber' :src='src' v-if="ying == true">
+<div class='imgNumber'>
+  <img :src='src' v-if="ying == true" width="100%">
+</div>
+
 <div class='electric' v-if='unusualBattery == 0'>
-    <img class='electric_img' src='@/assets/dianliang@2x.png'>
+  <div class='electric_img'>
+      <img src='@/assets/dianliang@2x.png' width="100%">
+  </div>
     <div class='electric_text'>电量不足</div>
 </div>
 <div class='leave' v-if='gatewayStatus == 0'>车位已离线</div>
 
 <div class='rights'>
 <div  class='right_top' @click='qie' v-if='num > 1'>
-    <img src='@/assets/qiehuan@2x1.png'>
+  <div>
+      <img src='@/assets/qiehuan@2x1.png' width="100%">
+  </div>
     切换
 </div>
 <div  class='right_center' @click='record' v-if='userStatus  == 1'>
-    <img src='@/assets/jilu@2x.png'>
+  <div>
+      <img src='@/assets/jilu@2x.png' width="100%">
+  </div>
     记录
 </div>
 <div class='right_bottom' @click='malfunction'>
-    <img src='@/assets/guzhang@2x.png'>
+  <div>
+       <img src='@/assets/guzhang@2x.png' width="100%">
+  </div>
     故障
 </div>
 <div  class='carwhere' @click='carwhere' v-if='userStatus == 0'>
-    <img src='@/assets/where.png'>
+  <div>
+      <img src='@/assets/where.png' width="100%">
+  </div>
     找车位
 </div>
 </div>
@@ -162,7 +175,7 @@ export default {
     unusualBattery:-1,//异常电量 0低于30 1大于30
     useUpLockTime:'',//上次使用时间
     useUserMobile:'',//使用用户电话
-    userStatus:'',//用户状态 1授权人 0被授权人  
+    userStatus:-1,//用户状态 1授权人 0被授权人  
     useUserName:'',//用户姓名
     src:'',//图片路径
     data:'',
@@ -752,7 +765,7 @@ export default {
   text-align: center;
   margin-bottom: 40px;
 }
-.right_top > img{
+.right_top > div{
   width:60px;
   height:60px;
 }
@@ -764,7 +777,7 @@ export default {
   text-align: center;
   margin-bottom: 40px;
 }
-.right_center > img{
+.right_center > figure{
   width:60px;
   height:60px;
 }
@@ -776,7 +789,7 @@ export default {
   text-align: center;
    margin-bottom: 40px;
 }
-.right_bottom > img{
+.right_bottom > figure{
   width:60px;
   height:60px;
 }
@@ -788,7 +801,7 @@ export default {
   text-align: center;
   margin-left: -10px;
 }
-.carwhere > img{
+.carwhere > div{
   width:60px;
   height:60px;
 }

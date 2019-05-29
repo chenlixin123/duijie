@@ -77,10 +77,10 @@ let Url = {
 function Time(time) {
   let now = new Date(time);
   var year = now.getFullYear(); //年
-  var month = now.getMonth(); //月
-  var date = now.getDate(); //日
-  var hour = now.getHours(); //时
-  var minu = now.getMinutes(); //分
+  var month = (now.getMonth() + 1) < 10 ? '0' + (now.getMonth() + 1) : now.getMonth() + 1; //月
+  var date = now.getDate() < 10 ? '0' + now.getDate() : now.getDate(); //日
+  var hour = now.getHours() < 10 ? '0' + now.getHours() : now.getHours(); //时
+  var minu = now.getMinutes() < 10 ? '0' + now.getMinutes() : now.getMinutes(); //分
   // var sec = now.getSeconds(); //秒
   return year + '/' + month + '/' + date + ' ' + hour + ':' + minu
 }

@@ -5,7 +5,9 @@
     <div class='add-plate' @click='goAddPlate'>添加车牌号</div>
     <div class='plate-list' v-for="(item,index) in plateList" :key="index">
       <div>{{item.vehMark}}</div>
-      <img @click='delPlate(item)' class='del-img' src='@/assets/chepaihaoguanli_cuowu@3x.png'>
+      <div @click='delPlate(item)' class='del-img'>
+        <img src='@/assets/chepaihaoguanli_cuowu@3x.png' width='100%'>
+      </div>
     </div>
     </div>
     </div>
@@ -226,6 +228,7 @@ export default {
 .del-img {
   width: 36px;
   height: 36px;
+  display: flex;
   position: absolute;
   right: 0;
   top: 26px;

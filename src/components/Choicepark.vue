@@ -143,15 +143,26 @@ export default {
   menuClicks(e,index){
     let that = this;
     console.log(e,index)
-        that.id = e.stallId
-    console.log(that.datas.rentOmType, that.datas.isAuthUser, that.datas.stallId, that.id)
-    if (that.datas.rentOmType == 1 || that.datas.isAuthUser == 1 || that.datas.stallId == that.id){
+    if(that.datas == undefined){
+       if (e.rentOmType == 1 || e.isAuthUser == 1){
         that.data = e,
         that.nav = index,
       console.log(that.data)
     }else{
         that.show = true
     }
+    }else{
+             that.id = e.stallId
+    console.log(that.datas.rentOmType, that.datas.isAuthUser, that.datas.stallId)
+    if (that.datas.rentOmType == 1 || that.datas.isAuthUser == 1 || that.datas.stallId == that.id){
+        that.data = e,
+        that.nav = index,
+      console.log(that.data)
+    }else{
+        that.show = true
+    
+    }
+   }
   },
     shows(){
     let that = this
@@ -265,7 +276,7 @@ export default {
 .nums {
    width: 170px;
    height: 68px;
-   border: none;
+   border: 1px solid #ffb489;
    font-size: 32px;
    border-radius: 10px;
    color: #fff;
@@ -290,11 +301,11 @@ export default {
    float: left;
 }
 
-.list-menu.cur {
-   background-color: #f66913 !important;
-   color: #fff !important;
-   border: 1px solid #fff !important;
-}
+// .list-menu.cur {
+//    background-color: #f66913 !important;
+//    color: #fff !important;
+//    border: 1px solid #fff !important;
+// }
 
 .cur {
    width: 170px;

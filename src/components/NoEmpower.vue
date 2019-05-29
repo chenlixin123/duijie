@@ -1,8 +1,10 @@
 <template>
 <div class="big_box">
-    <div class='img_box' v-if='img == true'>
-<div class='line'></div>
-  <img class='img' src='@/assets/noCartupian@2x.png'>
+<div class='img_box' v-if='img == true'>
+  <div class='line'></div>
+  <div class='img'>
+       <img src='@/assets/noCartupian@2x.png' width="100%">
+  </div>
   <div class='img_title'>完成车位授权</div>
   <div class='img_text'>您的朋友也可以使用您的长租车位哦!</div>
   <button class='btns' @click='add'>添加授权</button>
@@ -16,18 +18,24 @@
     </div>
     <div class='body_box' v-for='(item,index) in item.detailList'  :key='index' @click='taps(item)'>
       <div class='top'>
-        <img class='mobile_img' src='@/assets/dianhua@2x.png'>
+        <div class='mobile_img'>
+            <img src='@/assets/dianhua@2x.png' width="100%">
+        </div>
         <div class='mobile'>{{item.mobiles}}</div>
         <div class='name' v-if="item.username != ''">({{item.username}})</div>
         <div class='right'>{{item.authFlag == 0 ? "" : item.authFlag == 1 ? "已取消" : item.authFlag == 2 ? "已过期" : "已失效" }}</div>
       </div>
       <div class='bottom'>
-         <img class='mobile_img' src='@/assets/shijian@2x.png'>
+        <div class='mobile_img'>
+            <img src='@/assets/shijian@2x.png' width="100%">
+        </div>
         <div class='mobile'>{{item.startTime}}-{{item.endTime}}</div>
       </div>
     </div>
   </div>
-  <img class='add' v-if='show == true' @click='add' src='@/assets/tianjia@2x.png'>
+  <div class='add' v-if='show == true' @click='add'>
+       <img src='@/assets/tianjia@2x.png' width="100%">
+  </div>
 </div>
 </div>
 </template>
@@ -174,11 +182,14 @@ add(){
 </script>
 
 <style scoped>
+ button { 
+   cursor: pointer;
+  -webkit-appearance: none; 
+  }
     .big_box{
   width: 100%;
-  background: #f5f4f4;
+  height: 100%;
   box-sizing: border-box;
-  padding-bottom: 20px;
 }
 .line{
   border-top: 1px solid rgb(243, 240, 240);
@@ -222,6 +233,7 @@ add(){
   height: 100%;
   box-sizing: border-box;
   padding: 0 25px;
+  background: #f5f4f4;
 }
 .title{
   width: 100%;

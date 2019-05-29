@@ -17,7 +17,7 @@
     <div class='times'>使用时长:{{item.serviceTime == '' ? '0分钟' : item.serviceTime}}</div>
     <div class='username' v-if='item.stallAuthType == 2 && item.mobiles != null || item.stallAuthType == 2 && item.username != null'><div class='username3'>使用人:</div><div class='username1' v-if='item.mobiles != null'>{{item.mobiles}}</div><div class='username2' v-if='item.username != null'>({{item.username}}）</div></div>
   </div>
-  <div class="none">没有更多数据</div>
+  <div class="none" v-if='num > 5'>没有更多数据</div>
      <!-- loading -->
   <div v-if='loading == true' class='loadingq'>
     <div class='load-txtq'>加载中请稍候...</div>
@@ -154,6 +154,7 @@ tap(item){
 .scoll{
   width: 100%;
   height: 100%;
+  background: #f5f4f4
 }
 .ss{
     width: 100%;

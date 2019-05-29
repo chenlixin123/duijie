@@ -4,7 +4,9 @@
    <div class='plate-inp'>
       <div @click="plateZh" class='plate-zh'>{{zhData[0]}}</div>
       <div @click='inMsg' class='plate-zh'>{{zhData[1]}}</div>
-      <img class='plate-circle' src='@/assets/circle.png'>
+      <div class='plate-circle'>
+          <img src='@/assets/circle.png' width="100%">
+      </div>
       <div class='plate-num' @click='inMsg'>
         <div class="div" v-for="(item,index) in zhData" :key="index" v-if="index>1">{{item}}</div>
          <div v-if="zhData.length<3">请输入完整信息</div>
@@ -12,8 +14,9 @@
    </div>
    <div class='eight'>
       <div class='eight-num'>8位新能源车牌</div>
-      <img @click='changeNum' class='eight-img' :src="img">
-      <image @click='changeNum' class='eight-img' :src="img"></image>
+      <div @click='changeNum' class='eight-img'>
+           <img :src="img" width="100%">
+      </div>
    </div>
    <div class="add-btns"><button @click='addPlete' class='add-btn' data-clicknum=''>保存</button></div>
    <div class='keyword' v-if="keyWord==true">
@@ -385,9 +388,10 @@ export default {
 .plate-circle {
   width: 18px;
   height: 18px;
+  display:flex;
   position: absolute;
   top: 25px;
-  margin: 0 0 0 31px;
+  left: 39%;
 }
 
 .plate-num {
@@ -418,6 +422,7 @@ export default {
   float: right;
   width: 21px;
   height: 21px;
+  display: flex;
   margin: 9px 9px 0 0;
   /* position: absolute;
   top: 282px;

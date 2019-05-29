@@ -1,10 +1,10 @@
 <template>
     <div class="page">
-        <div class='box' v-for='(item,index) in data' :key='index' @click='big(item)'>
+        <div class='box' v-for='(item,indexs) in data' :key='indexs' @click='big(item,indexs)'>
   <div class='title'>{{item.preName}}</div>
   <div class='boxs'>
-    <div class='text' v-for='(item,index) in item.stalls' :key='index'>
-      <div :class="ind == index ? 'contents' : 'content'" @click='tap(item,index)'>{{item.stallName}}</div>
+    <div class='text' v-for='(item,index) in item.stalls' :key='index' @click='tap(item,index)'>
+      <div :class="ind == index && outind == indexs ? 'contents' : 'content'">{{item.stallName}}</div>
     </div>
   </div>
 </div>
@@ -25,7 +25,8 @@ export default {
       num:'',
     stallId:'',
     preId:"",
-    stallEndTime:''
+    stallEndTime:'',
+    outind:-1
     }},
     created(){
         let that = this
@@ -35,6 +36,7 @@ export default {
       }else{
         console.log('切换车位')
             that.ind = that.$route.query.index,
+            that.outind = that.$route.query.outind,
             that.name = that.$route.query.name,
             that.carname = that.$route.query.carname,
             that.num = that.$route.query.num,
@@ -76,14 +78,16 @@ export default {
          alert('请选择车位')
       }else{
         that.$router.push({
-          path: '/carImpower?name=' + that.name + "&carname=" + that.carname + "&index=" + that.ind + "&num=" + that.num + '&preId=' + that.preId + '&stallId=' + that.stallId + '&stallEndTime=' + that.stallEndTime
+          path: '/carImpower?name=' + that.name + "&carname=" + that.carname + "&index=" + that.ind + "&num=" + that.num + '&preId=' + that.preId + '&stallId=' + that.stallId + '&stallEndTime=' + that.stallEndTime + '&outind=' + that.outind
         })
       }
       console.log('确认车位')
   },
-  big(e){
+  big(e,indexs){
       console.log(e)
     let that = this
+    that.outind = indexs
+    console.log(indexs)
     console.log(e.preName)
       that.carname = e.preName,
       that.num = 2,

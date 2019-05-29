@@ -1,6 +1,8 @@
 <template>
     <div>
-        <img class='img' src='@/assets/noCartupian@2x.png'>
+      <div class='img'>
+        <img src='@/assets/noCartupian@2x.png' width="100%">
+      </div>
 <div class='title'>暂未发现您的长租车位信息</div>
 <div class='content'>添加车牌号，将自动导入您开通的长租车位</div>
 <div class='btn' @click='btn'>添加车牌号</div>

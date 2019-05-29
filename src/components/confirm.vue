@@ -535,6 +535,7 @@ if(start_times > time){
                 relationName: that.relationName, //关系名称
             }
         }).then(res => {
+            console.log(end_time,start_time,that.mobile,that.preId,that.carname,that.stallId,that.name,that.username,that.relationId,that.relationName)
             console.log(res)
              if(res.data == true){
            that.bus.$emit("tips", { show: true, title: "授权成功" });

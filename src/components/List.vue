@@ -3,26 +3,38 @@
     <div class="body" v-for="(item,index) in msg" :key="index">
         <div class="box_title">车区名称:{{item.name}}</div>
         <div class="car_where">车区地址:{{item.address}}</div>
-        <button class="btn_appointment" @click="park(item)">预约停车</button>
-        <button class="btn_long" @click="mypark(item)">我的车位</button>
+        <div class="btn-all">
+             <div class="btn_appointment" @click="park(item)">预约停车</div>
+             <div class="btn_long" @click="mypark(item)">我的车位</div>
+        </div>
     </div>
 
     <!-- 首部长租车位黄色提示框-->
     <div class="module" v-if="show == 'true'" @click="mypark">
-      <img class="weizhi" src="@/assets/chewei@2.png">
+      <div class="weizhi">
+        <img src="@/assets/chewei@2.png" width="100%">
+      </div>
       <div class="text">您正在使用{{long_name}}[{{names}}]车位</div>
-      <img class="you" src="@/assets/you@2.png">
+      <div class="you">
+          <img src="@/assets/you@2.png" width="100%">
+      </div>
     </div>
       <!-- 首部预约车位橘黄色提示框-->
     <div class="modules" v-if="appointments == 'true'" @click="parks">
-      <img class="weizhi" src="@/assets/yuyue@2x.png">
-      <div class="text">{{downFlag}}{{long_name}}[{{names}}]车位</div>
-      <img class="you" src="@/assets/you@2.png">
+      <div class="weizhi">
+          <img v-if="downFlag != '您有一笔订单未支付，请前往支付'" src="@/assets/yuyue@2x.png" width="100%">
+          <img v-if="downFlag == '您有一笔订单未支付，请前往支付'" src="@/assets/gua.png" width="100%">
+      </div>
+      <div class="text">{{downFlag}}{{downFlag == '您有一笔订单未支付，请前往支付' ? '' : long_name}}{{downFlag == '您有一笔订单未支付，请前往支付' ? '' : '[' + names + ']车位'}}</div>
+      <div class="you">
+          <img src="@/assets/you@2.png" width="100%">
+      </div>
     </div>
 
     <!-- 首页授权标识 -->
-
-    <img class="empower" src="@/assets/shouquan@2x.png" alt="" @click="empower" v-if="show_impower == true">
+      <div class="empower" @click="empower" v-if="show_impower == true">
+          <img src="@/assets/shouquan@2x.png" alt="" width="100%">
+      </div>
   </div>
   
 </template>
@@ -53,7 +65,7 @@ export default {
   },
   created() {
     let that = this;
-    console.log(wx)
+    // console.log(wx)
     // let wexinPay = (data,cb,errorCb) => {
     //   console.log(data)
     //   console.log(cd)
@@ -311,10 +323,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-body,
-html {
-  background: #f5f4f4 !important;
-}
 .page {
   width: 100%;
   height: 100%;
@@ -342,9 +350,13 @@ html {
   margin-top: 28px;
   margin-bottom: 32px;
 }
+.btn-all{
+  display: flex;
+}
 .btn_appointment{
-  width: 134px;
+  width: 136px;
   height: 46px;
+  text-align: center;
   line-height: 46px;
   font-size: 24px;
   color: #f66913;
@@ -352,19 +364,18 @@ html {
   border-radius: 10px;
   margin-left: 310px;
   border:1px solid #f66913;
-  outline: none;
 }
 .btn_long{
-   width: 134px;
+   width: 136px;
   height: 46px;
   line-height: 46px;
+  text-align: center;
   font-size: 24px;
   color: #faa901;
   background: white;
   border-radius: 10px;
   margin-left: 20px;
   border:1px solid #faa901;
-  outline: none;
 }
 
 .module {
@@ -404,6 +415,8 @@ html {
   margin-left: 50px;
   margin-right: 20px;
   float: left;
+  display: flex;
+
 }
 .you {
   width: 30px;
@@ -411,6 +424,7 @@ html {
   position: absolute;
   right: 48px;
   bottom: 14px;
+   display: flex;
 }
 .text {
   width: 73%;

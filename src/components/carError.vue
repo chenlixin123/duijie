@@ -19,7 +19,7 @@
         <div class="left">车位</div>
         <div class="right">{{name}}</div>
       </div>
-      <div class="error">请描述问题具体原因</div>
+      <div class="error">请选择故障原因</div>
       <div class="errors">
         <div
           :class="index == ind ? 'active' : 'errors_content'"
@@ -28,8 +28,7 @@
           @click="chose(item,index)"
         >{{item.name}}</div>
       </div>
-      <div class="input_top">详细描述</div>
-      <textarea class="text" maxlength="200" placeholder="请详细的描述问题" @input="descInput"></textarea>
+      <textarea class="text" maxlength="200" placeholder="请描述具体车位故障" @input="descInput"></textarea>
       <div class="input_bottom">还可以输入{{200-inputLength}}字</div>
       <button
         :class="show == 'true' ? 'btns' : 'btn'"
@@ -145,7 +144,7 @@ export default {
           } else {
             that.bus.$emit("tips", { show: true, title: "切换成功" });
             setTimeout(() => {
-              that.$router.go(-1);
+              that.$router.go(-3);
             }, 1000);
           }
         });
