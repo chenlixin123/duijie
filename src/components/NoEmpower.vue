@@ -99,8 +99,12 @@ shows(){
             }
           })
         })
+        // let ff = []
+        // ff.push(res.data[1])
+        // console.log(res.data)
         that.bus.$emit("loading", false);
           that.datas = res.data
+          //  that.datas = ff
       }
    })
 },
@@ -239,7 +243,7 @@ add(){
 }
 .body{
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   box-sizing: border-box;
   padding: 0 25px;
   background: #f5f4f4;
