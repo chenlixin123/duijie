@@ -181,7 +181,7 @@ export default new Router({
       name: 'particulars',
       component: particulars,
       meta: {
-        title: '详情页'
+        title: '使用详情'
       }
     },
     {

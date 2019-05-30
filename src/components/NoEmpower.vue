@@ -141,14 +141,23 @@ add(){
      url:Url.url.sure,
      method:'get'
  }).then(res => {
-    
+    console.log(res)
+    if(res.data.length > 1){
+      localStorage.setItem('skips',2)
+    }else{
+      localStorage.setItem('skips',1)
+    }
      that.num = res.data.length
      res.data.map(res => {
-        console.log(res)
+       console.log(res)
+       if(res.stalls.length > 1){
+         localStorage.setItem('skipes',2)
+       }else{
+        localStorage.setItem('skipes',1)
+       }
           that.nums =  res.stalls.length,
           that.carname = res.preName,
           that.preId = res.preId
-        console.log(res)
         res.stalls.map(res => {
             console.log(res)
               that.name = res.stallName,

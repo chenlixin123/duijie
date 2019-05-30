@@ -506,9 +506,7 @@ export default {
                   }
       })
     }else{
-      that.$router.push({
-          url: '/malfunction?stallId=' + that.stallId + '&val=' + that.val
-      })
+      that.malfunction()
     }
 
   },
@@ -605,11 +603,11 @@ export default {
   },
   bottom(){
        let that = this
-    console.log(that.isUserUse + '---------------isUserUse')
-    if (that.isUserUse == 1){
-     that.bus.$emit("tips", { show: true, title: "车位正在使用中" });
-      return
-    }
+    console.log(that.stallId + '---------------isUserUse')
+    // if (that.isUserUse == 1){
+    //  that.bus.$emit("tips", { show: true, title: "车位正在使用中" });
+    //   return
+    // }
     if (that.self == true) {
        that.bus.$emit("loading", true);
     that.bus.$emit("tip", { title: "降锁中请稍候" });
@@ -735,6 +733,10 @@ export default {
 </script>
 
 <style scoped lang='scss'>
+.container{
+  width:100%;
+  height: 100%;
+}
 .mypark {
   width: 100%;
   height: 100%;
@@ -850,9 +852,10 @@ export default {
   width:100%;
   box-sizing:border-box;
   padding: 0px 86px;
-  position: fixed;
-  left:0;
-  top:1050px;
+  // position: fixed;
+  // left:0;
+  // top:1050px;
+  margin-top: 200px;
   display: flex;
   justify-content: space-between;
   align-items: center;

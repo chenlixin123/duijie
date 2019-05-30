@@ -395,6 +395,7 @@ export default {
     ones() {
       let that = this;
       that.begins = "none";
+      console.log(that.s)
       if (that.s == 1) {
         //再升一次
         that.top();
@@ -428,7 +429,7 @@ export default {
                   console.log(res.message.content);
                   (that.aligns = res.message.content),
                     (that.ss = "确定"),
-                    (that.s = 5),
+                    (that.s = 7),
                     (that.begins = "true");
                 }
               }
@@ -452,7 +453,10 @@ export default {
       } else if (that.s == 6) {
         console.log("切换车位失败");
         
-      } else {
+      }else if(that.s == 7){
+           that.$router.push({ path: "/Lock" });
+            that.bus.$emit("loading", false);
+      }else {
         console.log("跳转故障车位页");
          that.$router.push({
          path: '/malfunction?stallId=' + that.data.id + '&val=' + that.data.stallName

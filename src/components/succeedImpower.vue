@@ -61,10 +61,15 @@ export default {
     beforeDestroy(){
         let that = this
     if (that.skip == 1){
-        that.$router.go(-2)
+        that.$router.go(-1)
       console.log('修改授权')
     }else{
-       that.$router.go(-3)
+      // console.log(localStorage.getItem('skips') + ' 555555  '+ localStorage.getItem('skipes'))
+      if(localStorage.getItem('skips') == 2 || localStorage.getItem('skipes') == 2){
+        that.$router.go(-4)
+      }else{
+         that.$router.go(-3)
+      }
       //  that.$router.push({
       //    path:'/goback'
       //  })

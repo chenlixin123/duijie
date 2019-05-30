@@ -15,7 +15,11 @@
     </div>
     <div class='time'>{{item.startTime}}</div>
     <div class='times'>使用时长:{{item.serviceTime == '' ? '0分钟' : item.serviceTime}}</div>
-    <div class='username' v-if='item.stallAuthType == 2 && item.mobiles != null || item.stallAuthType == 2 && item.username != null'><div class='username3'>使用人:</div><div class='username1' v-if='item.mobiles != null'>{{item.mobiles}}</div><div class='username2' v-if='item.username != null'>({{item.username}}）</div></div>
+    <div class='username' v-if='item.stallAuthType == 2 && item.mobiles != null || item.stallAuthType == 2 && item.username != null'>
+      <div>使用人:</div>
+      <div v-if='item.mobiles != null'>{{item.mobiles}}</div>
+      <div v-if='item.username != null'>({{item.username}}）</div>
+    </div>
   </div>
   <div class="none" v-if='num > 5'>没有更多数据</div>
      <!-- loading -->
@@ -242,6 +246,8 @@ tap(item){
    font-size: 28px;
   color: #666;
   display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 .img{
    width: 240px;
