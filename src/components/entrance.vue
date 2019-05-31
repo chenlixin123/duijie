@@ -33,9 +33,9 @@ export default {
        that.skip = localStorage.getItem('skip')
        console.log(localStorage.getItem('skip'))
         if(that.skip == 2){
+            localStorage.setItem('skip',1)
             console.log('555555555555')
             that.$router.go(-1)
-           localStorage.setItem('skip',1)
         }
         that.stallName = that.$route.query.stallName
         that.stallId = that.$route.query.stallId
@@ -78,7 +78,6 @@ export default {
                     console.log('22222222222222222')
                      window.location.href = 'https://map.linkmoretech.cn/#/ParkingCell?plateNo=H'+'&id=68'+'&start=' + that.name + '&end=' + that.stallName
                 }
-              
             }
         }
     }

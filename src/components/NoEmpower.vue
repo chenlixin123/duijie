@@ -283,6 +283,7 @@ add(){
 .mobile_img{
   width: 28px;
   height: 28px;
+  display: flex;
 }
 .mobile{
   margin-left: 16px;

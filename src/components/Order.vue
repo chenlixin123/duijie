@@ -459,14 +459,15 @@ export default {
       }else {
         console.log("跳转故障车位页");
          that.$router.push({
-         path: '/malfunction?stallId=' + that.data.id + '&val=' + that.data.stallName
+         path: '/malfunction?stallId=' + that.data.stallId + '&val=' + that.data.stallName
     })
       }
     },
     error() {
       let that = this;
+      console.log(that.data)
       that.$router.push({
-         path: '/malfunction?stallId=' + that.data.id + '&val=' + that.data.stallName
+         path: '/malfunction?stallId=' + that.data.stallId + '&val=' + that.data.stallName
     })
     },
     xiao() {

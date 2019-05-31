@@ -112,7 +112,7 @@ export default {
     if (that.id == "") {
         that.bus.$emit("tips", { show: true, title: "请选择故障原因" });
     } else {
-
+        console.log(that.id)
         that.ff = true
       if (that.id == 102) {
         // console.log('其他')
@@ -150,7 +150,7 @@ export default {
 
       } else {
         console.log("别的选项")
-         console.log(that.val , that.value,that.stallId,that.id )
+         console.log(that.val , that.value+ "222" + that.stallId+"33333"+that.id )
         axios.request({
             url:Url.url.long_Feedback,
             method:"post",

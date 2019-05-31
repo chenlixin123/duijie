@@ -189,7 +189,8 @@ export default {
     ji:0,
     malfunctions:0,
     top_block:false,
-    preId:''
+    preId:'',
+    carwheres:1
     };
   },
   created() {
@@ -467,9 +468,12 @@ export default {
     },
    carwhere(){
     let that = this
+    that.carwheres = 2
       console.log('跳转室内导航')
+      console.log(that.preId)
+      console.log(that.stallId)
       that.$router.push({
-           path: '/entrance?preId=' + that.preId + '&stallId=' + that.stallId,
+           path: '/entrance?preId=' + that.preId + '&stallId=' + that.stallId + '&stallName=' + that.val,
       })
   },
   malfunction(){
@@ -722,7 +726,7 @@ export default {
       })
       .then(res => {
         console.log(res,that.qies);
-        if(res.data.status == true && that.qies == 0 && that.ji == 0 && that.malfunctions == 0){
+        if(res.data.status == true && that.qies == 0 && that.ji == 0 && that.malfunctions == 0 && that.carwheres == 1){
           that.$router.push({
             path:"/"
           })
@@ -754,7 +758,7 @@ export default {
   position: relative;
 }
 .rights{
-  width: 60px;
+  width: 75px;
   position: absolute;
   top: 240px;
   right: 40px;
@@ -796,16 +800,20 @@ export default {
   height:60px;
 }
 .carwhere{
-   width:80px;
+   width:90px;
   height:96px;
   font-size: 24px;
   color: #999999;
-  text-align: center;
-  margin-left: -10px;
+  text-align: left;
+  margin-right: 5px;
+  margin-top: 5px;
+  font-size: 20px;
 }
 .carwhere > div{
   width:60px;
   height:60px;
+  margin-left: 10px;
+  margin-bottom: 5px;
 }
 .content_top{
   width:100%;

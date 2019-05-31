@@ -83,6 +83,7 @@ export default {
       }
       console.log('确认车位')
   },
+  // 外围点击
   big(e,indexs){
       console.log(e)
     let that = this
