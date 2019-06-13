@@ -630,7 +630,7 @@ export default {
 
  
                 setTimeout(() => {
-                 that.bus.$emit("tips", { show: true, title: "降锁成功" });
+                 that.bus.$emit("tips", { show: true, title: "车位锁降下成功" });
                 },1000)
              
                localStorage.setItem('oo',true)

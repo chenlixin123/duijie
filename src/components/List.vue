@@ -35,7 +35,10 @@
       <div class="empower" @click="empower" v-if="show_impower == true">
           <img src="@/assets/shouquan@2x.png" alt="" width="100%">
       </div>
+
+      <div class="pay" @click="pay">支付</div>
   </div>
+  
   
 </template>
 
@@ -163,6 +166,9 @@ export default {
 // })
 //   },
   methods: {
+    pay(){
+        window.location.href = 'http://api.linkmoreparking.cn/api/account/open/guomao/payPage?appType=android&amount=1&successUrl=https://www.baidu.com/'
+    },
     jhajax(token) {
       let that = this
       // alert(token);
@@ -323,6 +329,15 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.pay{
+  width: 20%;
+  font-size: 60px;
+  position: absolute;
+  bottom: 20%;
+  right: 0;
+  color: red;
+  border: 1px solid green;
+}
 .page {
   width: 100%;
   height: 100%;

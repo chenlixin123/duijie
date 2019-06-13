@@ -385,7 +385,7 @@ export default {
             }
           } else {
             that.bus.$emit("loading", false);
-            that.bus.$emit("tips", { show: true, title: "降锁成功" });
+            that.bus.$emit("tips", { show: true, title: "车位锁降下成功" });
             that.data.cancelFlag = 2;
             // that.nocar = "true";
             // that.nocar_content = "降锁成功";
