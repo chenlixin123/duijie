@@ -235,8 +235,8 @@
       width: 70px;
       height: 70px;
       position: absolute;
-      bottom: -100px;
-      left: 47%;
+      bottom: -130px;
+      left: 44%;
     }
     .boxs_top {
       width: 100%;

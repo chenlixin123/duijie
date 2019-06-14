@@ -335,9 +335,9 @@ export default {
     background: white;
 }
 .div{
-    width: 10px;
+    width: 15px;
      display: inline-block;
-     margin-left: 10px;
+     margin-left: 20px;
      color: #666;
 }
 .plate-txt {

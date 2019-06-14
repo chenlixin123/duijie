@@ -153,7 +153,7 @@ export default {
     }
     }else{
              that.id = e.stallId
-    console.log(that.datas.rentOmType, that.datas.isAuthUser, that.datas.stallId)
+    console.log(that.datas.rentOmType, that.datas.isAuthUser, that.datas.stallId,that.id)
     if (that.datas.rentOmType == 1 || that.datas.isAuthUser == 1 || that.datas.stallId == that.id){
         that.data = e,
         that.nav = index,
