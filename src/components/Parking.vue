@@ -736,7 +736,10 @@ export default {
         })
         .then(res => {
           console.log(res);
-          that.carlist = res.data;
+          if(res.data.length == 0){
+            that.$router.go(-1)
+          }else{
+              that.carlist = res.data;
            let id = localStorage.getItem("carlist_index");
            console.log(id)
            for(let i = 0; i < res.data.length; i++){
@@ -755,6 +758,7 @@ export default {
 
           if(res.status == true){
             that.bus.$emit("loading", false);
+          }
           }
         });
     },

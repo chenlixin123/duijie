@@ -38,18 +38,18 @@ let Url = {
   user_impower:"/api/enterprise/app/auth-record/v2.0/list",
   //查询用户可授权的车位
   sure: "/api/enterprise/app/user-rent-stall/v2.0/auth-stall",
-   //亲属关系
+  //亲属关系
   friends: "/api/common/app/dicts/v2.0/relation/code",
-   //查询用户详情
-   choose_user: "/api/account/app/users/v2.0/detail",
-    //新增授权接口
-    newImpower: "/api/enterprise/app/auth-record/v2.0/save",
-    //修改授权接口
-    update: "/api/enterprise/app/auth-record/v2.0/update",
-    //取消授权接口
-    cancels: "/api/enterprise/app/auth-record/v2.0/cancel",
-    //首页是否显示授权
-    show_impower: "/api/enterprise/app/user-rent-stall/v2.0/auth-flag",
+  //查询用户详情
+  choose_user: "/api/account/app/users/v2.0/detail",
+  //新增授权接口
+  newImpower: "/api/enterprise/app/auth-record/v2.0/save",
+  //修改授权接口
+  update: "/api/enterprise/app/auth-record/v2.0/update",
+  //取消授权接口
+  cancels: "/api/enterprise/app/auth-record/v2.0/cancel",
+  //首页是否显示授权
+  show_impower: "/api/enterprise/app/user-rent-stall/v2.0/auth-flag",
 
 
   //固定车位
@@ -66,12 +66,22 @@ let Url = {
   long_current: '/api/enterprise/app/user-rent-stall/v2.0/current',
   //故障车位上报 
   long_Feedback: '/api/account/app/fault-stall/feedback/v2.0/save',
-  //故障车位失败原因列表 
+  //故障车位失败原因列表
   long_Feedbacks: '/api/common/app/dicts/v2.0/cause/fault',
    //停车记录
   record: "/api/enterprise/app/user-rent-stall/v2.0/parking-record",
    //导航  车区入口管理
-  entrance:'/api/prefecture/app/prefectures/v2.0/entrance-list'
+  entrance: '/api/prefecture/app/prefectures/v2.0/entrance-list',
+  
+
+  //个人中心
+
+  //查询用户详情
+  choose_user: "/api/account/app/users/v2.0/detail",
+  //用户已完成订单列表
+  by_list: '/api/order/app/order/v2.0/list',
+  //订单详情
+  detail: '/api/order/app/order/v2.0/detail',
 }
 
 function Time(time) {
@@ -85,7 +95,7 @@ function Time(time) {
   return year + '/' + month + '/' + date + ' ' + hour + ':' + minu
 }
 Time()
-module.exports = {
+export default{
   url: Url,
   Time: Time
 }

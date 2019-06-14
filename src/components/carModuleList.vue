@@ -69,6 +69,8 @@ export default {
           let that = this;
           console.log(that.$route.query.num)
           that.num = that.$route.query.num
+           that.bus.$emit("loading", true);
+           that.bus.$emit("tip", { title: "加载中请稍候..." });
       axios
         .request({
           url: Url.url.plate_list,
@@ -76,6 +78,7 @@ export default {
         })
         .then(res => {
           console.log(res);
+          that.bus.$emit("loading", false);
           that.plateList = res.data,
           that.data = res.data
         });

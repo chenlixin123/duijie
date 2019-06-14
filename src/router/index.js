@@ -22,6 +22,9 @@ import record from '@/components/record'
 import particulars from '@/components/particulars'
 import entrance from '@/components/entrance'
 import nocarmodule from '@/components/nocarmodule'
+import User from '@/components/user'
+import Bill from '@/components/bill'
+import BillDetails from '@/components/billDetails'
 
 Vue.use(Router)
 
@@ -206,6 +209,30 @@ export default new Router({
       component: NoEmpower,
       meta: {
         title: '授权管理'
+      }
+    },
+    {
+      path: '/user', //预约车位页面
+      name: 'User',
+      component: User,
+      meta: {
+        title: '个人中心'
+      }
+    },
+    {
+      path: '/bill', //订单列表
+      name: 'Bill',
+      component: Bill,
+      meta: {
+        title: '订单列表'
+      }
+    }, 
+    {
+      path: '/billDetails', //订单详情页面
+      name: 'BillDetails',
+      component: BillDetails,
+      meta: {
+        title: '订单详情'
       }
     },
   ]

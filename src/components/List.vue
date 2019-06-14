@@ -3,10 +3,8 @@
     <div class="body" v-for="(item,index) in msg" :key="index">
         <div class="box_title">车区名称:{{item.name}}</div>
         <div class="car_where">车区地址:{{item.address}}</div>
-        <div class="btn-all">
-             <div class="btn_appointment" @click="park(item)">预约停车</div>
-             <div class="btn_long" @click="mypark(item)">我的车位</div>
-        </div>
+        <div class="btn_appointment" @click="park(item)">预约停车</div>
+             <!-- <div class="btn_long" @click="mypark(item)">我的车位</div> -->
     </div>
 
     <!-- 首部长租车位黄色提示框-->
@@ -33,10 +31,41 @@
 
     <!-- 首页授权标识 -->
       <div class="empower" @click="empower" v-if="show_impower == true">
-          <img src="@/assets/shouquan@2x.png" alt="" width="100%">
+          <img src="@/assets/shouquan2.png" alt="" width="100%">
       </div>
 
-      <div class="pay" @click="pay">支付</div>
+      <div class="tab">
+          <div class="tab1">
+            <div class="img">
+              <img src="@/assets/shouye_xuanzhong@2x.png" alt="" v-if="tap == 0" width="100%">
+            </div>
+            <div class="img">
+              <img src="@/assets/shouye@2x.png" alt="" v-if="tap != 0" width="100%">
+            </div>
+            
+            <div :class="tap == 0 ? 'text' : 'text1'">首页</div>
+          </div>
+          <div class="tab2" @click="mypark(1)">
+            <div class="img">
+              <img src="@/assets/gudingchewei_xuanzhogn@2x.png" alt="" v-if="tap == 1" width="100%">
+            </div>
+            <div class="img">
+              <img src="@/assets/gudingchewei@2x.png" alt="" v-if="tap != 1" width="100%">
+            </div>
+            <div :class="tap == 1 ? 'text' : 'text1'">固定车位</div>
+          </div>
+          <div class="tab3" @click="user(2)">
+            <div class="img">
+              <img src="@/assets/wode_xuanzhong@2x.png" alt="" v-if="tap == 2" width="100%">
+            </div>
+            <div class="img">
+              <img src="@/assets/wode@2x.png" alt="" v-if="tap != 2" width="100%">
+            </div>
+            <div :class="tap == 2 ? 'text' : 'text1'">我的</div>
+          </div>
+      </div>
+
+      <!-- <div class="pay" @click="pay">支付</div> -->
   </div>
   
   
@@ -63,7 +92,8 @@ export default {
       show_impower:'',
       longitude: "116.41361",
       latitude: "39.91106",
-      downFlag:'' //车位的状态
+      downFlag:'' ,//车位的状态
+      tap:0,
     };
   },
   created() {
@@ -75,8 +105,7 @@ export default {
     // }
     localStorage.setItem('tap',0)
     let token = that.$route.query.token;
-    // token = '4534807d4f184a06870192563a289c2e'
-    // token = '2d5c574581c447f9ab4e6fbd224b7233'
+    // token = 'd0e4745b16004598bf85b14aa086f57c'
     //  window.jhajax = this.jhajax;
     console.log(token)
     if(token == undefined){
@@ -92,12 +121,14 @@ export default {
         .then(res => {
           console.log(res)
           that.appointment = res.data
-          if(res.data.downFlag == 0){
+          if(res.data != null){
+               if(res.data.downFlag == 0){
             that.downFlag = '您已预约'
           }else if(res.data.downFlag == 1){
             that.downFlag = '您正在使用'
           }else{
               that.downFlag = '您有一笔订单未支付，请前往支付'
+          }
           }
           if(res.data == null){
             that.appointments = 'false'
@@ -126,7 +157,6 @@ export default {
     //  window.jhajax(
     //   token='c2fb6980c0284a99ba3ef24a96ec6c6a',
     //   )
-
     axios
       .request({
         url: Url.url.long_current,
@@ -192,6 +222,14 @@ export default {
            that.bus.$emit("loading", false);
         });
     },
+    // 跳转个人中心
+    user(number){
+        let that = this
+        that.tap = number
+        that.$router.push({
+          path:'/user'
+        })
+    },
     //是否显示授权标识
     show_impowers(){
       let that = this
@@ -246,10 +284,11 @@ export default {
             });
     },
     // 跳转长租
-    mypark(e) {
-      console.log(e.groupId)
-      localStorage.setItem('groupId',e.groupId)
+    mypark(number) {
+      console.log(number)
+      // localStorage.setItem('groupId',e.groupId)
       let that = this
+      that.tap = number
       console.log('长租');
       let token = Cookies.get("tokens");
       let oo = localStorage.getItem("oo");
@@ -328,7 +367,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped lang='scss'>
 .pay{
   width: 20%;
   font-size: 60px;
@@ -336,7 +375,10 @@ export default {
   bottom: 20%;
   right: 0;
   color: red;
-  border: 1px solid green;
+  border: 1px solid red;
+  background: black;
+  border-radius: 18px;
+  text-align: center;
 }
 .page {
   width: 100%;
@@ -347,26 +389,24 @@ export default {
 }
 .body{
   width: 690px;
-  height: 250px;
   background: white;
   margin: 0 auto;
   margin-bottom: 30px;
   border-radius: 20px;
   box-sizing: border-box;
-  padding: 34px 30px 32px 30px;
+  padding: 34px 30px 38px 30px;
+  position: relative;
 }
 .box_title{
   font-size: 30px;
   color: #333;
 }
 .car_where{
+  width: 75%;
   font-size: 26px;
   color: #666;
   margin-top: 28px;
-  margin-bottom: 32px;
-}
-.btn-all{
-  display: flex;
+  /* border: 1px solid; */
 }
 .btn_appointment{
   width: 136px;
@@ -377,7 +417,9 @@ export default {
   color: #f66913;
   background: white;
   border-radius: 10px;
-  margin-left: 310px;
+  position: absolute;
+  bottom:26px;
+  right: 30px;
   border:1px solid #f66913;
 }
 .btn_long{
@@ -448,10 +490,83 @@ export default {
   white-space: nowrap;
 }
 .empower{
-  width: 80px;
-  height:80px;
+  width: 102px;
+  height:102px;
   position: absolute;
-  top: 50%;
-  right: 0px;
+  bottom: 190px;
+  right: 20px;
+}
+.tab{
+  width: 100%;
+  height: 98px;
+  box-sizing: border-box;
+  padding: 12px 102px;
+  // border: 1px solid red;
+  position: fixed;
+  bottom: 0px;
+  left: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+}
+.tab1{
+  width: 10%;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  // border: 1px solid red;
+  .img{
+    width: 40px;
+    margin: 0 auto;
+  }
+  .text{
+    width: 100%;
+    font-size: 12px;
+    color: #f66913;
+  }
+  .text1{
+    width: 100%;
+    font-size: 12px;
+    color: #666;
+  }
+}
+.tab2{
+  width: 20%;
+  text-align: center;
+  // border: 1px solid red;
+  .img{
+    width: 40px;
+    margin: 0 auto;
+  }
+  .text{
+    width: 100%;
+    font-size: 12px;
+    color: #f66913;
+  }
+  .text1{
+    width: 100%;
+    font-size: 12px;
+    color: #666;
+  }
+}
+.tab3{
+  width: 10%;
+  text-align: center;
+  // border: 1px solid red;
+  .img{
+    width: 40px;
+    margin: 0 auto;
+  }
+  .text{
+    width: 100%;
+    font-size: 12px;
+    color: #f66913;
+  }
+  .text1{
+    width: 100%;
+    font-size: 12px;
+    color: #666;
+  }
 }
 </style>
