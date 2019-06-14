@@ -216,7 +216,7 @@ export default {
              longitude: that.longitude
         }
       }).then(res => {
-        console.log(res)
+        // console.log(res)
         if (res.status == true) {
             res.data.rentUsers.map(res => {
               res.rentUserStalls.map(res => {
@@ -232,8 +232,10 @@ export default {
                 }else{
                   that.$route.meta.title = '授权车位'
                 }
-                  that.userStatus = res.userStatus,
+                  that.userStatus = res.userStatus
                 console.log(res)
+                 let data = (res)
+                 that.data = data
                 if (res.gatewayStatus == 1) { //判断网关在线
                   if (res.stallStatus == 2) { //判断车位状态 2占用
                       that.src = require('@/assets/zaixianshiyongzhong@2x.png') 
@@ -701,20 +703,20 @@ export default {
       let that = this;
       that.qies = 1
     let data = JSON.stringify(that.data);
-    axios.request({
-      url:Url.url.long_current,
-      method:"get"
-    }).then(res => {
-      console.log(res)
-       if (res.data.switchFlag == true){ //判断可否切换
+    // axios.request({
+    //   url:Url.url.long_current,
+    //   method:"get"
+    // }).then(res => {
+      // console.log(res)
+      //  if (res.data.switchFlag == true){ //判断可否切换
              that.$router.push({
                   path: '/Choice?data=' + data + "&latitude=" + that.latitude + "&longitude=" + that.longitude + "&switchFlag=" + 1 + '&id=' + that.stallId,
                 })
-          } else if (res.data.switchFlag == false){
-               that.show = true
-               that.qies = 0
-          }
-    })
+          // } else if (res.data.switchFlag == false){
+              //  that.show = true
+              //  that.qies = 0
+          // }
+    // })
   },
   },
   beforeDestroy(){

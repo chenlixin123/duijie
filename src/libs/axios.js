@@ -25,7 +25,7 @@ class httpRequest {
     instance.interceptors.request.use(config => {
       //config.headers['token'] = Cookies.get(TOKEN_KEY)
       // config.headers['X-Access-Auth-Token'] = 'b36d78cda79f40e49e56840409f924af'
-      console.log('add token for heard')
+      // console.log('add token for heard')
       config.headers['X-Access-Auth-Token'] = Cookies.get('tokens')
       config.headers['os'] = 3
       // alert('token :' + Cookies.get('tokens'))
@@ -45,7 +45,10 @@ class httpRequest {
     // 添加响应拦截器
     instance.interceptors.response.use((res) => {
       let data = res.data
-      console.log(data)
+      // console.log(data)
+      if (data.status == false) {
+        console.log(data.message.content)
+      }
       const is = this.destroy(url)
       if (!is) {
         setTimeout(() => {
@@ -104,12 +107,12 @@ class httpRequest {
         'Content-Type': 'application/json; charset=utf-8'
       }
     }
-    console.log('create error')
+    // console.log('create error')
     return Axios.create(conf)
   }
   // 请求实例
   request(options) {
-    console.log('request')
+    // console.log('request')
     var instance = this.create()
     this.interceptors(instance, options.url)
     options = Object.assign({}, options)

@@ -142,7 +142,7 @@ export default {
   //占用点击
   menuClicks(e,index){
     let that = this;
-    console.log(e,index)
+    console.log(e,index,that.datas)
     if(that.datas == undefined){
        if (e.rentOmType == 1 || e.isAuthUser == 1){
         that.data = e,
@@ -160,7 +160,6 @@ export default {
       console.log(that.data)
     }else{
         that.show = true
-    
     }
    }
   },

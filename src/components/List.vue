@@ -107,12 +107,12 @@ export default {
     let token = that.$route.query.token;
     // token = 'd0e4745b16004598bf85b14aa086f57c'
     //  window.jhajax = this.jhajax;
-    console.log(token)
+    // console.log(token)
     if(token == undefined){
-       console.log('5555555555')
+      //  console.log('5555555555')
       token = Cookies.get("tokens");
     }
-    console.log(token)
+    // console.log(token)
     this.jhajax(token);
      axios
         .request({
@@ -148,7 +148,7 @@ export default {
           console.log(res);
           that.num = res.data.length
         });
-        console.log(that.num)
+        // console.log(that.num)
     // window.jhajax({
     //   token:'e6e3d2145d5b46c1a2caa072c1771c96',
     //   data:1,
@@ -209,7 +209,6 @@ export default {
       console.log(token);
       Cookies.set("tokens", token);
       localStorage.setItem("token", token);
-
       //请求车场列表接口  渲染列表
       axios
         .request({
