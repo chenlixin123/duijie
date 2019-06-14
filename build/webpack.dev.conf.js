@@ -63,7 +63,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     },
     proxy: {
       '/api': {
-        target: 'http://api.linkmoretech.cn/', // 开发cn 测试net  线上com
+        target: 'https://api.linkmoretech.cn/', // 开发cn 测试net  线上com
         pathRewrite: {
           '^/api': 'api/'
         },
