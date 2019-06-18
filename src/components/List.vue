@@ -65,7 +65,7 @@
           </div>
       </div>
 
-      <!-- <div class="pay" @click="pay">支付</div> -->
+      <div class="pay" @click="pay">支付</div>
   </div>
   
   
@@ -197,7 +197,7 @@ export default {
 //   },
   methods: {
     pay(){
-        window.location.href = 'http://api.linkmoreparking.cn/api/account/open/guomao/payPage?appType=android&amount=1&successUrl=https://www.baidu.com/'
+        window.location.href = 'https://api.linkmoreparking.cn/api/account/open/guomao/payPage?appType=android&amount=1&successUrl=https://www.baidu.com/'
     },
     jhajax(token) {
       let that = this
@@ -371,7 +371,7 @@ export default {
   width: 20%;
   font-size: 60px;
   position: absolute;
-  bottom: 20%;
+  bottom: 40%;
   right: 0;
   color: red;
   border: 1px solid red;

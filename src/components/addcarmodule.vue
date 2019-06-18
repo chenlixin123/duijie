@@ -168,6 +168,7 @@ export default {
   inPleteNumber(e) {
     console.log(e);
     let zh = e;
+    console.log(this.zhData)
     let zhData = this.zhData;
     let keword1 = this.carPlete;
     let keword2 = this.descWord;
