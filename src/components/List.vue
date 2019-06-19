@@ -119,7 +119,7 @@ export default {
           url: Url.url.current
         })
         .then(res => {
-          console.log(res)
+          // console.log(res)
           that.appointment = res.data
           if(res.data != null){
                if(res.data.downFlag == 0){
@@ -145,7 +145,7 @@ export default {
           method: "get"
         })
         .then(res => {
-          console.log(res);
+          // console.log(res);
           that.num = res.data.length
         });
         // console.log(that.num)
@@ -163,7 +163,7 @@ export default {
         method: "get"
       })
       .then(res => {
-        console.log(res);
+        // console.log(res);
         if (res.data.status == false) {
           (that.shows = "none"), localStorage.setItem("oo", false);
           that.show = localStorage.getItem("oo");
@@ -216,7 +216,7 @@ export default {
           method: "get"
         })
         .then(res => {
-          console.log(res)
+          // console.log(res)
           this.msg = res.data;
            that.bus.$emit("loading", false);
         });
@@ -236,7 +236,7 @@ export default {
           url:Url.url.show_impower,
           method:"get"
         }).then(res => {
-          console.log(res)
+          // console.log(res)
           if (res.status == true){
             // console.log(res.data.authFlag)
             that.show_impower = res.data.authFlag

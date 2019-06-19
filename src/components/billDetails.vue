@@ -98,7 +98,7 @@ export default {
                       var hour = now.getHours();
                       var minute = now.getMinutes();
                       var second = now.getSeconds();
-                      return year + "/" + (month < 10 ? '0' + month : month) + "/" + (date < 10 ? '0' + date : date) + "/" + " " + (hour < 10 ? '0' + hour : hour) + ":" + (minute < 10 ? '0' + minute : minute)
+                      return year + "/" + (month < 10 ? '0' + month : month) + "/" + (date < 10 ? '0' + date : date) + " " + (hour < 10 ? '0' + hour : hour) + ":" + (minute < 10 ? '0' + minute : minute)
                     }
                      detail.startTime = formatDate(new Date(detail.startTime))
                      detail.endTime =  formatDate(new Date(detail.endTime))
