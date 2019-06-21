@@ -197,14 +197,15 @@ export default {
   },
   //提交车牌
   addPlete() {
-      console.log('11111111111')
+     
     let self = this;
     let that = this
     let nums = this.zhData;
     let list = []
     console.log(self.carlist)
-    nums = nums.toString().replace(/,/g, '');
+    nums = nums.toString().replace(/,/g,'');
     if (nums == "") {
+       console.log('11111111111')
       that.bus.$emit("tips", { show: true, title: "请输入正确的车牌号" });
       //return false;
     }
@@ -318,6 +319,7 @@ export default {
           }
       }) 
     } else {
+      // console.log('zoule llllllllllllllll')
       that.bus.$emit("tips", { show: true, title: "请输入正确的车牌号" });
     };
   }
