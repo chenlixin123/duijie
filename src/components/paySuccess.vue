@@ -2,59 +2,55 @@
     <div class="pay">
         <div class="paymoney">
             <div class="success">支付成功</div>
-            <div class="money">￥{{pay.money}}</div>
+            <div class="money">￥{{data.stotalAmount}}</div>
         </div>
         <div class="body">
             <div class="body-content">
                 <div class="body-num">
                     <span>车位号</span>
-                    <span>{{pay.num}}</span>
+                    <span>{{data.stallName}}</span>
                 </div>
             </div>
             <div class="body-content">
                 <div class="body-num">
                     <span>车牌号码</span>
-                    <span>{{pay.parknum}}</span>
+                    <span>{{data.plateNumber}}</span>
                 </div>
             </div>
              <div class="body-content">
                 <div class="body-num">
                     <span>开始时间</span>
-                    <span>{{pay.starttime}}</span>
+                    <span>{{start_Time}}</span>
                 </div>
             </div>
              <div class="body-content">
                 <div class="body-num">
                     <span>结束时间</span>
-                    <span>{{pay.endtime}}</span>
+                    <span>{{end_Time}}</span>
                 </div>
             </div>
              <div class="body-content">
                 <div class="body-num">
                     <span>订单编号</span>
-                    <span>{{pay.ordernum}}</span>
+                    <span>{{data.orderNo}}</span>
                 </div>
             </div>
              <div class="body-content">
                 <div class="body-num">
                     <span>停车时长</span>
-                    <span>{{pay.parktime}}</span>
-                </div>
-            </div>
-             <div class="body-content">
-                <div class="body-num">
-                    <span>优惠减免</span>
-                    <span>￥{{pay.dismoney}}</span>
+                    <span>{{data.parkingTime}}</span>
                 </div>
             </div>
         </div>
         <div class="foot">
             <div class="foot-content">结账成功后，请在15分钟内驶离停车场</div>
-            <button>完成</button>
+            <button @click="suss">完成</button>
         </div>
     </div>
 </template>
 <script>
+import axios from "@/libs/api.request";
+import Url from "@/libs/url";
 export default {
     name:"Pay",
     data(){
@@ -68,7 +64,46 @@ export default {
                 ordernum:'2019040610000460',
                 parktime:'1时15分',
                 dismoney:'5.0'
-            }
+            },
+            data:{},
+            start_Time:'',
+            end_Time:''
+        }
+    },
+    created(){
+        let that = this
+          let orderId = localStorage.getItem("orderId");
+         axios
+      .request({
+        url: Url.url.verify,
+        method: "get",
+        params: {
+          orderId: orderId
+        }
+      })
+      .then(res => {
+        console.log(res.data);
+        if(res.status == true){
+        that.data = res.data;
+        that.start_Time = Url.Time(res.data.startTime);
+        that.end_Time = Url.Time(res.data.endTime);
+        }else{
+          that.bus.$emit("tips", { show: true, title: res.message.content });
+        }
+      });
+    },
+    methods:{
+        suss(){
+    let that = this
+    // that.$router.push({
+    //     path:'/'
+    // })
+    let tap = localStorage.getItem('tap')
+    if(tap == 1){
+        that.$router.go(-5)
+    }else{
+         that.$router.go(-4)
+    }
         }
     }
 }

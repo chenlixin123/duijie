@@ -26,6 +26,8 @@ let Url = {
   control_up: '/api/order/app/order/v2.0/control-up',
   //订单回调
   verify: '/api/order/app/pay/v2.0/verify',
+  //生成账单
+  checkout: '/api/order/app/pay/v2.0/checkout',
   //切换车位
   switchTab: "/api/order/app/order/v2.1/switch",
   //降锁异常原因
@@ -82,6 +84,8 @@ let Url = {
   by_list: '/api/order/app/order/v2.0/list',
   //订单详情
   detail: '/api/order/app/order/v2.0/detail',
+  // 支付接口
+  payPage:'/api/order/guomao/payPage'
 }
 
 function Time(time) {

@@ -65,7 +65,7 @@
           </div>
       </div>
 
-      <div class="pay" @click="pay">支付</div>
+      <!-- <div class="pay" @click="pay">支付</div> -->
   </div>
   
   
@@ -103,6 +103,16 @@ export default {
     //   console.log(data)
     //   console.log(cd)
     // }
+
+          let parkingTime = 55
+        if (parkingTime < 61){
+            that.parkingTime = parkingTime + '分'
+            console.log(that.parkingTime)
+        } else if (parkingTime > 60){
+          that.parkingTime =  parseInt(parkingTime / 60) + '小时' + (parkingTime - parseInt(parkingTime / 60) * 60) + '分'
+            console.log(that.parkingTime)
+        }
+
     localStorage.setItem('tap',0)
     let token = that.$route.query.token;
     // token = 'd0e4745b16004598bf85b14aa086f57c'
@@ -196,9 +206,6 @@ export default {
 // })
 //   },
   methods: {
-    pay(){
-        window.location.href = 'https://api.linkmoreparking.cn/api/account/open/guomao/payPage?appType=android&amount=1&successUrl=https://www.baidu.com/'
-    },
     jhajax(token) {
       let that = this
       // alert(token);
@@ -217,8 +224,8 @@ export default {
         })
         .then(res => {
           // console.log(res)
-          this.msg = res.data;
            that.bus.$emit("loading", false);
+          this.msg = res.data;
         });
     },
     // 跳转个人中心

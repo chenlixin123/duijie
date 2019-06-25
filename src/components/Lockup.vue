@@ -1,7 +1,13 @@
 <template>
   <div class="lockup">
-    <div class="success">升锁成功</div>
+    <!-- <div class="success">升锁成功</div> -->
     <div class="body">
+      <div class="body-content">
+        <div class="body-num">
+          <span>停车场</span>
+          <span>{{data.prefectureName}}</span>
+        </div>
+      </div>
       <div class="body-content">
         <div class="body-num">
           <span>车位号</span>
@@ -29,12 +35,24 @@
       <div class="body-content">
         <div class="body-num">
           <span>停车时长</span>
-          <span>{{data.parkingTime}}</span>
+          <span>{{parkingTime}}</span>
+        </div>
+      </div>
+      <div class="body-content">
+        <div class="body-num">
+          <span>应付金额</span>
+          <span>{{data.totalAmount}}</span>
+        </div>
+      </div>
+      <div class="body-content">
+        <div class="body-num">
+          <span>实付金额</span>
+          <span>{{data.totalAmount}}</span>
         </div>
       </div>
     </div>
     <div class="btn">
-      <button @click="suss">完成</button>
+      <button @click="suss">确认支付</button>
     </div>
   </div>
 </template>
@@ -58,7 +76,9 @@ export default {
       },
       data: {},
       start_Time: "",
-      end_Time: ""
+      end_Time: "",
+      system:'',
+      parkingTime:''
     };
   },
   created() {
@@ -68,7 +88,7 @@ export default {
     console.log(orderId);
     axios
       .request({
-        url: Url.url.verify,
+        url: Url.url.checkout,
         method: "get",
         params: {
           orderId: orderId
@@ -76,48 +96,93 @@ export default {
       })
       .then(res => {
         console.log(res);
-        that.data = res.data;
+        if(res.status == true){
+             that.data = res.data;
+        that.id = res.data.id
         that.start_Time = Url.Time(res.data.startTime);
         that.end_Time = Url.Time(res.data.endTime);
+
+         let parkingTime = res.data.parkingTime
+         if (parkingTime < 61){
+            that.parkingTime = parkingTime + 1 + '分'
+            console.log(that.parkingTime)
+        } else if (parkingTime > 60){
+          that.parkingTime =  parseInt(parkingTime / 60) + '小时' + (parkingTime - parseInt(parkingTime / 60) * 60) + 1 + '分'
+            console.log(that.parkingTime)
+        }
+        }else{
+           that.bus.$emit("tips", { show: true, title: res.message.content });
+        }
       });
   },
   methods: {
     suss() {
+       let that = this
       // var u = navigator.userAgent;
       // alert(navigator.userAgent);
 
       // var u = navigator.userAgent;
       // // android终端
-      // var isAndroid = u.indexOf("wehome/1") > -1;
-      // var isIos = u.indexOf("wehome/2") > -1;
       // this.$router.push({
       //   path: "/"
       // });
       // window.location.href = "http://www.baidu.com"; // 跳转外部链接
 
       // var u = navigator.userAgent;
-      // alert(u)
-      // // android终端
+      // console.log(u)
+      // android终端
       // var isAndroid = u.indexOf("wehome/1") > -1;
       // var isiOS = u.indexOf("wehome/2") > -1;
-      // // ios终端
-      // if (isiOS) {
-      //   // alert(navigator.userAgent);
-      //   window.finish_current_activity_webView("", "");
-      //   // alert("isiOS调用成功2");
+      // ios终端
+      // if (isIos) {
+        // alert(navigator.userAgent);
+        // window.finish_current_activity_webView("", "");
+        // alert("isiOS调用成功2");
       // } else if (isAndroid) {
-      //   // alert(navigator.userAgent);
-      //   window.jsObject.finish_current_activity_webView("", "");
-      //   // window.jsObject.open_in_new_activity_webView("1212");
-      //   // alert("isAndroid调用成功2");
+        // alert(navigator.userAgent);
+        // window.jsObject.finish_current_activity_webView("", "");
+        // window.jsObject.open_in_new_activity_webView("1212");
+        // alert("isAndroid调用成功2");
       // }
-      let tap = localStorage.getItem('tap')
-      if(tap == 0){
-          this.$router.go(-2)
-      }else{
-         this.$router.go(-3)
-      }
-      
+
+
+    var n = navigator.userAgent;
+　　if (n.indexOf('Android') > -1 || n.indexOf('Linux') > -1) {
+　　　　 that.system = 'android'
+　　} else if (n.indexOf('iPhone') > -1) {
+　　　　 that.system = 'ios'
+　　}
+      console.log(that.system)
+        let Id = localStorage.getItem("orderId");
+        console.log(Id)
+      axios
+          .request({
+          url:Url.url.payPage,
+          params:{
+              appType:that.system,
+              orderId:Id,
+              successUrl:'https://web-blue.linkmoreparking.cn/#/pay'
+          }
+        }).then(res => {
+          console.log(res)
+          if(res.status == true){
+              if(res.data.code == 200){
+                console.log('11111111111111')
+                   window.location.href = res.data.url
+              }else{
+                that.bus.$emit("tips", { show: true, title:'支付成功'});
+                setTimeout(() => {
+                  console.log('333333333333')
+                      that.$router.push({
+                          path:'/pay'
+                })
+                }, 1000);
+              }
+
+          }else{
+          //   that.bus.$emit("tips", { show: true, title: res.message.content });
+          }
+        }) 
     }
   }
 };
@@ -163,14 +228,15 @@ export default {
   justify-content: center;
 }
 .btn button {
-  width: 286px;
+  width: 400px;
   height: 74px;
-  border-radius: 12px;
+  border-radius: 40px;
   font-size: 36px;
-  color: #333;
+  color: white;
   outline: none;
-  background: #fff;
-  border: 1px solid #333;
+  background: #f66913;
+  border: none;
+  outline: none;
   margin-top: 126px;
 }
 </style>
