@@ -102,12 +102,12 @@ export default {
         that.start_Time = Url.Time(res.data.startTime);
         that.end_Time = Url.Time(res.data.endTime);
 
-         let parkingTime = res.data.parkingTime
-         if (parkingTime < 61){
-            that.parkingTime = parkingTime + 1 + '分'
+         let parkingTime = res.data.parkingTime + 1
+         if (parkingTime < 60){
+            that.parkingTime = parkingTime + '分'
             console.log(that.parkingTime)
-        } else if (parkingTime > 60){
-          that.parkingTime =  parseInt(parkingTime / 60) + '小时' + (parkingTime - parseInt(parkingTime / 60) * 60) + 1 + '分'
+        } else if (parkingTime > 59){
+          that.parkingTime =  parseInt(parkingTime / 60) + '时' + ((parkingTime - parseInt(parkingTime / 60) * 60) < 1 ? '' : (parkingTime - parseInt(parkingTime / 60) * 60) + '分')
             console.log(that.parkingTime)
         }
         }else{

@@ -103,13 +103,13 @@ export default {
     //   console.log(data)
     //   console.log(cd)
     // }
-
-          let parkingTime = 55
-        if (parkingTime < 61){
+      // 分钟转小时或者分钟
+          let parkingTime =61
+      if (parkingTime < 60){
             that.parkingTime = parkingTime + '分'
             console.log(that.parkingTime)
-        } else if (parkingTime > 60){
-          that.parkingTime =  parseInt(parkingTime / 60) + '小时' + (parkingTime - parseInt(parkingTime / 60) * 60) + '分'
+        } else if (parkingTime > 59){
+          that.parkingTime =  parseInt(parkingTime / 60) + '时' + ((parkingTime - parseInt(parkingTime / 60) * 60) < 1 ? '' : (parkingTime - parseInt(parkingTime / 60) * 60) + '分')
             console.log(that.parkingTime)
         }
 
