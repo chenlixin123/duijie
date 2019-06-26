@@ -64,16 +64,6 @@ export default {
   name: "Lock",
   data() {
     return {
-      pay: {
-        money: "10.0",
-        num: "088",
-        parknum: "京N12584",
-        starttime: "2019/4/6  20:00",
-        endtime: "2019/4/6  21:25",
-        ordernum: "2019040610000460",
-        parktime: "1时15分",
-        dismoney: "5.0"
-      },
       data: {},
       start_Time: "",
       end_Time: "",
@@ -97,7 +87,7 @@ export default {
       .then(res => {
         console.log(res);
         if(res.status == true){
-             that.data = res.data;
+        that.data = res.data;
         that.id = res.data.id
         that.start_Time = Url.Time(res.data.startTime);
         that.end_Time = Url.Time(res.data.endTime);
@@ -180,7 +170,7 @@ export default {
               }
 
           }else{
-          //   that.bus.$emit("tips", { show: true, title: res.message.content });
+            that.bus.$emit("tips", { show: true, title: res.message.content })
           }
         }) 
     }
