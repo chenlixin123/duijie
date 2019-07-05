@@ -61,7 +61,7 @@ let Url = {
   //获取长租车位列表
   long_carList: '/api/enterprise/app/user-rent-stall/v2.0/list',
   // 长租车位列表
-  long_carLists: '/api/enterprise/app/user-rent-stall/v2.0.1/list',
+  long_carLists: '/api/enterprise/app/user-rent-stall/v2.0.2/list',
   //长租用户操作车位锁
   long_control: '/api/enterprise/app/user-rent-stall//v2.0/control-auth',
   //查询当前是否有使用长租车位

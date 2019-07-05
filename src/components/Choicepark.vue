@@ -1,27 +1,51 @@
 <template>
 <div class="page">
- <div class='container'>
-   <div>
-      <div class='column' v-for="(itemName,outindex) in PositionList"  :key='outindex' @click="menuClick1(itemName,outindex)">
-         <div class='titel'>{{itemName.preName}}</div>
-         <div class='number'>
-            <div v-for="(item,index) in itemName.rentUserStalls"  :key='index'>
-               <div v-if="item.stallStatus == 1" :class="nav==index&&outnav==outindex? 'cur':'num'"  @click='menuClick(item,index)' >{{item.stallName}}<img v-if='item.userStatus == 0' class='img' src='@/assets/impower.png'></div>
+    <div class="box" v-for="(item,index) in PositionList" :key="index">
+        <div class="title">{{item.preName}}</div>
 
-               <div v-else  :class="nav==index&&outnav==outindex?' cur ':'nums'" @click='menuClicks(item,index)'>{{item.stallName}}<img v-if='item.userStatus == 0' class='imgs' src='@/assets/impower.png'></div>
+
+        <div class="content" @click="menuClick(item,items)" v-for="(items, indexs) in item.rentPreStalls" :key="indexs" v-if="items.status!='空闲' && items.status!='使用中' && items.status!=1 && items.status!='无使用权限'">
+          <div class="img" v-if="items.userStatus == 0">
+            <img src="@/assets/impower.png" alt="" width="100%">
+          </div>
+            <div class="top">
+              <div class="carmodules">{{items.stallName}}</div>
+              <div class="statue">{{items.status}}</div>
             </div>
-         </div>
-      </div>
-   </div>
-</div>
-<div class="btn" @click='submit'>确认车位</div>
-<div class='box' v-if='show == true'>
-  <div class='body'>
-    <div class='top'>该车位正被他人使用，请使用其他车位</div>
-    <div class='bottom' @click='shows'>确定</div>
-  </div>
-</div>
+            <div class="bottoms" v-if="items.useUpLockTime!=null && items.stallStatus == 1">
+                <div class="bottom1">上次使用:</div>
+                <div class="bottom2">{{items.useUpLockTimes}}</div>
+            </div>
+            <div class="bottoms" v-else-if="items.downLockTime!=null && items.stallStatus == 2">
+                <div class="bottom1">降锁时间:</div>
+                <div class="bottom2">{{items.downLockTimes}}</div>
+            </div>
+        </div>
 
+        <div class="content" @click="menuClick(item,items)" v-for="(items, indexs) in item.rentPreStalls" :key="indexs" v-if="items.status=='空闲'|| items.status=='使用中' || items.status==1 || items.status=='无使用权限'">
+          <div class="img" v-if="items.userStatus == 0">
+            <img src="@/assets/impower.png" alt="" width="100%">
+          </div>
+            <div class="top">
+              <div class="carmodule">{{items.stallName}}</div>
+              <div :class="items.status == '使用中' || items.status == 1 ? 'statues' : 'status'">{{items.status == 1 ? user : items.status }}</div>
+            </div>
+            <div class="bottom" v-if="items.useUpLockTime!=null && items.stallStatus == 1">
+                <div class="bottom1">上次使用:</div>
+                <div class="bottom2">{{items.useUpLockTimes}}</div>
+            </div>
+            <div class="bottom" v-else-if="items.downLockTime!=null && items.stallStatus == 2">
+                <div class="bottom1">降锁时间:</div>
+                <div class="bottom2">{{items.downLockTimes}}</div>
+            </div>
+        </div>
+    </div>
+      <div class="nopermissions" v-if="nopermission == true">
+        <div class="nopermissions_content">
+          <div class="nopermissions_top">{{nopermissions}}</div>
+          <div class="nopermissions_bottom" @click="nopermissione">确定</div>
+        </div>
+      </div>
 </div>
 </template>
 
@@ -33,27 +57,21 @@ export default {
   name: "Choice",
   data() {
     return {
-      nav: -1,
-    nav: "-1", //内层index
-    val: "",
-    outnav: "-1", //外层index
     PositionList: "",
     num:'',
-    gatewayStatus:'',
     //本地经纬度
     location: {
       longitude: "116.41361",
       latitude: "39.91106"
     },
-    battery:'',
-    show:false,
     longitude:"",
     latitude:"",
-    rentMoType:"",
-    rentOmType:"",
     switchFlag:"",
     data:'',
-    id:''
+    id:'',
+    nopermission:false,
+    nopermissions: '车位无法使用，请通过物业管理人员开启车位使用权限',
+    user:'',
     };
   },
   created() {
@@ -77,7 +95,7 @@ export default {
       that.switchFlag = that.$route.query.switchFlag,
       that.id = that.$route.query.id
 
-    console.log(that.data)
+    // console.log(that.data)
     
     if (that.switchFlag == 1){
         console.log(that.$route.query, "-------------------------------=================------------------------------")
@@ -92,15 +110,62 @@ export default {
         },
       }).then(res => {
         console.log(res)
-        console.log(res.data.num,res.message)
+        // console.log(res.data.num,res.message)
         if(res.status == true){
           that.bus.$emit("loading", false);
-             that.PositionList = res.data.rentUsers,
+             that.PositionList = res.data.rentPres,
             that.num = res.data.num
+            res.data.rentPres.forEach(element => {
+                element.rentPreStalls.forEach(reson => {
+                        // console.log(reson)
+                        if(reson.operateAuthFlag == 0){
+                          reson.status = '无使用权限'
+                        }else{
+                          if(reson.stallStatus == 1){
+                            reson.status = '空闲'
+                          }else if(reson.stallStatus == 2){
+                            if(reson.isSelfUser == 1){
+                              if(reson.isAuthUser != 1){
+                                reson.status = '他人使用'
+                              }else{
+                                 let mobile = reson.useUserMobile.substring(0, 3)
+                                 let mobiles = reson.useUserMobile.substring(7, 11)
+                                 that.user = reson.useUserName == '' ? mobile + '****' + mobiles + '使用中' : reson.useUserName + '使用中'
+                                 reson.status = 1
+                              }
+                            }else if(reson.isSelfUser == 0){
+                                  reson.status = '使用中'
+                            }
+                          }
+                        }
+                        if(reson.useUpLockTime != null){
+                           let time = new Date(reson.useUpLockTime);
+                            // console.log(time)
+                           let y = time.getFullYear()
+                           let m = time.getMonth() + 1 < 10 ? '0' + (time.getMonth() + 1) : time.getMonth() + 1
+                           let d = time.getDate() < 10 ? '0' + time.getDate() : time.getDate()
+                           let h = time.getHours() < 10 ? '0' + time.getHours() : time.getHours()
+                           let mm = time.getMinutes() < 10 ? '0' + time.getMinutes() : time.getMinutes()
+                           reson.useUpLockTimes = m + '月' + d + '日' + ' ' + h + ':' + mm
+                          //  console.log(reson.useUpLockTimes)
+                        }
+                         if(reson.downLockTime != null){
+                           let time = new Date(reson.downLockTime);
+                            // console.log(time)
+                           let y = time.getFullYear()
+                           let m = time.getMonth() + 1 < 10 ? '0' + (time.getMonth() + 1) : time.getMonth() + 1
+                           let d = time.getDate() < 10 ? '0' + time.getDate() : time.getDate()
+                           let h = time.getHours() < 10 ? '0' + time.getHours() : time.getHours()
+                           let mm = time.getMinutes() < 10 ? '0' + time.getMinutes() : time.getMinutes()
+                           reson.downLockTimes = m + '月' + d + '日' + ' ' + h + ':' + mm
+                          //  console.log(reson.downLockTimes)
+                        }
+                });
+            });
         }else{
           that.bus.$emit("loading", false);
            that.bus.$emit("tips", { show: true, title:res.message.content });
-        } 
+        }
       })
     }else{
        axios.request({
@@ -112,11 +177,58 @@ export default {
         },
       }).then(res => {
         console.log(res)
-        console.log(res.data.num,res.message)
+        // console.log(res.data.num,res.message)
         if(res.status == true){
           that.bus.$emit("loading", false);
-             that.PositionList = res.data.rentUsers,
+             that.PositionList = res.data.rentPres,
             that.num = res.data.num
+            res.data.rentPres.forEach(element => {
+                element.rentPreStalls.forEach(reson => {
+                        // console.log(reson)
+                        if(reson.operateAuthFlag == 0){
+                          reson.status = '无使用权限'
+                        }else{
+                          if(reson.stallStatus == 1){
+                            reson.status = '空闲'
+                          }else if(reson.stallStatus == 2){
+                            if(reson.isSelfUser == 1){
+                              if(reson.isAuthUser != 1){
+                                reson.status = '他人使用'
+                              }else{
+                                 let mobile = reson.useUserMobile.substring(0, 3)
+                                 let mobiles = reson.useUserMobile.substring(7, 11)
+                                 that.user = reson.useUserName == '' ? mobile + '****' + mobiles + '使用中' : reson.useUserName + '使用中'
+                                 reson.status = 1
+                              }
+                            }else if(reson.isSelfUser == 0){
+                                  reson.status = '使用中'
+                            }
+                          }
+                        }
+                        if(reson.useUpLockTime != null){
+                           let time = new Date(reson.useUpLockTime);
+                            // console.log(time)
+                           let y = time.getFullYear()
+                           let m = time.getMonth() + 1 < 10 ? '0' + (time.getMonth() + 1) : time.getMonth() + 1
+                           let d = time.getDate() < 10 ? '0' + time.getDate() : time.getDate()
+                           let h = time.getHours() < 10 ? '0' + time.getHours() : time.getHours()
+                           let mm = time.getMinutes() < 10 ? '0' + time.getMinutes() : time.getMinutes()
+                           reson.useUpLockTimes = m + '月' + d + '日' + ' ' + h + ':' + mm
+                          //  console.log(reson.useUpLockTimes)
+                        }
+                         if(reson.downLockTime != null){
+                           let time = new Date(reson.downLockTime);
+                            // console.log(time)
+                           let y = time.getFullYear()
+                           let m = time.getMonth() + 1 < 10 ? '0' + (time.getMonth() + 1) : time.getMonth() + 1
+                           let d = time.getDate() < 10 ? '0' + time.getDate() : time.getDate()
+                           let h = time.getHours() < 10 ? '0' + time.getHours() : time.getHours()
+                           let mm = time.getMinutes() < 10 ? '0' + time.getMinutes() : time.getMinutes()
+                           reson.downLockTimes = m + '月' + d + '日' + ' ' + h + ':' + mm
+                          //  console.log(reson.downLockTimes)
+                        }
+                });
+            });
         }else{
           that.bus.$emit("loading", false);
            that.bus.$emit("tips", { show: true, title:res.message.content });
@@ -126,240 +238,137 @@ export default {
     }
   },
   methods: {
-    // 外围点击
-    menuClick1(e,index){
-      let that = this
-        that.outnav = index
-        that.data1 = e
-    },
-    //空闲点击
-  menuClick(e,index) {
-    let that = this;
-    let data = e
-      that.data = data,
-      that.nav = index
-  },
-  //占用点击
-  menuClicks(e,index){
-    let that = this;
-    console.log(e,index,that.datas)
-    if(that.datas == undefined){
-       if (e.rentOmType == 1 || e.isAuthUser == 1){
-        that.data = e,
-        that.nav = index,
-      console.log(that.data)
-    }else{
-        that.show = true
-    }
-    }else{
-             that.id = e.stallId
-    console.log(that.datas.rentOmType, that.datas.isAuthUser, that.datas.stallId,that.id)
-    if (that.datas.rentOmType == 1 || that.datas.isAuthUser == 1 || that.datas.stallId == that.id){
-        that.data = e,
-        that.nav = index,
-      console.log(that.data)
-    }else{
-        that.show = true
-    }
-   }
-  },
-    shows(){
-    let that = this
-      that.show = false
-  },
-  //确认车位
-  submit(e) {
-     let that = this
     
-    if (that.data != '') {
-      let datas = JSON.stringify(that.data)
-      let datas1 = JSON.stringify(that.data1)
+    //点击进入车位详情
+    menuClick(data1,data){
+      let that = this
+      console.log(data)
+       if (data.operateAuthFlag == 0){
+            that.nopermission = true
+            return
+        }
       that.$router.push({
-        path:'/park?data=' + datas + '&data1=' + datas1
+        path:'/park?data=' + JSON.stringify(data) + '&data1=' + JSON.stringify(data1)
       })
+    },
+    //取消弹出框
+    nopermissione(){
+      let that = this
+      that.nopermission = false
     }
-    else {
-      that.bus.$emit("tips", { show: true, title: '请选择车位' });
-    }
-  }
   }
 };
 </script>
 
 <style scoped lang='scss'>
-.page {
+  .page{
+    width: 100%;
+    min-height: 100%;
+    background: #f5f4f4;
+    box-sizing: border-box;
+    padding: 24px 40px;
+    .box{
+      width: 100%;
+       .title{
+         width: 100%;
+         box-sizing: border-box;
+         padding-bottom: 24px;
+         font-size: 26px;
+         color: #999;
+       }
+       .content{
+         width: 100%;
+         box-sizing: border-box;
+         padding: 32px 28px;
+         background: white;
+         border-radius: 10px;
+         margin-bottom: 24px;
+         position: relative;
+         .img{
+           width: 60px;
+           height: 50px;
+           position: absolute;
+           top: 0;
+           right: 0;
+         }
+         .top{
+           width: 100%;
+           display: flex;
+           justify-content: space-between;
+           .carmodule{
+             font-size: 30px;
+             color: #333;
+           }
+           .carmodules{
+             font-size: 30px;
+             color:#a4a3a3;
+           }
+           .status{
+               font-size: 26px;
+               color: #333;
+               font-weight: bold;
+             }
+             .statues{
+               font-size: 26px;
+               color: #faa913;
+               font-weight: bold;
+             }
+             .statue{
+               font-size: 26px;
+               color: #a4a3a3;
+               font-weight: bold;
+             }
+         }
+         .bottom{
+           width: 100%;
+           margin-top: 32px;
+           font-size: 28px;
+           color: #666;
+           display: flex;
+         }
+         .bottoms{
+           width: 100%;
+           margin-top: 32px;
+           font-size: 28px;
+           color: #a4a3a3;
+           display: flex;
+         }
+       }
+    }
+    .nopermissions{
   width: 100%;
   height: 100%;
-   background: #f5f4f4;
-   box-sizing: border-box;
-   padding: 0;
-   margin: 0;
-}
-
-.btn {
-   width: 100%;
-   background-color: #f66913;
-   border: none;
-   border-radius: 0;
-   color: #fff;
-   position: fixed;
-   bottom: 0;
-   left: 0;
-   font-size: 38px;
-   height: 104px;
-   padding-left: 0;
-   padding-right: 0;
-   line-height: 104px;
-   text-align: center;
-}
-
-.container {
-   width: 100%;
-   background: white;
-   box-sizing: border-box;
-    padding: 0;
-   margin: 0;
-}
-
-.column:last-child {
-   margin-bottom: 40px;
-   border: none;
-   border-top: 20px solid #f5f4f4;
-}
-
-.column {
-   width: 100%;
-   border-top: 20px solid #f5f4f4;
-   background: white;
-}
-
-.titel {
-   width: 100%;
-   height: 108px;
-   line-height: 108px;
-   font-size: 32px;
-   color: #333333;
-   box-sizing: border-box;
-   padding-left: 43px;
-}
-
-.number {
-   display: flex;
-   flex-wrap: wrap;
-   width:100%;
-   margin:auto;
-}
-
-.num {
-   width: 170px;
-   height: 68px;
-   border: 1px solid#c6c5c5;
-   font-size: 32px;
-   border-radius: 10px;
-   color: #666666;
-   background: #ffffff;
-   line-height: 68px;
-   text-align: center;
-   margin-bottom: 35px;
-   margin-left:43px;
-   margin-right: 35px;
-   position: relative;
-}
-.img{
-   width: 60px;
-  height: 50px;
-  position: absolute;
-  top: -1px;
-  right: -1px;
-}
-.nums {
-   width: 170px;
-   height: 68px;
-   border: 1px solid #ffb489;
-   font-size: 32px;
-   border-radius: 10px;
-   color: #fff;
-   background: #ffb489;
-   line-height: 68px;
-   text-align: center;
-   margin-bottom: 35px;
-   margin-left:43px;
-   margin-right: 35px;
-   position: relative;
-}
-.imgs{
-  width: 60px;
-  height: 50px;
-  position: absolute;
-  top: 0;
-  right: 0;
-}
-
-.nums:nth-child(even) {
-   margin-left: 150px;
-   float: left;
-}
-
-// .list-menu.cur {
-//    background-color: #f66913 !important;
-//    color: #fff !important;
-//    border: 1px solid #fff !important;
-// }
-
-.cur {
-   width: 170px;
-   height: 68px;
-   border:1px solid white;
-   font-size: 32px;
-   border-radius: 10px;
-   color: #fff;
-   background: #f66913;
-   line-height: 68px;
-   text-align: center;
-   margin-bottom: 35px;
-   margin-left:43px;
-   margin-right: 35px;
-   position: relative;
-}
-.curs {
-   width: 170px;
-   height: 68px;
-   background-color: #f66913 !important;
-   color: #fff !important;
-}
-.box{
-  position: fixed;
-  top:0;
-  left:0;
   background: rgba(0, 0, 0, 0.5);
-  width: 100%;
-  height: 100%;
-}
-.body{
   position: fixed;
-  top:35%;
-  left:70px;
-  width: 610px;
+  top: 0;
+  left: 0;
+  z-index: 10000;
+  .nopermissions_content{
+  width: 586px;
   background: white;
   border-radius: 20px;
-}
-.top{
+  margin: 0 auto;
+  margin-top: 400px;
+  .nopermissions_top{
   width: 100%;
-  font-size: 34px;
-  text-align: center;
-  line-height: 60px;
-  border-bottom: 1px solid #dedede;
-  color: #333333;
+  line-height: 74px;
   box-sizing: border-box;
-  padding: 15px 40px;
-}
-.bottom{
-  width: 100%;
-  height: 110px;
-  font-size: 32px;
-  color: #666666;
+  padding: 40px 60px;
+  font-size: 34px;
+  color: #666;
   text-align: center;
-  line-height: 110px;
+  border-bottom: 1px solid #dedede;
 }
+.nopermissions_bottom{
+  width: 100%;
+  height: 104px;
+  font-size: 32px;
+  color: #666;
+  text-align: center;
+  line-height:104px;
+}
+}
+}
+  }
 
 </style>

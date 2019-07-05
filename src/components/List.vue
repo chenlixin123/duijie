@@ -167,25 +167,6 @@ export default {
     //  window.jhajax(
     //   token='c2fb6980c0284a99ba3ef24a96ec6c6a',
     //   )
-    axios
-      .request({
-        url: Url.url.long_current,
-        method: "get"
-      })
-      .then(res => {
-        // console.log(res);
-        if (res.data.status == false) {
-          (that.shows = "none"), localStorage.setItem("oo", false);
-          that.show = localStorage.getItem("oo");
-        } else {
-          (that.shows = "block"),
-            (that.names = res.data.stallName),
-            (that.long_name = res.data.preName);
-          localStorage.setItem("oo", true);
-          that.show = localStorage.getItem("oo");
-          
-        }
-      });
       that.show_impowers()
   },
 //   mounted(){
@@ -255,11 +236,7 @@ export default {
     park(item) {
       console.log(item);
       let that = this
-      let oo = localStorage.getItem("oo");
       let token = Cookies.get("tokens");
-      if (oo == "true") {
-        that.bus.$emit("tips", { show: true, title: "您正在使用长租车位" });
-      } else {
         console.log(that.appointment)
           if(that.appointment == null){
             if(that.num == 0){
@@ -280,8 +257,6 @@ export default {
               path: "/Order"
             });
           }
-       
-      }
     },
     parks(){
       let that = this
@@ -297,22 +272,6 @@ export default {
       that.tap = number
       console.log('长租');
       let token = Cookies.get("tokens");
-      let oo = localStorage.getItem("oo");
-      console.log(oo);
-      if(that.appointments == 'true'){
-        that.bus.$emit("tips", { show: true, title: "您正在使用预约车位" });
-      }else if (oo == "true") {
-        console.log("详情页");
-        this.$router.push({
-          path: "/Park",
-          query:{
-            skip:1,
-             token:token,
-             latitude: that.latitude,
-             longitude : that.longitude,
-          }
-        });
-      } else {
         // that.num = 0
         if(that.num == 0){
             this.$router.push({ 
@@ -358,7 +317,6 @@ export default {
             }
           })      
         }
-      }
     },
 
     // 跳转授权页面

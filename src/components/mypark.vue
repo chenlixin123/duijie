@@ -23,7 +23,7 @@
 </div>
 <div class='leave' v-if='gatewayStatus == 0'>车位已离线</div>
 
-<div class='rights'>
+<div class='rights' v-if="operateAuthFlag == 1">
 <div  class='right_top' @click='qie' v-if='num > 1'>
   <div>
       <img src='@/assets/qiehuan@2x1.png' width="100%">
@@ -64,10 +64,10 @@
 </div>
 
 <div class='bottom'>
-  <div @click='top'>
+  <div @click='top' :class="operateAuthFlag == 0 ? 'bottom2' : 'bottom1'">
     升起
   </div>
-  <div @click='bottom'>
+  <div @click='bottom' :class="operateAuthFlag == 0 ? 'bottom2' : 'bottom1'">
     降下
   </div>
 </div> 
@@ -135,6 +135,12 @@
 </div>
 
 </div>
+ <div class="nopermissions" v-if="nopermission == true">
+                <div class="nopermissions_content">
+                    <div class="nopermissions_top">{{nopermissions}}</div>
+                    <div class="nopermissions_bottom" @click="nopermissione">确定</div>
+                </div>
+        </div>
  </div>
 </template>
 
@@ -190,7 +196,10 @@ export default {
     malfunctions:0,
     top_block:false,
     preId:'',
-    carwheres:1
+    carwheres:1,
+     nopermission:false,
+    nopermissions: '车位无法使用，请通过物业管理人员开启车位使用权限',
+    operateAuthFlag:'',
     };
   },
   created() {
@@ -216,7 +225,7 @@ export default {
              longitude: that.longitude
         }
       }).then(res => {
-        // console.log(res)
+        console.log(res)
         if (res.status == true) {
             res.data.rentUsers.map(res => {
               res.rentUserStalls.map(res => {
@@ -270,7 +279,7 @@ export default {
                 }
                 let time = new Date(res.validity);
                 console.log(res.validity)
-                let y = ((time.getFullYear()).toString()).substring(2, 4)
+                let y = time.getFullYear()
                 let m = time.getMonth() + 1 < 10 ? '0' + (time.getMonth() + 1) : time.getMonth() + 1
                 let d = time.getDate() < 10 ? '0' + time.getDate() : time.getDate()
                 let h = time.getHours() < 10 ? '0' + time.getHours() : time.getHours()
@@ -278,12 +287,35 @@ export default {
                 let validity = y + '-' + m + '-' + d + ' ' + h + ':' + mm
                 let validitys = y + '-' + m + '-' + d 
 
+            //上次使用时间
+                let useUpLockTime = new Date(res.useUpLockTime);
+                console.log(res.validity)
+                let y_useUpLockTime = useUpLockTime.getFullYear()
+                let m_useUpLockTime = useUpLockTime.getMonth() + 1 < 10 ? '0' + (useUpLockTime.getMonth() + 1) : useUpLockTime.getMonth() + 1
+                let d_useUpLockTime = useUpLockTime.getDate() < 10 ? '0' + useUpLockTime.getDate() : useUpLockTime.getDate()
+                let h_useUpLockTime = useUpLockTime.getHours() < 10 ? '0' + useUpLockTime.getHours() : useUpLockTime.getHours()
+                let mm_useUpLockTime = useUpLockTime.getMinutes() < 10 ? '0' + useUpLockTime.getMinutes() : useUpLockTime.getMinutes()
+                let useUpLockTimes = y_useUpLockTime + '-' + m_useUpLockTime + '-' + d_useUpLockTime + ' ' + h_useUpLockTime + ':' + mm_useUpLockTime
+                console.log(useUpLockTimes)
+
+
+
+
+                 //降锁时间
+                let downLockTime = new Date(res.downLockTime);
+                let y_downLockTime = downLockTime.getFullYear()
+                let m_downLockTime = downLockTime.getMonth() + 1 < 10 ? '0' + (downLockTime.getMonth() + 1) : downLockTime.getMonth() + 1
+                let d_downLockTime = downLockTime.getDate() < 10 ? '0' + downLockTime.getDate() : downLockTime.getDate()
+                let h_downLockTime = downLockTime.getHours() < 10 ? '0' + downLockTime.getHours() : downLockTime.getHours()
+                let mm_downLockTime = downLockTime.getMinutes() < 10 ? '0' + downLockTime.getMinutes() : downLockTime.getMinutes()
+                let downLockTimes = y_downLockTime + '-' + m_downLockTime + '-' + d_downLockTime + ' ' + h_downLockTime + ':' + mm_downLockTime
+                console.log(downLockTimes)
                   that.validity = validity,
                   that.validitys = validitys,
                   that.prename = res.preName,
                   that.val = res.stallName,
                   that.isUserRecord = res.isUserRecord,
-                  that.downLockTime = res.downLockTime,
+                  that.downLockTime = downLockTimes,
                   that.stallStatus = res.stallStatus,
                   that.lockStatus = res.lockStatus,
                   that.useUpLockTime = res.useUpLockTime,
@@ -294,8 +326,13 @@ export default {
                   that.stallId = res.stallId,
                   that.isUserUse = res.isUserUse ,
                   that.underLayer = res.underLayer,
-                  that.preId = res.preId
-
+                  that.preId = res.preId,
+                  that.operateAuthFlag = res.operateAuthFlag
+                   if(that.operateAuthFlag == 0){
+                      that.nopermission = true
+                   }else{
+                      that.nopermission = false
+                   }
                 console.log(that.isUserUse, '--------- isUserUse')
                 console.log(that.useUserName,that.useUserMobile)
                  that.bus.$emit("loading", false);
@@ -364,8 +401,8 @@ export default {
         }
       }
       let time = new Date(data.validity);
-      console.log(data.validity)
-      let y = ((time.getFullYear()).toString()).substring(2,4)
+      console.log(data)
+      let y = time.getFullYear()
      let m = time.getMonth() + 1 < 10 ? '0' + (time.getMonth() + 1) : time.getMonth() + 1
       let d = time.getDate() < 10 ? '0' + time.getDate() : time.getDate()
       let h = time.getHours() < 10 ? '0' + time.getHours() : time.getHours()
@@ -373,15 +410,40 @@ export default {
       let validity = y + '-' + m + '-' + d + ' ' + h + ':' + mm
       let validitys = y + '-' + m + '-' + d 
 
+
+
+       //上次使用时间
+                let useUpLockTime = new Date(data.useUpLockTime);
+                let y_useUpLockTime = useUpLockTime.getFullYear()
+                let m_useUpLockTime = useUpLockTime.getMonth() + 1 < 10 ? '0' + (useUpLockTime.getMonth() + 1) : useUpLockTime.getMonth() + 1
+                let d_useUpLockTime = useUpLockTime.getDate() < 10 ? '0' + useUpLockTime.getDate() : useUpLockTime.getDate()
+                let h_useUpLockTime = useUpLockTime.getHours() < 10 ? '0' + useUpLockTime.getHours() : useUpLockTime.getHours()
+                let mm_useUpLockTime = useUpLockTime.getMinutes() < 10 ? '0' + useUpLockTime.getMinutes() : useUpLockTime.getMinutes()
+                let useUpLockTimes = y_useUpLockTime + '-' + m_useUpLockTime + '-' + d_useUpLockTime + ' ' + h_useUpLockTime + ':' + mm_useUpLockTime
+                console.log(useUpLockTimes)
+
+
+ //降锁时间
+                let downLockTime = new Date(data.downLockTime);
+                let y_downLockTime = downLockTime.getFullYear()
+                let m_downLockTime = downLockTime.getMonth() + 1 < 10 ? '0' + (downLockTime.getMonth() + 1) : downLockTime.getMonth() + 1
+                let d_downLockTime = downLockTime.getDate() < 10 ? '0' + downLockTime.getDate() : downLockTime.getDate()
+                let h_downLockTime = downLockTime.getHours() < 10 ? '0' + downLockTime.getHours() : downLockTime.getHours()
+                let mm_downLockTime = downLockTime.getMinutes() < 10 ? '0' + downLockTime.getMinutes() : downLockTime.getMinutes()
+                let downLockTimes = y_downLockTime + '-' + m_downLockTime + '-' + d_downLockTime + ' ' + h_downLockTime + ':' + mm_downLockTime
+                console.log(downLockTimes)
+
+
+
         that.validity = validity,
         that.validitys = validitys,
         that.prename = data.preName,
         that.val = data.stallName,
         that.isUserRecord = data.isUserRecord,
-        that.downLockTime = data.downLockTime,
+        that.downLockTime = downLockTimes,
         that.stallStatus = data.stallStatus,
         that.lockStatus = data.lockStatus,
-        that.useUpLockTime = data.useUpLockTime,
+        that.useUpLockTime = useUpLockTimes,
         that.useUserMobile = data.useUserMobile,
         that.userStatus = data.userStatus,
         that.useUserName = data.useUserName,
@@ -390,7 +452,13 @@ export default {
         that.longitude = data1.longitude,
         that.latitude = data1.latitude,
         that.underLayer = data.underLayer,
-        that.preId = data1.preId
+        that.preId = data1.preId,
+        that.operateAuthFlag = data.operateAuthFlag
+        if(that.operateAuthFlag == 0){
+          that.nopermission = true
+        }else{
+          that.nopermission = false
+        }
 
        console.log(that.useUserName,that.useUserMobile)
       that.bus.$emit("loading", false);
@@ -399,6 +467,11 @@ export default {
     }
   },
   methods: {
+     //取消弹出框
+    nopermissione(){
+      let that = this
+      that.nopermission = false
+    },
     tops(){
       let that = this
       that.top_block = false
@@ -535,7 +608,10 @@ export default {
   },
  top(){
     let that = this
-    console.log(that.isUserUse,'--------- isUserUse' )
+    if(that.operateAuthFlag == 0){
+      that.nopermission = true
+      return
+    }
      if (that.data.isUserUse == 1){
           that.top_block = true
      }else{
@@ -614,6 +690,10 @@ export default {
     //  that.bus.$emit("tips", { show: true, title: "车位正在使用中" });
     //   return
     // }
+    if(that.operateAuthFlag == 0){
+      that.nopermission = true
+      return
+    }
     if (that.self == true) {
        that.bus.$emit("loading", true);
     that.bus.$emit("tip", { title: "降锁中请稍候" });
@@ -721,19 +801,19 @@ export default {
   },
   beforeDestroy(){
     let that = this
-    axios
-      .request({
-        url: Url.url.long_current,
-        method: "get"
-      })
-      .then(res => {
-        console.log(res,that.qies);
-        if(res.data.status == true && that.qies == 0 && that.ji == 0 && that.malfunctions == 0 && that.carwheres == 1){
-          that.$router.push({
-            path:"/"
-          })
-        }
-      });
+    // axios
+    //   .request({
+    //     url: Url.url.long_current,
+    //     method: "get"
+    //   })
+    //   .then(res => {
+    //     console.log(res,that.qies);
+    //     if(res.data.status == true && that.qies == 0 && that.ji == 0 && that.malfunctions == 0 && that.carwheres == 1){
+    //       that.$router.push({
+    //         path:"/"
+    //       })
+    //     }
+    //   });
   }
 };
 </script>
@@ -869,9 +949,8 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-.bottom > div{
-  width: 250px;
+  .bottom1{
+     width: 250px;
   background: #faa901;
   text-align: center;
   font-size: 32px;
@@ -879,6 +958,17 @@ export default {
   border-radius: 60px;
   box-sizing:border-box;
   padding: 24px 58px;
+  }
+  .bottom2{
+     width: 250px;
+  background: #cdcdcd;
+  text-align: center;
+  font-size: 32px;
+  color: #ffffff;
+  border-radius: 60px;
+  box-sizing:border-box;
+  padding: 24px 58px;
+  }
 }
 .starts{
    width: 100%;
@@ -1146,5 +1236,39 @@ fail{
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+.nopermissions{
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10000;
+  .nopermissions_content{
+  width: 586px;
+  background: white;
+  border-radius: 20px;
+  margin: 0 auto;
+  margin-top: 400px;
+  .nopermissions_top{
+  width: 100%;
+  line-height: 74px;
+  box-sizing: border-box;
+  padding: 40px 60px;
+  font-size: 34px;
+  color: #666;
+  text-align: center;
+  border-bottom: 1px solid #dedede;
+}
+.nopermissions_bottom{
+  width: 100%;
+  height: 104px;
+  font-size: 32px;
+  color: #666;
+  text-align: center;
+  line-height:104px;
+}
+}
 }
 </style>
